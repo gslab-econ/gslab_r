@@ -1,0 +1,1 @@
+Package is available on CRAN
