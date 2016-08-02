@@ -1,0 +1,40 @@
+Starting at 08/01/16:19:58:25
+[1] "PASS"
+[1] "PASS"
+[1] "PASS"
+[1] "value1"
+[1] "PASS"
+[1] "PASS"
+[1] "PASS"
+[1] "PASS"
+[1] "PASS"
+[1] "PASS"
+
+
+
+
+
+
+DATA.TXT 
+
+ 2  Variables      3  Observations
+--------------------------------------------------------------------------------
+VAR 
+      n missing  unique 
+      3       0       3 
+
+          VAR1 VAR2 VERYVERYVERYLONGVARNAME3
+Frequency    1    1                        1
+%           33   33                       33
+--------------------------------------------------------------------------------
+VAL 
+      n missing  unique 
+      3       0       3 
+
+          value1 value3With!@#%^^&*() veryLongValue2
+Frequency      1                    1              1
+%             33                   33             33
+--------------------------------------------------------------------------------
+[1] "PASS"
+[1] "PASS ALL"
+Finished at 08/01/16:19:58:28

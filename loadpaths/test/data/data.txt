@@ -1,0 +1,4 @@
+VAR|VAL
+VAR1|value1
+VAR2|veryLongValue2
+VERYVERYVERYLONGVARNAME3|value3With!@#%^^&*()
