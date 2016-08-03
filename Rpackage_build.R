@@ -1,11 +1,10 @@
 Main <- function(){
     
-    CRAN_packages   <- c("bit64",       "bootstrap",   "data.table",  "DBI",      "devtools", 
-                         "entropy",     "foreign",     "gamlss",      "ggplot2",  "glmnet",    
-                         "lattice",     "Matrix",      "parallel",    "pls",      "plyr",
-                         "R.methodsS3", "R.oo",        "R.utils",     "RSQLite",  "readstata13", 
-                         "roxygen2",    "rpart.plot",  "RUnit",       "slam",     "snow", 
-                         "snowfall",    "stringr")
+    CRAN_packages   <- c("bit64",       "bootstrap",   "data.table",  "DBI",        "devtools", 
+                         "foreign",     "ggplot2",     "lattice",     "Matrix",     "parallel",           
+                         "plyr",        "R.methodsS3", "R.oo",        "R.utils",    "RSQLite",  
+                         "readstata13", "reshape2",    "roxygen2",    "rpart.plot", "RUnit",       
+                         "slam",        "stringr")
     
     CRAN_result     <- lapply(CRAN_packages, install_CRAN, repo = "http://cran.cnr.Berkeley.edu/", 
                               dependency = TRUE, quiet = TRUE)
