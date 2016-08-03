@@ -3,9 +3,11 @@
 Main <- function() {
     suppressMessages(library(devtools, roxygen))
     suppressMessages(document("../"))
-    suppressMessages(install("../", dependencies = TRUE))
+    suppressMessages(install("../"))
     print("PASS")
-    Sys.setenv("PATHS_TEST" = "paths.txt", "CHECKSUM_DIR" = "./data/")
+
+    Sys.setenv("PATHS_TEST" = "data/paths/paths.txt", "CHECKSUM_DIR" = "./data/data/")
+
     paths_lists <- Sys.getenv()[grep("^PATHS", names(Sys.getenv()))]
 
     test_data <- read.table(paths_lists[1], comment.char = " ")
@@ -19,13 +21,13 @@ Main <- function() {
     VERYVERYVERYLONGVARNAME3 <- checkerror(VERYVERYVERYLONGVARNAME3, "value3With!@#%^^&*()")
     rm(VAR1, VAR2, VERYVERYVERYLONGVARNAME3)
 
-    loadPathsDirect(additionalPaths = "paths.txt", standardPaths = "")
+    loadPathsDirect(additionalPaths = "data/paths/paths.txt", standardPaths = "")
     VAR1                     <- checkerror(VAR1,                     "value1")
     VAR2                     <- checkerror(VAR2,                     "veryLongValue2")
     VERYVERYVERYLONGVARNAME3 <- checkerror(VERYVERYVERYLONGVARNAME3, "value3With!@#%^^&*()")
     rm(VAR1, VAR2, VERYVERYVERYLONGVARNAME3)
 
-    loadPathsDirect(additionalPaths = "", standardPaths = "paths.txt")
+    loadPathsDirect(additionalPaths = "", standardPaths = "data/paths/paths.txt")
     VAR1                     <- checkerror(VAR1,                     "value1")
     VAR2                     <- checkerror(VAR2,                     "veryLongValue2")
     VERYVERYVERYLONGVARNAME3 <- checkerror(VERYVERYVERYLONGVARNAME3, "value3With!@#%^^&*()")  
