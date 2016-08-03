@@ -4,7 +4,7 @@
 \alias{loadPathsDirect}
 \title{Add paths from files to R environment}
 \usage{
-loadPathsDirect(additionalPath = "",
+loadPathsDirect(additionalPaths = "",
   standardPaths = c("output/data/paths.txt", "lib/paths.txt"))
 }
 \arguments{
@@ -16,7 +16,18 @@ Creates string objects that hold contents of specified files, normally paths.txt
 \description{
 Add paths from files to R environment
 }
+\examples{
+#Load paths in standardPaths
+loadPathsDirect()
+
+#Load paths in additionalPaths and standardPaths
+loadPathsDirect(additionalPath = c("example/path/one.txt", "example/path/two.txt"))
+
+#Load paths in additionalPaths
+loadPathsDirect(additionalPaths = c("example/path/one.txt", "example/path/two.txt"),
+                standardPaths = "")
+}
 \seealso{
-loadPaths.R
+\code{\link{loadPaths}} to load from "^PATHS"
 }
 

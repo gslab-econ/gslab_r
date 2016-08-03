@@ -1,8 +1,16 @@
 #' Prints a 'checksum' of datasets stored in text files
 #' 
-#' @description Prints a 'checksum' of datasets stored in text files which are stored in  a pipe-delimited format. It requires a shell environment 
+#' @description Prints a 'checksum' of datasets stored in text files which are stored in a 
+#'   pipe-delimited format. It requires a shell environment variable called "CHECKSUM_DIR" which 
+#'   should contain the name of the directory where the text files are stored. 
+#'
 #' @param none
+#' 
 #' @return Prints a description
+#' 
+#' @examples
+#' checksum()
+#' 
 #' @export
 
 checksum <- function () {

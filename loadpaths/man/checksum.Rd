@@ -13,6 +13,11 @@ checksum()
 Prints a description
 }
 \description{
-Prints a 'checksum' of datasets stored in text files which are stored in  a pipe-delimited format. It requires a shell environment
+Prints a 'checksum' of datasets stored in text files which are stored in a
+  pipe-delimited format. It requires a shell environment variable called "CHECKSUM_DIR" which
+  should contain the name of the directory where the text files are stored.
+}
+\examples{
+checksum()
 }
 

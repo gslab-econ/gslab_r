@@ -1,7 +1,10 @@
 Package: loadpaths
-Title: Load paths as string objects in environment. 
+Title: Load paths and sumamrize text files.
 Version: 0.0.0.9000
-Authors@R: person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre"))
+Authors@R: c(
+  person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre")), 
+  person("Jesse", "Shapiro", email = "jesse_shapiro_1@brown.edu", role = c("aut"))
+  )
 Description: Contains two functions for loading paths. Use loadPaths to add the contents from all instances containing "^PATHS", from Sys.getenv(). Use loadPathsDirect to ad contents from specified paths.txt files. Use checksum to summarize datasets stored in pipe-delimited text files.
-Depends: R (>= 3.2.1)
+Depends: R (>= 3.2.1), Hmisc (>= 3.17-4)
 LazyData: true

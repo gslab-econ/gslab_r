@@ -8,4 +8,4 @@ How to run
 
 Run make.py from gslab_r/loadpaths/test.
 
-If the make.log is unchanged, the word "PASS" appears 10 times, the word "PASS ALL," appears once, and there are two levels of graphical output, then the test is successful.
+If the make.log is unchanged, the word "PASS" appears 11 times, the word "PASS ALL," appears once, and there are two levels of graphical output, then the test is successful.

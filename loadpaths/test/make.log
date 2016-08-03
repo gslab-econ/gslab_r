@@ -1,8 +1,9 @@
-Starting at 08/01/16:19:58:25
+Starting at 08/03/16:12:33:57
+Warning: package ‘Hmisc’ was built under R version 3.2.5
+Warning: package ‘ggplot2’ was built under R version 3.2.4
 [1] "PASS"
 [1] "PASS"
 [1] "PASS"
-[1] "value1"
 [1] "PASS"
 [1] "PASS"
 [1] "PASS"
@@ -37,4 +38,4 @@ Frequency      1                    1              1
 --------------------------------------------------------------------------------
 [1] "PASS"
 [1] "PASS ALL"
-Finished at 08/01/16:19:58:28
+Finished at 08/03/16:12:34:02
