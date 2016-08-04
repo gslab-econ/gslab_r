@@ -1,8 +1,15 @@
 #' Add "^PATHS" to R environment
 #' 
-#' @param none
-#' @description Creates string objects that hold contents of environment variables containing "^PATHS" from Sys.getenv().
-#' @seealso loadPathsDirect.R
+#' @description Creates string objects that hold contents of environment variables containing 
+#' "^PATHS" from Sys.getenv().
+#' 
+#' @seealso \code{\link{loadPathsDirect}} to specify path locations. 
+#' 
+#' @examples
+#' \dontrun{
+#' loadPaths()
+#' }
+#'
 #' @export
 
 loadPaths <- function() {
