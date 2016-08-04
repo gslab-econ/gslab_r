@@ -11,36 +11,74 @@ Useful tools on package development are given in the table below.
 | [`devtools` on GitHub](https://github.com/hadley/devtools) | Easy package creation functions |
 | [`roxygen2` vignette](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html) | Methods for package documentation |
 | [`testthat` tutorial](https://journal.r-project.org/archive/2011-1/RJournal_2011-1_Wickham.pdf) | Contemporary unit testing in R |
-| [`ggplot2` on GitHub](https://github.com/hadley/ggplot2) | Example of a large scale, well-used, and reliable R package |
+| [`ggplot2` on GitHub](https://github.com/hadley/ggplot2) | Example of a large scale, well-designed, and reliable R package |
+
+The next section(#anatonomy-of-a-gslab-packge) outlines the organiation of a GSLab R package. The following section(#development-process) describes the development process we follow to maintain the uniform structure.
 
 ##  Anatomy of a GSLab R package
 
-Every R package produced by GSLab has the following structure. 
+We store each package in its own directory within `gslab_r`. The default name scheme is to give the package directory the same name as the package. 
 
-The DESCRIPTION file (no extension) should contain 
+We use two primary branches on `gslab_r` for each package: `master` and `development-packagename`. The `master` branch contains the most recent version of clean code that is ready for distribution. We go through the `development-packagename` branch whenever we make *any* changes or additions to the code in the current release. To organize the development process, we create issue-specific branches ([see the RA manual for conventions](https://github.com/gslab-econ/admin/wiki/Issues)) from `development-packagename` in which we make the actual changes to the code. When we are ready to release a new version of the package, we merge `development-packagename` into master. 
+
+Every package contains the following structure.
+
+### DESCRIPTION
+
+The `DESCRIPTION` file (no extension) is required for R to reckognize a directory as a package. This file should contain complete information on the following fields. 
+
+*  The `Package` section should contain the name of the package. 
+
+*  The `Title` should give a descriptive package title.
+
+*  `Version` gives the current version of the package. We use [semantic versioning](http://semver.org/).
+
+*  `Authors@R` references Matt and Jesse as authors and Matt as the creator.
+
+*  `Description` is a paragraph explanation of the function.
+
+*  `Depends` gives package dependencies. Normally, this will only contain a version of R.
+
+*  `Imports` lists the packages that will be installed along with this pacakge. Imports provides a robust method of trakcing dependencies between packages.
+
+*  `Suggests` contains packages that may be useful but are not strictly necessary to use the pacakge. Packages used for development and testing belong in this field.
+
+*  `License` by defauly contains a reference to a separate file LICENSE file.
+
+### LICENSE
+
+By default, the `LICENSE` file (no extension) should contain the standard [MIT Open Source License](https://opensource.org/licenses/MIT). 
+
+### R 
+
+The `R` subdirectory stores R files that contain the functions in the package. Each script should include exactly one function. Arbitrary dependencies are allowed between the function in this package. Documentation should follow documentation guidelines(#function-documentation)
+
+### NAMESPACE
+
+The `NAMESPACE` file (no extension) informs R which functions from the `R` subdirectory to load for use and which other packages to install.
+
+### man
+
+The `man` subdirectory contains help files stored in .Rd format. Each help file should closely match the documentation of the functions in R.
+
+### tests
+
+The `tests` subdirectory contains the unit tests. We follow GSLab guidelines for [unit testing](https://github.com/gslab-econ/admin/wiki/Unit-Testing). 
+
+### README.md
+
+The `README.md` should give a brief description of the user called functions in the package. 
+
+## Development Process
+
+We use the `devtools`, `roxygen2`, and `testthat` packages as out primary tools in the package development process. `devtools` is a convenient wrapper for the functions in the others. The commands below are from`devtools`, but the syntax belongs to  `roxygen2` and `testthat`.
+
+The `create` function initializes a package with the `DESCRIPTION`, `R` and `NAMESPACE` fields. The `LICENSE` file must be created manually, the `DESCRIPTION` file must be edited manually.
+
+The `document` function should be used to produce the help files in the `man` subdirectory and appropriately fill the the `NAMESPACE` file. This function is a wrapper for the `roxygenise` function from the `roxygen2` package. This functions read from `DESCRIPTION` and the documentation for the files in `R`. Formatting must align with `roxygen2` standards.
+
+During development the `devtools::check` function should be used to preform the unit tests in the `tests` subdirectory and check a large number of other package aspects. This function centralies and adds utilities to functions in the `testthat` package. The `tests` directory must be conform to the format used by `testthat`. 
+
+To install a package from GitHub, use the `install_github` function.
 
 
-
-## Internal packages
-
-All R packages produced by GSLab should be stored as directories in `gslab_r` named after the title of the package. An exact match between the name and title is preffered. Internal packages should be loaded with `install_github` from the third party devtools package. 
-
-## Making and maintaining packages
-
-Organization
-
-Each package in the `gslab_r` repository should be given a unique directory. The directory name should exactly match the name of the package. We maintain a single format of our R packages to ensure readability and completeness. Each package should always contain the following files and subdirectories. 
-
-*  The DESCRIPTION file gives key information about the package: its name, title, author, version, description, and dependencies. R will only recognize a directory as a package if it contains a DIRECTORY file.
-
-*  The R subdirectory contains the .R files in the package. These files should meet the standards in the [RA manual](https://github.com/gslab-econ/admin/wiki/Code-Style). Each file should conatin exactly one well-documented function. Dependencies are allowed between files within the R subdirectory. For example 
-
-### Semantic versioning
-
-Use [semantic versioning](http://semver.org/)
-
-### Branching
-
-Our package system must permit calls for a stable download while a package is in development. We meet this standard using branches. Each package has two branches: a stable branch for download and a development branch for updates and experimentation. 
-
-The stable branch should be named 
