@@ -1,10 +1,25 @@
 # Overview
 
-This repository contains the R tools used in multiple projects/repositories by GSLab. The code in this repository is originally drawn from `trunk/lib/third_party/r_tools` of the SVN repository `econ-gentzkow-stanford, revision 34,755`. However, new packages have been added as needed. 
+This repository is used to store R packages created by the GSLab for use in two or more projects/repositories. If a stable release of a package is available from another source, then it should not be stored in this repository. Since different useres will draw on these packages across multiple projects, we follow a standard strategy for development, testing, and documentation. 
 
-## Third party packages
+Useful tools on package development are given in the table below.
 
-All packages in `third_party` are available on CRAN. By default, all third party packages should be download from CRAN or another stable source. If no stable source is available, then the contents of the package should be transfered into a downloadable format and stored in gslab_r. For completeness all thrid party packages should be given a directory within `third_party` for easy scanning.
+| Resource | Description |
+| -------- | ----------- |
+| [O'Reily R Packages](http://r-pkgs.had.co.nz/) | A detailed guide of the package developmetn process |
+| [Hilary Parker](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/) | Barebones guide to package development with `devtools` |
+| [`devtools` on GitHub](https://github.com/hadley/devtools) | Easy package creation functions |
+| [`roxygen2` vignette](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html) | Methods for package documentation |
+| [`testthat` tutorial](https://journal.r-project.org/archive/2011-1/RJournal_2011-1_Wickham.pdf) | Contemporary unit testing in R |
+| [`ggplot2` on GitHub](https://github.com/hadley/ggplot2) | Example of a large scale, well-used, and reliable R package |
+
+##  Anatomy of a GSLab R package
+
+Every R package produced by GSLab has the following structure. 
+
+The DESCRIPTION file (no extension) should contain 
+
+
 
 ## Internal packages
 
