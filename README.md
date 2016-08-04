@@ -13,13 +13,42 @@ Useful tools on package development are given in the table below.
 | [`testthat` tutorial](https://journal.r-project.org/archive/2011-1/RJournal_2011-1_Wickham.pdf) | Contemporary unit testing in R |
 | [`ggplot2` on GitHub](https://github.com/hadley/ggplot2) | Example of a large scale, well-designed, and reliable R package |
 
-The next section(#anatonomy-of-a-gslab-packge) outlines the organiation of a GSLab R package. The following section(#development-process) describes the development process we follow to maintain the uniform structure.
-
-##  Anatomy of a GSLab R package
+## Development Process
 
 We store each package in its own directory within `gslab_r`. The default name scheme is to give the package directory the same name as the package. 
 
-We use two primary branches on `gslab_r` for each package: `master` and `development-packagename`. The `master` branch contains the most recent version of clean code that is ready for distribution. We go through the `development-packagename` branch whenever we make *any* changes or additions to the code in the current release. To organize the development process, we create issue-specific branches ([see the RA manual for conventions](https://github.com/gslab-econ/admin/wiki/Issues)) from `development-packagename` in which we make the actual changes to the code. When we are ready to release a new version of the package, we merge `development-packagename` into master. 
+We use a single master branch to store the most recent stable version of all packages. We use development branches for each package to store modifications to the package that will be included in the next release. Each developemnt branch should be named `development-packagename`. To edit the code in a package we create a new issue-specific branch from the development branch following the conventions in the [RA manual](https://github.com/gslab-econ/admin/wiki/Issues). Once the issue is resolved, we merge the issue specific branch back into the development branch to await the next release. All code in the master and development branches should always run without errors. 
+
+### Tools
+
+We use the `devtools`, `roxygen2`, and `testthat` packages as out primary tools in the package development process. `devtools` is a convenient wrapper for the functions in the others. The commands below are from`devtools`, but the syntax belongs to  `roxygen2` and `testthat`.
+
+The `create` function initializes a package with the `DESCRIPTION`, `R` and `NAMESPACE` fields. The `LICENSE` file must be created manually, the `DESCRIPTION` file must be edited manually.
+
+The `document` function should be used to produce the help files in the `man` subdirectory and appropriately fill the the `NAMESPACE` file. This function is a wrapper for the `roxygenise` function from the `roxygen2` package. This functions read from `DESCRIPTION` and the documentation for the files in `R`. Formatting must align with `roxygen2` standards.
+
+During development the `devtools::check` function should be used to preform the unit tests in the `tests` subdirectory and check a large number of other package aspects. This function centralies and adds utilities to functions in the `testthat` package. The `tests` directory must be conform to the format used by `testthat`. 
+
+To install a package from GitHub, use the `install_github` function.
+
+### Workflow
+
+The workflow for the creation of a package might be:
+  1. Create a new branch of `gslab_r` named `development-packagename` from the`master` branch.
+  2. Open R, load `devtools`, and run `create("packagename")` from the root of `gslab_r`.
+  3. Write the functions, in-file documentation, and unit tests for the package.
+    *  From the head of the directory, run `document` in R to add and update documentation as needed. 
+    *  From the head of the directory, run `devtools::check` in R to perform unit tests as needed.
+  4. When development is complete follow GSLab procedure to merge the `development-packagename` branch into `master`.
+
+The workflow to add a feature to a package that already exists might be:
+  1. Create a new branch of `gslab_r` named `development-packagename-issue` from the `development-packagename` branch.
+  3. Write the new functions, in-file documentation, and unit tests for the package.
+    *  From the head of the directory in R, run `document` to add and update documentation as needed. 
+    *  From the head of the directory in R, run `devtools::check` to perform unit tests as needed.
+  4. When development is complete follow GSLab procedure to merge the `development-packagename-issue` branch into `development-packagename`.
+
+##  Anatomy of a GSLab R package
 
 Every package contains the following structure.
 
@@ -68,17 +97,5 @@ The `tests` subdirectory contains the unit tests. We follow GSLab guidelines for
 ### README.md
 
 The `README.md` should give a brief description of the user called functions in the package. 
-
-## Development Process
-
-We use the `devtools`, `roxygen2`, and `testthat` packages as out primary tools in the package development process. `devtools` is a convenient wrapper for the functions in the others. The commands below are from`devtools`, but the syntax belongs to  `roxygen2` and `testthat`.
-
-The `create` function initializes a package with the `DESCRIPTION`, `R` and `NAMESPACE` fields. The `LICENSE` file must be created manually, the `DESCRIPTION` file must be edited manually.
-
-The `document` function should be used to produce the help files in the `man` subdirectory and appropriately fill the the `NAMESPACE` file. This function is a wrapper for the `roxygenise` function from the `roxygen2` package. This functions read from `DESCRIPTION` and the documentation for the files in `R`. Formatting must align with `roxygen2` standards.
-
-During development the `devtools::check` function should be used to preform the unit tests in the `tests` subdirectory and check a large number of other package aspects. This function centralies and adds utilities to functions in the `testthat` package. The `tests` directory must be conform to the format used by `testthat`. 
-
-To install a package from GitHub, use the `install_github` function.
 
 
