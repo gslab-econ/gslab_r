@@ -3,18 +3,17 @@
 #' @description Prints a 'checksum' of datasets stored in text files which are stored in a 
 #'   pipe-delimited format. It requires a shell environment variable called "CHECKSUM_DIR" which 
 #'   should contain the name of the directory where the text files are stored. 
-#'
-#' @param none
 #' 
 #' @return Prints a description
 #' 
 #' @examples
+#' \dontrun{
 #' checksum()
+#' }
 #' 
 #' @export
 
 checksum <- function () {
-    suppressMessages(library(Hmisc))
 
     dir   <- Sys.getenv("CHECKSUM_DIR")
     files <- list.files(dir)
@@ -27,7 +26,7 @@ checksum <- function () {
     
           table <- read.table(paste0(dir, file), sep = "|", header = T, comment.char = " ")
     
-          print(describe(table, toupper(file), digits = 4), condense = F)
+          print(Hmisc::describe(table, toupper(file), digits = 4), condense = F)
   
         }
     }

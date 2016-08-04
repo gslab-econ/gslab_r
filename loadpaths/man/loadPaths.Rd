@@ -6,15 +6,14 @@
 \usage{
 loadPaths()
 }
-\arguments{
-\item{none}{}
-}
 \description{
 Creates string objects that hold contents of environment variables containing
 "^PATHS" from Sys.getenv().
 }
 \examples{
+\dontrun{
 loadPaths()
+}
 }
 \seealso{
 \code{\link{loadPathsDirect}} to specify path locations.

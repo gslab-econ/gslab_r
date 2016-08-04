@@ -1,12 +1,14 @@
 #' Add paths from files to R environment
 #' 
-#' @param additionalPath, standardPaths
+#' @param additionalPaths NULL or path to file
+#' @param standardPaths NULL or path to file
 #' 
 #' @return Creates string objects that hold contents of specified files, normally paths.txt
 #' 
 #' @seealso \code{\link{loadPaths}} to load from "^PATHS"
 #' 
 #' @examples
+#' \dontrun{
 #' #Load paths in standardPaths
 #' loadPathsDirect()
 #' 
@@ -16,6 +18,9 @@
 #' #Load paths in additionalPaths 
 #' loadPathsDirect(additionalPaths = c("example/path/one.txt", "example/path/two.txt"), 
 #'                 standardPaths = "")
+#' }
+#' 
+#' @import Hmisc
 #' @export
 
 loadPathsDirect <- function(additionalPaths = "",

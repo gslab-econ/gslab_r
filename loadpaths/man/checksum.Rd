@@ -6,9 +6,6 @@
 \usage{
 checksum()
 }
-\arguments{
-\item{none}{}
-}
 \value{
 Prints a description
 }
@@ -18,6 +15,8 @@ Prints a 'checksum' of datasets stored in text files which are stored in a
   should contain the name of the directory where the text files are stored.
 }
 \examples{
+\dontrun{
 checksum()
+}
 }
 
