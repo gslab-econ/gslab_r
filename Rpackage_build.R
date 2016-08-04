@@ -4,7 +4,7 @@ Main <- function(){
                          "foreign",     "ggplot2",     "lattice",     "Matrix",     "parallel",           
                          "plyr",        "R.methodsS3", "R.oo",        "R.utils",    "RSQLite",  
                          "readstata13", "reshape2",    "roxygen2",    "rpart.plot", "RUnit",       
-                         "slam",        "stringr")
+                         "slam",        "stringr",     "testthat")
     
     CRAN_result     <- lapply(CRAN_packages, install_CRAN, repo = "http://cran.cnr.Berkeley.edu/", 
                               dependency = TRUE, quiet = TRUE)
