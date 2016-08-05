@@ -8,10 +8,8 @@ Main <- function(){
                               dependency = TRUE, quiet = TRUE)
     
     library(devtools)
-    
     GitHub_packages <- c("loadpaths")
-    
-    GitHub_result   <- lapply(GitHub_packages, function(pkg) install_github('gslab_econ/gslab_r', subdir = pkg))
+    GitHub_result   <- lapply(GitHub_packages, function(pkg) install_github('gslab-econ/gslab_r', subdir = pkg))
 }
 
 install_CRAN <- function(pkg, repo, dependency, quiet){
