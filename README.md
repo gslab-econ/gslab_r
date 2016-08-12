@@ -15,7 +15,7 @@ Useful tools on package development are given in the table below.
 
 ## Development Process
 
-We follow the development process for code libraries outlined in the [RA manual](https://github.com/gslab-econ/admin/wiki/Version-Control)
+We follow the development process for code libraries outlined in the [RA manual](https://github.com/gslab-econ/admin/wiki/Version-Control) We store each package in its own directory within `gslab_r`. The default name scheme is to give the package directory the same name as the package. 
 
 ### Tools
 
@@ -58,7 +58,7 @@ The `DESCRIPTION` file (no extension) is required for R to reckognize a director
 
 *  The `Title` should give a descriptive package title.
 
-*  `Version` gives the current version of the package.
+*  `Version` gives the current version of the package. We use [semantic versioning](http://semver.org/).
 
 *  `Authors@R` references Matt and Jesse as authors and Matt as the creator.
 
@@ -66,7 +66,7 @@ The `DESCRIPTION` file (no extension) is required for R to reckognize a director
 
 *  `Depends` gives package dependencies. Normally, this will only contain a version of R.
 
-*  `Imports` lists the packages that will be installed along with this pacakge. Imports provides a robust method of trakcing dependencies between packages.
+*  `Imports` lists the packages that will be installed along with this pacakge. Imports provides a robust method of tracking dependencies between packages.
 
 *  `Suggests` contains packages that may be useful but are not strictly necessary to use the pacakge. Packages used for development and testing belong in this field.
 
