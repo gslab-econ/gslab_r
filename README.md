@@ -6,7 +6,7 @@ Useful tools on package development are given in the table below.
 
 | Resource | Description |
 | -------- | ----------- |
-| [O'Reily R Packages](http://r-pkgs.had.co.nz/) | A detailed guide of the package developmetn process |
+| [O'Reily R Packages](http://r-pkgs.had.co.nz/) | A detailed guide of the package development process |
 | [Hilary Parker](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/) | Barebones guide to package development with `devtools` |
 | [`devtools` on GitHub](https://github.com/hadley/devtools) | Easy package creation functions |
 | [`roxygen2` vignette](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html) | Methods for package documentation |
@@ -98,4 +98,7 @@ The `tests` subdirectory contains the unit tests. We follow GSLab guidelines for
 
 The `README.md` should give a brief description of the user called functions in the package. 
 
+## Third Party Pacakges
+
+We maintain an R scipt in the root of this driectory named `Rpackage_build.R`. This script contains a list of all third party packages used across multiple repositories and code to install them, if necessary. The [shell script](https://github.com/gslab-econ/admin/tree/master/computer-build-sheet) GSLab uses to set up machins calls `Rpackage_build.R`.
 
