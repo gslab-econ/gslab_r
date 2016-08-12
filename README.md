@@ -6,7 +6,7 @@ Useful tools on package development are given in the table below.
 
 | Resource | Description |
 | -------- | ----------- |
-| [O'Reily R Packages](http://r-pkgs.had.co.nz/) | A detailed guide of the package developmetn process |
+| [O'Reily R Packages](http://r-pkgs.had.co.nz/) | A detailed guide of the package development process |
 | [Hilary Parker](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/) | Barebones guide to package development with `devtools` |
 | [`devtools` on GitHub](https://github.com/hadley/devtools) | Easy package creation functions |
 | [`roxygen2` vignette](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html) | Methods for package documentation |
