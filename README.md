@@ -19,7 +19,7 @@ We follow the development process for code libraries outlined in the [RA manual]
 
 ### Tools
 
-We use the `devtools`, `roxygen2`, and `testthat` packages as out primary tools in the package development process. `devtools` is a convenient wrapper for the functions in the others. The commands below are from`devtools`, but the syntax belongs to  `roxygen2` and `testthat`.
+We use the `devtools`, `roxygen2`, and `testthat` packages as our primary tools in the package development process. `devtools` is a convenient wrapper for the functions in the others. The commands below are from`devtools`, but the syntax belongs to  `roxygen2` and `testthat`.
 
 The `create` function initializes a package with the `DESCRIPTION`, `R` and `NAMESPACE` fields. The `LICENSE` file must be created manually, the `DESCRIPTION` file must be edited manually.
 
