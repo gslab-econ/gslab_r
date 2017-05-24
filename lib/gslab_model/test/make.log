@@ -1,0 +1,56 @@
+Starting at  05/24/17:16:14:09
+Loading required package: methods
+
+
+Executing test function test.ExampleData.addData  ...  done successfully.
+
+
+
+Executing test function test.ExampleData.ExampleData  ...  done successfully.
+
+
+
+Executing test function test.ExampleData.removeData  ...  done successfully.
+
+
+
+Executing test function test.ExampleExampleData.selectData  ...  done successfully.
+
+
+
+Executing test function test.ExampleModel.estimate  ...  done successfully.
+
+
+
+Executing test function test.ExampleModel.ExampleModel  ...  done successfully.
+
+RUNIT TEST PROTOCOL -- Wed May 24 16:14:09 2017 
+*********************************************** 
+Number of test functions: 6 
+Number of errors: 0 
+Number of failures: 0 
+
+ 
+1 Test Suite : 
+gslab_model - 6 test functions, 0 errors, 0 failures
+
+
+
+Details 
+*************************** 
+Test Suite: gslab_model 
+Test function regexp: ^test.+ 
+Test file regexp: test.*.R$ 
+Involved directory: 
+./ 
+--------------------------- 
+Test file: .//test.ExampleData.R 
+test.ExampleData.addData: (5 checks) ... OK (0.01 seconds)
+test.ExampleData.ExampleData: (8 checks) ... OK (0.02 seconds)
+test.ExampleData.removeData: (2 checks) ... OK (0.01 seconds)
+test.ExampleExampleData.selectData: (3 checks) ... OK (0.01 seconds)
+--------------------------- 
+Test file: .//test.ExampleModel.R 
+test.ExampleModel.estimate: (1 checks) ... OK (0.01 seconds)
+test.ExampleModel.ExampleModel: (3 checks) ... OK (0 seconds)
+Finished at  05/24/17:16:14:09
