@@ -1,12 +1,13 @@
 source("../ModelEstimationOutput.R")
 
+# output for a simple linear model
 ExampleEstimationOutput<- setClass("ExampleEstimationOutput",
-                                   slot      = c(vcov = "matrix"),
-                                   prototype = list(vcov = as.matrix(NA)),
-                                   contain   = "ModelEstimationOutput"
+                                   slot    = c(vcov = "matrix",
+                                               se   = "numeric"),
+                                   contain = "ModelEstimationOutput"
 )
 
-# create ExampleEstimationOutput method
+# create ExampleEstimationOutput method (initialize)
 setGeneric(name = "ExampleEstimationOutput",
            def  = function(est, model, data) {
              standardGeneric("ExampleEstimationOutput")
@@ -14,13 +15,12 @@ setGeneric(name = "ExampleEstimationOutput",
 )
 setMethod(f = "ExampleEstimationOutput", signature = c("list", "Model", "ModelData"),
           definition = function(est, model, data) {
-            obj = ModelEstimationOutput(est, model, data)
             obj = new("ExampleEstimationOutput",
-                      param = obj@param,
-                      model = obj@model,
-                      data  = obj@data,
-                      nobs  = obj@nobs,
-                      vcov  = diag(obj@model@nparam))
-            return(obj)
+                      param = est$par,
+                      model = model,
+                      nobs  = data@nobs,
+                      vcov  = diag(model@nparam))
+            obj@se = sqrt(diag(obj@vcov))
+            return (obj)
           }
 )

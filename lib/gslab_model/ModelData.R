@@ -1,29 +1,21 @@
 ModelData <- setClass("ModelData",
-                      slots     = c(var      = "data.frame",
-                                    varnames = "character",
-                                    nobs     = "numeric",
-                                    nvars    = "numeric"),
-                      prototype = list(var      = data.frame(),
-                                       varnames = as.character(NA),
-                                       nobs     = as.numeric(NA),
-                                       nvars    = as.numeric(NA)),
-                      validity  = function(object) {
+                      slots    = c(var      = "data.frame",
+                                   varnames = "character",
+                                   nobs     = "numeric",
+                                   nvars    = "numeric"),
+                      validity = function(object) {
                         if (any(duplicated(object@varnames))) {
-                          return(sprintf("Duplicated variable names: %s", 
-                                          paste(object@varnames[duplicated(object@varnames)],
-                                                collapse = ", ")))
+                          return (sprintf("Duplicated variable names: %s", 
+                                         paste(object@varnames[duplicated(object@varnames)], collapse = ", ")))
+                        } else if (object@nvars != ncol(object@var) | object@nvars != length(object@varnames)) {
+                          return ("Wrong number of variables.")
+                        } else if (nrow(object@var) != object@nobs) {
+                          return ("Wrong number of observations.")
+                        } else if (any(colnames(object@var) != object@varnames)) {
+                          return ("Wrong column names.")
+                        } else {
+                          return (TRUE)
                         }
-                        if (object@nvars != ncol(object@var) | 
-                            object@nvars != length(object@varnames)){
-                          return("Wrong number of variables.")
-                        }
-                        if (nrow(object@var) != object@nobs) {
-                          return("Wrong number of observations.")
-                        }
-                        if (any(colnames(object@var) != object@varnames)) {
-                          return("Wrong column names.")
-                        }
-                        return(TRUE)
                       }
 )
 
@@ -33,58 +25,25 @@ setGeneric(name = "ModelData",
              standardGeneric("ModelData")
            }
 )
-setMethod(f = "ModelData", signature = c("data.frame"),
+setMethod(f = "ModelData",
           definition = function(data, varnames = NULL) {
+            newdata <- data.frame(data)
             if(!is.null(varnames)) {
-              if(length(varnames) != ncol(data)) {
+              if(length(varnames) != ncol(newdata)) {
                 stop("Wrong number of variable names supplied")
               } else {
-                colnames(data) <- varnames
+                colnames(newdata) <- varnames
               }
+            } else if (is.null(colnames(data))) {
+              colnames(newdata) <- paste("var", seq(from = 1,to = ncol(newdata)), sep = "")
             }
             obj = new("ModelData",
-                      var      = data,
-                      varnames = colnames(data),
-                      nobs     = nrow(data),
-                      nvars    = ncol(data))
+                      var      = newdata,
+                      varnames = colnames(newdata),
+                      nobs     = nrow(newdata),
+                      nvars    = ncol(newdata))
             validObject(obj)
-            return(obj)
-          }
-)
-setMethod(f = "ModelData", signature = c("matrix"),
-          definition = function(data, varnames = NULL) {
-            data <- data.frame(data)
-            return(ModelData(data, varnames))
-          }
-)
-setMethod(f = "ModelData", signature = c("numeric"),
-          definition = function(data, varnames = NULL) {
-            if (is.null(varnames)) {
-              varnames = "var1"
-            }
-            data <- data.frame(data)
-            return(ModelData(data, varnames))
-          }
-)
-
-# create removeData method
-setGeneric(name = "removeData",
-           def  = function(obj, varnames) {
-             standardGeneric("removeData")
-           }
-)
-setMethod(f = "removeData", signature = c("ModelData", "character"),
-          definition = function(obj, varnames) {
-            if (all(varnames %in% obj@varnames)) {
-              obj@varnames = obj@varnames[!obj@varnames %in% varnames]
-              obj@var <- subset(obj@var, select = obj@varnames)
-              obj@nvars = ncol(obj@var)
-            } else {
-              stop(sprintf("%s not in the data", 
-                           paste(c(varnames[!varnames %in% obj@varnames]), collapse = ", ")))
-            }
-            validObject(obj)
-            return(obj)
+            return (obj)
           }
 )
 
@@ -94,69 +53,70 @@ setGeneric(name = "addData",
              standardGeneric("addData")
            }
 )
-setMethod(f = "addData", signature = c("ModelData", "data.frame"),
+setMethod(f = "addData", signature = c("ModelData"),
           definition = function(obj, data, varnames = NULL) {
-            if (nrow(data) !=  obj@nobs) {
+            newdata <- data.frame(data)
+            if (nrow(newdata) != obj@nobs) {
               stop("Number of observations is mismatched.")
             }
             if (!is.null(varnames)) {
-              if (length(varnames) != ncol(data)) {
+              if (length(varnames) != ncol(newdata)) {
                 stop("Wrong number of variable names supplied")
               } else {
-                colnames(data) = varnames
+                colnames(newdata) = varnames
               }
+            } else if (is.null(colnames(data))) {
+              varnames <- paste("var", seq(from = 1,to = obj@nvars + ncol(newdata)), sep = "")
+              colnames(newdata) <- varnames[!varnames %in% obj@varnames][1:ncol(newdata)]
             }
-            obj@var      <- cbind(obj@var, data)
+            obj@var      <- cbind(obj@var, newdata)
             obj@nvars    <- ncol(obj@var)
             obj@varnames <- colnames(obj@var)
             validObject(obj)
-            return(obj)
+            return (obj)
           }
 )
-setMethod(f = "addData", signature = c("ModelData", "matrix"),
-          definition = function(obj, data, varnames = NULL) {
-            data <- data.frame(data)
-            return(addData(obj, data, varnames))
-          }
+
+# create removeData method
+setGeneric(name = "removeData",
+           def  = function(obj, col) {
+             standardGeneric("removeData")
+           }
 )
-setMethod(f = "addData", signature = c("ModelData", "numeric"),
-          definition = function(obj, data, varnames = NULL) {
-            data <- data.frame(data)
-            if (is.null(varnames)) {
-              suffix = min(which(c(paste("var", seq(from = 1,to = obj@nvars + 1),
-                                         sep = "") %in% obj@varnames) == FALSE))
-              colnames(data) <- paste("var", suffix, sep = "")
+setMethod(f = "removeData", signature = c("ModelData"),
+          definition = function(obj, col) {
+            if (is.numeric(col)) {
+              col <- obj@varnames[col]
             }
-            return(addData(obj, data, varnames))
+            if (all(col %in% obj@varnames)) {
+              obj@varnames <- obj@varnames[!obj@varnames %in% col]
+              obj@var      <- subset(obj@var, select = obj@varnames)
+              obj@nvars    <- ncol(obj@var)
+            } else {
+              stop(sprintf("%s not in the data", paste(c(col[!col %in% obj@varnames]), collapse = ", ")))
+            }
+            validObject(obj)
+            return (obj)
           }
 )
 
 # create selectData method
 setGeneric(name = "selectData",
-           def  = function(obj, row = NULL, col = NULL) {
+           def  = function(obj, row = 1:obj@nobs, col = obj@varnames) {
              standardGeneric("selectData")
            }
 )
 setMethod(f = "selectData", signature = c("ModelData"),
-          definition = function(obj, row = NULL, col = NULL) {
-            if (is.null(row) & is.null(col)) {
-              return(obj)
-            } else {
-              if (!is.null(row)) {
-                obj@var  <- as.data.frame(obj@var[row, ])
-                obj@nobs <- nrow(obj@var)
-                colnames(obj@var) = obj@varnames
-              }
-              if (!is.null(col)) {
-                obj@var      <- as.data.frame(obj@var[, col])
-                if (is.character(col)) {
-                  colnames(obj@var) = col
-                }
-                obj@varnames <- colnames(obj@var)
-                obj@nvars    <- ncol(obj@var)
-              }
+          definition = function(obj, row = 1:obj@nobs, col = obj@varnames) {
+            data = data.frame(obj@var[row, col])
+            if (is.character(col)) {
+              colnames(data) = col
             }
+            obj@var      = data
+            obj@varnames = colnames(data)
+            obj@nobs     = nrow(data)
+            obj@nvars    = ncol(data)
             validObject(obj)
-            return(obj)
+            return (obj)
           }
 )

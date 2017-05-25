@@ -1,8 +1,6 @@
 source("../ModelData.R")
 
-ExampleData <- setClass("ExampleData",
-                        contain = "ModelData"
-)
+ExampleData <- setClass("ExampleData", contain = "ModelData")
 
 # create ExampleData method (initialize)
 setGeneric(name = "ExampleData",
@@ -12,12 +10,13 @@ setGeneric(name = "ExampleData",
 )
 setMethod(f = "ExampleData",
           definition = function(data, varnames = NULL) {
-            obj = ModelData(data, varnames)
-            obj = new("ExampleData",
-                      var      = obj@var,
-                      varnames = obj@varnames,
-                      nobs     = obj@nobs,
-                      nvars    = obj@nvars)
-            return(obj)
+            obj <- ModelData(data, varnames)
+            obj <- new("ExampleData",
+                       var      = obj@var,
+                       varnames = obj@varnames,
+                       nobs     = obj@nobs,
+                       nvars    = obj@nvars)
+            validObject(obj)
+            return (obj)
           }
 )

@@ -6,20 +6,14 @@ ExampleModel <- setClass("ExampleModel",
                          slot = c(include_constant = "numeric"),
                          prototype = list(include_constant = 1),
                          validity  = function(object) {
-                           if (length(object@paramlist) != object@nparam) {
-                             return("Incorrect number of parameters.")
+                           if (object@nparam != length(object@paramlist) | 
+                               object@nparam != length(object@rhslist) + object@include_constant) {
+                             return ("Incorrect number of parameters.")
+                           } else if (!object@include_constant %in% c(0, 1)) {
+                             return("Incorrectly specified slot include_constant.")
+                           } else {
+                             return (TRUE)
                            }
-                           if (object@nparam != length(object@rhslist) + object@include_constant) {
-                             if (object@nparam == length(object@rhslist)) {
-                               return("Constant is not added in paramer list.")
-                             } else {
-                               return("Incorrect number of parameters.")
-                             }
-                             if (!object@include_constant %in% c(0, 1)) {
-                               return("Incorrectly specified slot include_constant.")
-                             }
-                           }
-                           return(TRUE)
                          },
                          contains = "Model"
 )
@@ -67,10 +61,8 @@ setGeneric(name = "estimate",
 )
 setMethod(f = "estimate", signature = c("ExampleModel", "ExampleData"),
           definition = function(obj, data) {
-            # minimize X'X-X
-            g <- function(x) return(x %*% x - rep(1, length(x)) %*% x)
-            result <- optim(obj@default_startparam, g)
-            est    <- ExampleEstimationOutput(result, obj, data)
+            est <- optim(obj@default_startparam, function(x) return(x %*% x))
+            est <- ExampleEstimationOutput(est, obj, data)
             return(est)
           }
 )
