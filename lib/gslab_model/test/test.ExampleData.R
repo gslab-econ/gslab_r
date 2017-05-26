@@ -10,9 +10,7 @@ test.exampleData.initialize <- function() {
   data <- cbind(y, x)
   b <- exampleData(data, c("lhs", "rhs"))
   checkEquals(c(b$varnames, b$nobs, b$nvars), c(c("lhs", "rhs"), 100, 2))
-  checkException(exampleData(data, c("dup", "dup")), silent = TRUE)
   checkException(exampleData(data, c("few")), silent = TRUE)
-  checkException(exampleData(data, c("one", "two", "more")), silent = TRUE)
   c <- exampleData(matrix(c(2, 3, 1, 2, 3, 4), 2, 3))
   checkEquals(c(c$varnames, c$nobs, c$nvars), c(c("var1", "var2", "var3"), 2, 3))
   d <- exampleData(x)
@@ -23,7 +21,6 @@ test.exampleData.addData <- function() {
   a <- exampleData(x, "x")
   a$addData(data.frame(y))
   checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("x", "y"), 2, 2))
-  checkException(a$addData(x, "x"), silent = TRUE)
   a$addData(cbind(y, z), c("var1", "var2"))
   checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("x", "y", "var1", "var2"), 4, 4))
   a$addData(z)
@@ -33,12 +30,10 @@ test.exampleData.addData <- function() {
 
 test.exampleData.removeData <- function() {
   a <- exampleData(data.frame(x, y, z))
-  b <- a$copy()
-  b$removeData(c("x", "z"))
-  checkEquals(c(b$varnames, b$nvars, ncol(b$var)), c("y", 1, 1))
-  a$removeData(1)
+  a$removeData("x")
   checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("y", "z"), 2, 2))
-  checkException(a$removeData(c("y", "w")), silent = TRUE)
+  a$removeData(2)
+  checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("y"), 1, 1))
 }
 
 test.ExampleexampleData.selectData <- function() {
@@ -53,4 +48,3 @@ test.ExampleexampleData.selectData <- function() {
   a$selectData(row = a$var$x > 0)
   checkEquals(a$nobs, nrow(a$var))
 }
-

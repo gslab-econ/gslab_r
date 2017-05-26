@@ -5,33 +5,38 @@ source("exampleEstimationOutput.R")
 exampleModel <- setRefClass("exampleModel", contains = "model",
                             fields  = list(include_constant = "numeric"),
                             methods = list(
-                              initialize = function(lhs, rhs, constant = 1,
-                                                    startparam = NULL, suffix = "_coeff") {
-                                if (constant == 1) {
-                                  .self$paramlist <- paste(c("constant", paste(rhs, suffix, sep = "")))
-                                } else if (constant == 0) {
+                              initialize = function(lhs = NULL, rhs = NULL, constant = 1,
+                                                    startparams = NULL, suffix = "_coeff") {
+                                if (is.null(lhs)) return (.self)
+                                if (constant == 0) {
                                   .self$paramlist <- paste(rhs, suffix, sep = "")
                                 } else {
-                                  stop("Incorrectly specified include_constant.")
+                                  .self$paramlist <- paste(c("constant", paste(rhs, suffix, sep = "")))
                                 }
-                                .self$nparam <- length(.self$paramlist)
-                                if (is.null(startparam)) {
-                                  .self$default_startparam <- rep(0, .self$nparam)
-                                } else if (length(startparam) != .self$nparam) {
-                                  stop("Incorrectly specified default_startparam.")
+                                if (is.null(startparams)) {
+                                  .self$startparam <- rep(0, length(.self$paramlist))
                                 } else {
-                                  .self$default_startparam = startparam
+                                  .self$startparam = startparams
                                 }
-                                .self$lhslist          = lhs
-                                .self$rhslist          = rhs
-                                .self$include_constant = constant
+                                .self$nparam           <- length(.self$paramlist)
+                                .self$lhslist          <- lhs
+                                .self$rhslist          <- rhs
+                                .self$include_constant <- constant
+                                validObject(.self)
                               },
                               
                               estimate = function(data) {
-                                est <- optim(.self$default_startparam, function(x) return(x %*% x))
+                                est <- optim(.self$startparam, function(x) return(x %*% x))
                                 est <- exampleEstimationOutput(est, .self, data)
                                 return(est)
                               }
                             )
 
+)
+
+setValidity("exampleModel", function(object) {
+  if (length(object$startparam) != object$nparam) {
+    stop("Incorrectly specified default_startparam.")
+    } else TRUE
+}
 )
