@@ -1,6 +1,6 @@
-ModelEstimationOutput <- setClass("ModelEstimationOutput",
-                                  slots = c(param = "numeric",
-                                            model = "Model",
-                                            data  = "ModelData",
-                                            nobs  = "numeric")
+modelEstimationOutput <- setRefClass("modelEstimationOutput",
+                                     fields = list(param = "numeric",
+                                                   model = "model",
+                                                   data  = "modelData",
+                                                   nobs  = "numeric")
 )
