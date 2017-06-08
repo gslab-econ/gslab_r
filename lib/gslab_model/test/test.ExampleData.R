@@ -1,50 +1,77 @@
-source("exampleData.R")
-x = rnorm(100)
-y = rnorm(100)
-z = rnorm(100)
-w = rnorm(200)
+source("ExampleData.R")
+x <- rnorm(1000)
+y <- rnorm(1000)
+z <- rnorm(1000)
+w <- rnorm(2000)
+rhs <- list(x = x, y = y)
+strvar <- c("f", "m", "m", "f", "m")
+group1 <- sort(sample(1:10, 1000, replace = TRUE))
+group2 <- sort(sample(1:10, 800, replace = TRUE))
+group3 <- sample(1:10, 1000, replace = TRUE)
 
-test.exampleData.initialize <- function() {
-  a <- exampleData(data.frame(x))
-  checkEquals(c(a$varnames, a$nobs, a$nvars), c(c("x"), 100, 1))
-  data <- cbind(y, x)
-  b <- exampleData(data, c("lhs", "rhs"))
-  checkEquals(c(b$varnames, b$nobs, b$nvars), c(c("lhs", "rhs"), 100, 2))
-  checkException(exampleData(data, c("few")), silent = TRUE)
-  c <- exampleData(matrix(c(2, 3, 1, 2, 3, 4), 2, 3))
-  checkEquals(c(c$varnames, c$nobs, c$nvars), c(c("var1", "var2", "var3"), 2, 3))
-  d <- exampleData(x)
-  checkEquals(c(d$varnames, d$nobs, d$nvars), c(c("var1"), 100, 1))
+test.ExampleData.SaveLoad <- function() {
+    a <- ExampleData(x, y, z, const = list(mu = 0, sigma = 1))
+    a$setGroup(group1)
+    a$saveToDisk("", "myObj", 8)
+    b <- ExampleData()
+    b$loadFromDisk("", "myObj")
+    checkEquals(a, b, tolerance = 1e-8)
+    file.remove(c("myObj.RData", "myObj.csv"))
 }
 
-test.exampleData.addData <- function() {
-  a <- exampleData(x, "x")
-  a$addData(data.frame(y))
-  checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("x", "y"), 2, 2))
-  a$addData(cbind(y, z), c("var1", "var2"))
-  checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("x", "y", "var1", "var2"), 4, 4))
-  a$addData(z)
-  checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("x", "y", "var1", "var2", "var3"), 5, 5))
-  checkException(a$addData(data.frame(w)), silent = TRUE)
+test.ExampleData.initialize <- function() {
+    a <- ExampleData(x, y, const = list(mu = 0, sigma = 1))
+    checkEquals(c(a$varnames, a$nobs, a$nvars, a$const$mu), c(c("x", "y", "obsindex"), 1000, 3, 0))
+    b <- ExampleData(rhs, z, varnames = c("rhs1", "rhs2", "rhs3"))
+    checkEquals(c(b$varnames, b$nobs, b$nvars), c(c("rhs1", "rhs2", "rhs3", "obsindex"), 1000, 4))
+    c <- ExampleData(strvar, stringsAsFactors = FALSE, varnames = "gender")
+    checkEquals(c(c$varnames, c$nobs, c$nvars, class(c$var$gender)), c(c("gender", "obsindex"), 5, 2, "character"))
+    checkException(ExampleData(x, y, varnames = c("few")), silent = TRUE)
 }
 
-test.exampleData.removeData <- function() {
-  a <- exampleData(data.frame(x, y, z))
-  a$removeData("x")
-  checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("y", "z"), 2, 2))
-  a$removeData(2)
-  checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("y"), 1, 1))
+test.ExampleData.setGroup <- function() {
+    a <- ExampleData(x, y)
+    a$setGroup(group1)
+    checkEquals(a$ngroup, 10)
+    checkException(a$setGroup(group2), silent = TRUE)
+    checkException(a$setGroup(group3), silent = TRUE)
 }
 
-test.ExampleexampleData.selectData <- function() {
-  a <- exampleData(data.frame(x, y, z, z), varnames = c("x", "y", "z1", "z2"))
-  b <- a$copy()
-  a$selectData()
-  checkEquals(b, a)
-  a$selectData(col = c(1, 2, 4))
-  checkEquals(c(a$varnames, a$nvars), c(c("x", "y", "z2"), 3))
-  a$selectData(row = c(1:2, 5:8), col = c("x"))
-  checkEquals(c(a$varnames, a$nobs, a$nvars), c("x", 6, 1))
-  a$selectData(row = a$var$x > 0)
-  checkEquals(a$nobs, nrow(a$var))
+test.ExampleData.addData <- function() {
+    a <- ExampleData(x)
+    a$addData(y)
+    checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("x", "obsindex", "y"), 3, 3))
+    a$addData(rhs, names = c("var1", "var2"))
+    checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("x", "obsindex", "y", "var1", "var2"), 5, 5))
+    checkException(a$addData(w), silent = TRUE)
+    checkException(a$addData(x, y, names = c("var1")), silent = TRUE)
+}
+
+test.ExampleData.removeData <- function() {
+    a <- ExampleData(x, y, z)
+    a$removeData("x")
+    checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("y", "z", "obsindex"), 3, 3))
+    a$removeData(2)
+    checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("y", "obsindex"), 2, 2))
+}
+
+test.ExampleData.selectData <- function() {
+    a <- ExampleData(x, y, z, rhs, varnames = c("x", "y", "z", "x1", "y1"))
+    a$selectData(col = c(1, 2, 4))
+    checkEquals(c(a$varnames, a$nvars), c(c("x", "y", "x1"), 3))
+    a$selectData(c(1:2, 5:8), col = c("x"))
+    checkEquals(c(a$varnames, a$nobs, a$nvars), c("x", 6, 1))
+    a$selectData(a$var$x > 0)
+    checkEquals(a$nobs, nrow(a$var))
+}
+
+test.ExampleData.misc <- function() {
+    a <- ExampleData(x, y, z)
+    b <- a$copy()
+    checkEquals(a, b)
+    a$removeData("y")
+    checkException(checkEquals(a, b), silent = TRUE)
+    
+    checkTrue(a$isVariable("x"))
+    checkTrue(!a$isVariable("w"))
 }

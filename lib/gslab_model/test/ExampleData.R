@@ -1,3 +1,3 @@
-source("../modelData.R")
+source("../ModelData.R")
 
-exampleData <- setRefClass("exampleData", contains = "modelData")
+ExampleData <- setRefClass("ExampleData", contains = "ModelData")

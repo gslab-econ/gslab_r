@@ -1,39 +1,42 @@
+Starting at  06/07/17:17:34:42
 Loading required package: methods
-Warning message:
-package 'RUnit' was built under R version 3.3.3 
 
 
-Executing test function test.exampleData.addData  ...  done successfully.
-
-
-
-Executing test function test.exampleData.initialize  ...  done successfully.
+Executing test function test.ExampleData.addData  ...  done successfully.
 
 
 
-Executing test function test.exampleData.removeData  ...  done successfully.
+Executing test function test.ExampleData.initialize  ...  done successfully.
 
 
 
-Executing test function test.ExampleexampleData.selectData  ...  done successfully.
+Executing test function test.ExampleData.misc  ...  done successfully.
 
 
 
-Executing test function test.exampleModel.estimate  ...  done successfully.
+Executing test function test.ExampleData.removeData  ...  done successfully.
 
 
 
-Executing test function test.exampleModel.exampleModel  ...  done successfully.
+Executing test function test.ExampleData.SaveLoad  ...  done successfully.
 
-RUNIT TEST PROTOCOL -- Fri May 26 09:43:27 2017 
+
+
+Executing test function test.ExampleData.selectData  ...  done successfully.
+
+
+
+Executing test function test.ExampleData.setGroup  ...  done successfully.
+
+RUNIT TEST PROTOCOL -- Wed Jun  7 17:34:43 2017 
 *********************************************** 
-Number of test functions: 6 
+Number of test functions: 7 
 Number of errors: 0 
 Number of failures: 0 
 
  
 1 Test Suite : 
-gslab_model - 6 test functions, 0 errors, 0 failures
+gslab_model - 7 test functions, 0 errors, 0 failures
 
 
 
@@ -41,16 +44,16 @@ Details
 *************************** 
 Test Suite: gslab_model 
 Test function regexp: ^test.+ 
-Test file regexp: test.*.R$ 
+Test file regexp: test.ExampleData.R$ 
 Involved directory: 
-. 
+./ 
 --------------------------- 
-Test file: ./test.exampleData.R 
-test.exampleData.addData: (5 checks) ... OK (0 seconds)
-test.exampleData.initialize: (7 checks) ... OK (0.01 seconds)
-test.exampleData.removeData: (3 checks) ... OK (0 seconds)
-test.ExampleexampleData.selectData: (4 checks) ... OK (0 seconds)
---------------------------- 
-Test file: ./test.exampleModel.R 
-test.exampleModel.estimate: (1 checks) ... OK (0.02 seconds)
-test.exampleModel.exampleModel: (4 checks) ... OK (0.01 seconds)
+Test file: .//test.ExampleData.R 
+test.ExampleData.addData: (4 checks) ... OK (0.02 seconds)
+test.ExampleData.initialize: (4 checks) ... OK (0.02 seconds)
+test.ExampleData.misc: (5 checks) ... OK (0.02 seconds)
+test.ExampleData.removeData: (2 checks) ... OK (0.01 seconds)
+test.ExampleData.SaveLoad: (1 checks) ... OK (0.06 seconds)
+test.ExampleData.selectData: (3 checks) ... OK (0.01 seconds)
+test.ExampleData.setGroup: (3 checks) ... OK (0.02 seconds)
+Finished at  06/07/17:17:34:43
