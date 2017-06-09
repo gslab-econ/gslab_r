@@ -8,16 +8,8 @@ strvar <- c("f", "m", "m", "f", "m")
 group1 <- sort(sample(1:10, 1000, replace = TRUE))
 group2 <- sort(sample(1:10, 800, replace = TRUE))
 group3 <- sample(1:10, 1000, replace = TRUE)
-
-test.ExampleData.SaveLoad <- function() {
-    a <- ExampleData(x, y, z, const = list(mu = 0, sigma = 1))
-    a$setGroup(group1)
-    a$saveToDisk("", "myObj", 8)
-    b <- ExampleData()
-    b$loadFromDisk("", "myObj")
-    checkEquals(a, b, tolerance = 1e-8)
-    file.remove(c("myObj.RData", "myObj.csv"))
-}
+arrayVar1 <- array(rnorm(3000), c(1000, 3))
+arrayVar2 <- array(rnorm(6000), c(1000, 2, 3))
 
 test.ExampleData.initialize <- function() {
     a <- ExampleData(x, y, const = list(mu = 0, sigma = 1))
@@ -65,8 +57,35 @@ test.ExampleData.selectData <- function() {
     checkEquals(a$nobs, nrow(a$var))
 }
 
+test.ExampleData.array <- function() {
+    a <- ExampleData(x)
+    a$addArrayVars(arrayVar1, "array1")
+    checkEquals(c(a$varnames, a$nvars, ncol(a$var), dim(a$var$array1)), 
+                c(c("x", "obsindex", "array1"), 3, 3, c(1000, 3, 1)))
+    a$addArrayVars(arrayVar2, "array2")
+    b <- a$copy()
+    a$expandArrayVars()
+    checkEquals(c(a$varnames[c(4, 10)], a$nvars, ncol(a$var)), 
+                c(c("array1_array_2_1", "array2_array_2_2"), 11, 11))
+    a$collapseArrayVars()
+    checkEquals(a, b)
+}
+
+test.ExampleData.SaveLoad <- function() {
+    a <- ExampleData(x, y, z, const = list(mu = 0, sigma = 1))
+    a$setGroup(group1)
+    a$addArrayVars(arrayVar1, "array1")
+    a$addArrayVars(arrayVar2, "array2")
+    
+    a$saveToDisk("", "myObj", 8)
+    b <- ExampleData()
+    b$loadFromDisk("", "myObj")
+    checkEquals(a, b, tolerance = 1e-8)
+    file.remove(c("myObj.RData", "myObj.csv"))
+}
+
 test.ExampleData.misc <- function() {
-    a <- ExampleData(x, y, z)
+    a <- ExampleData(x, y)
     b <- a$copy()
     checkEquals(a, b)
     a$removeData("y")
