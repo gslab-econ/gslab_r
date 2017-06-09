@@ -25,6 +25,9 @@ test.ExampleData.setGroup <- function() {
     a <- ExampleData(x, y)
     a$setGroup(group1)
     checkEquals(a$ngroup, 10)
+    a <- ExampleData(x, y, group1)
+    a$setGroup(a$var$group1)
+    checkEquals(a$var$group1, a$groupvar)
     checkException(a$setGroup(group2), silent = TRUE)
     checkException(a$setGroup(group3), silent = TRUE)
 }
