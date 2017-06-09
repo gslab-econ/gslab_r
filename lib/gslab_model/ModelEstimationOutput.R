@@ -4,5 +4,5 @@ ModelEstimationOutput <- setRefClass(Class  = "ModelEstimationOutput",
                                                    convergence = "numeric",  # flag for convergence
                                                    model       = "Model",    # model object used for estimation
                                                    nobs        = "numeric"   # number of observations in the data used for estimation
-                                                   )
+                                     )
 )

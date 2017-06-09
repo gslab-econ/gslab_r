@@ -1,9 +1,9 @@
 source("ExampleModel.R")
 
 test.ExampleModel.initialize <- function() {
-    a <- ExampleModel("y", c("x1", "x2"), suffix = "_c", include_constant = 1, startparam = c(2, 2, 2))
+    a <- ExampleModel("y", c("x1", "x2"), suffix = "_c", include_constant = 1, startparam = c(0, 1, 2))
     checkEquals(c(a$paramlist, a$lhslist, a$rhslist, a$nparam, a$include_constant, a$startparam),
-                c(c("x1_c", "x2_c", "constant"), "y", c("x1","x2"), 3, 1, c(2, 2, 2)))
+                c(c("x1_c", "x2_c", "constant"), "y", c("x1","x2"), 3, 1, c(0, 1, 2)))
     b <- ExampleModel(c("y1", "y2"), "z", include_constant = 0)
     checkEquals(c(b$paramlist, b$lhslist, b$rhslist, b$nparam, b$include_constant, b$startparam),
                 c("z_coeff", c("y1", "y2"), "z", 1, 0, 0))
@@ -20,8 +20,8 @@ test.ExampleModel.XBeta <- function() {
 
 test.ExampleModel.estimate <- function() {
     model <- ExampleModel("y", c("x1", "x2", "x3"), include_constant = 0)
-    data  <- ExampleData(rnorm(100))
+    data  <- ExampleData(x = rnorm(100))
     est   <- model$estimate(data)
     checkEquals(c(est$nobs, est$model$nparam, est$param, est$value, est$vcov, est$se),
-                c(100, 3, rep(0.5, 3), -0.75, diag(3), rep(1, 3)), tolerance = 0.0001)
+                c(100, 3, rep(0, 3), 0, diag(3), rep(1, 3)), tolerance = 0.0001)
 }

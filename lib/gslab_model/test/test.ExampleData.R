@@ -1,8 +1,9 @@
 source("ExampleData.R")
+
 x <- rnorm(1000)
 y <- rnorm(1000)
 z <- rnorm(1000)
-w <- rnorm(2000)
+w <- rnorm(1500)
 rhs <- list(x = x, y = y)
 strvar <- c("f", "m", "m", "f", "m")
 group1 <- sort(sample(1:10, 1000, replace = TRUE))

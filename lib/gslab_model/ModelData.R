@@ -1,18 +1,18 @@
 ModelData <- setRefClass(Class  = "ModelData",
-                         # A ModelData object stores data in the field var, an R data.frame object.
-                         # The constructor ModelData() accepts the same inputs as the 
-                         #   constructor for the R data.frame class.
-                         # See /test/ for examples 
+                         # A ModelData object stores dataset in the field var, an R data.frame object.
+                         # The constructor ModelData() accepts the same inputs as the constructor for
+                         #   the R data.frame class, plus an option of specifying variable names and
+                         #   an option of adding a customer list of constants characterizing the data.
                          
-                         fields = list(var                = "data.frame",   # data.frame object to hold actual data variables
-                                       nobs               = "numeric",      # number of observations
-                                       varnames           = "character",    # list of names of variables in the dataset 
-                                       nvars              = "numeric",      # number of observations
-                                       const              = "list",         # list to hold constants characterizing the dataset
-                                       groupvar           = "numeric",      # variable identifying groups in panel
-                                       ngroup             = "numeric",      # number of groups in panel
-                                       group_size         = "numeric",      # vector of size ngroups x 1 giving number of observations in each group
-                                       unique_group_sizes = "numeric"       # unique group sizes that appear in the data
+                         fields = list(var                = "data.frame",   # a data.frame object to hold dataset
+                                       varnames           = "character",    # a vector of variable names in the dataset
+                                       nvars              = "numeric",      # the number of variables in the dataset
+                                       nobs               = "numeric",      # the number of observations in the dataset
+                                       const              = "list",         # a list to hold constants characterizing the dataset
+                                       groupvar           = "numeric",      # a vector identifying groups in the panel
+                                       ngroup             = "numeric",      # the number of groups in the panel
+                                       group_size         = "numeric",      # a vector of size ngroups giving the number of observations in each group
+                                       unique_group_sizes = "numeric"       # unique group sizes that appear in the dataset
                          ),
                          methods = list(
                              initialize = function(..., varnames = NULL, const = list()) {
@@ -24,10 +24,10 @@ ModelData <- setRefClass(Class  = "ModelData",
                                          stop("Wrong number of variable names supplied")
                                      colnames(data) <- varnames
                                  }
-                                 .self$var      <- cbind(data, obsindex = 1:nrow(data))
-                                 .self$nobs     <- nrow(.self$var)
+                                 .self$var      <- data.frame(data, obsindex = 1:nrow(data))
                                  .self$varnames <- colnames(.self$var)
                                  .self$nvars    <- ncol(.self$var)
+                                 .self$nobs     <- nrow(.self$var)
                                  .self$const    <- const
                              }
                          )
@@ -35,13 +35,15 @@ ModelData <- setRefClass(Class  = "ModelData",
 
 ModelData$methods(
     setGroup = function(value) {
-        # Add a vector identifying groups in the panel. This vector must be sorted in
-        #   ascending order with length equal to the number of observations.
+        # Add a vector identifying groups in the panel. This vector must be sorted in ascending order
+        #   with length equal to the number of observations in the dataset.
+        # In most cases, the group variable is also in the dataset. It's better to first sort the dataset
+        #   by the group variable, then create the ModelData object and set the group variable.
         
         if (length(value) != .self$nobs)
-            stop("Length of group variable does not match data")
+            stop("The length of the group variable does not match the dataset")
         if (any(value[2:.self$nobs] - value[1:.self$nobs - 1] < 0))
-            stop("Group variable not sorted")
+            stop("The group variable is not sorted")
         .self$groupvar           <- value
         .self$ngroup             <- length(unique(.self$groupvar))
         .self$group_size         <- as.numeric(table(.self$groupvar))
@@ -49,13 +51,13 @@ ModelData$methods(
     },
     
     addData = function(..., names = NULL) {
+        # Input: the same as the constructor for a data.frame object plus an option of specifying variable names
+        
         newdata <- data.frame(...)
-        if (nrow(newdata) != .self$nobs) 
-            stop("Number of observations is mismatched.")
         if (!is.null(names)) {
             if (length(names) != ncol(newdata))
                 stop("Wrong number of variable names supplied")
-            colnames(newdata) = names
+            colnames(newdata) <- names
         }
         .self$var      <- data.frame(.self$var, newdata, check.names = TRUE)
         .self$varnames <- colnames(.self$var)
@@ -63,6 +65,8 @@ ModelData$methods(
     },
     
     removeData = function(col) {
+        # Input: column index or variable names
+        
         if (is.character(col))
             col <- which(.self$varnames %in% col)
         .self$var      <- .self$var[-col]
@@ -71,13 +75,15 @@ ModelData$methods(
     },
     
     selectData = function(row = 1:.self$nobs, col = .self$varnames) {
+        # Input: the same as subsetting a data.frame object
+        
         data <- data.frame(.self$var[row, col])
         if (is.character(col))
             colnames(data) <- col
         .self$var      <- data
         .self$varnames <- colnames(.self$var)
-        .self$nobs     <- nrow(.self$var)
         .self$nvars    <- ncol(.self$var)
+        .self$nobs     <- nrow(.self$var)
     },
     
     isVariable = function(varname) {
@@ -85,7 +91,7 @@ ModelData$methods(
     },
     
     addArrayVars = function(data, name = "arrayvar") {
-        # Add a matrix or a 3-dimension array as a 3-dimension variable.
+        # Input: a matrix or a 3-dimension array, added in the field var as a 3-dimension variable.
         
         d <- dim(data)
         if (is.null(d))
@@ -97,13 +103,13 @@ ModelData$methods(
         if (length(d) == 2)
             data <- array(data, c(d[1], d[2], 1))
         .self$var[[name]] <- data
-        .self$nvars    <- ncol(.self$var)
-        .self$varnames <- colnames(.self$var)
+        .self$varnames    <- colnames(.self$var)
+        .self$nvars       <- ncol(.self$var)
     },
     
     expandArrayVars = function() {
         # Expand all array variables [varname] with dimensions R by C into multiple variables 
-        #   with the form [varname]_array_[1:R]_[1:C]
+        #   with the variable name [varname]_array_[1:R]_[1:C]
         # The reverse function of collapseArrayVars
         
         vars <- .self$varnames
@@ -112,8 +118,8 @@ ModelData$methods(
             if (!is.null(d)) {
                 for (i in 1:d[2]) {
                     for (j in 1:d[3]) {
-                        name <- paste(varname, "_array_", i, "_", j, sep = "")
-                        .self$addData(.self$var[[varname]][, i, j], names = name)
+                        newname <- paste(varname, "_array_", i, "_", j, sep = "")
+                        .self$addData(.self$var[[varname]][, i, j], names = newname)
                     }
                 }
                 .self$removeData(varname)
@@ -122,7 +128,7 @@ ModelData$methods(
     },
     
     collapseArrayVars = function() {
-        # Collapse all variables of the form [varname]_array_[d1]_[d2] to an array variable 
+        # Collapse all variables with the name [varname]_array_[d1]_[d2] to an array variable 
         #   [varname] with dimensions R = max(d1) by C = max(d2)
         # The reverse function of expandArrayVars
         
@@ -144,9 +150,9 @@ ModelData$methods(
     },
     
     saveToDisk = function(directory, name, precision = 4) {
-        # Saves an ModelData object to a directory. The field var is saved as a CSV, 
+        # Save an ModelData object to a directory. The field var is saved as .csv, 
         #   and the remaining fields are saved as .RData.
-        # The group variable is added in var. Array variables are expanded.
+        # The group variable is added in the field var with name group_export. Array variables are expanded.
         #
         # INPUTS
         #  - directory: location of files to be saved.
@@ -163,19 +169,19 @@ ModelData$methods(
         base::save(obj, file = paste(directory, name, ".RData", sep = ""))
     },
     
-    loadFromDisk = function(dir, name, collapseArrayVars = 1) {
-        # Loads ModelData structure saved using SaveToDisk to an ModelData object.
+    loadFromDisk = function(directory, name, collapseArrayVars = 1) {
+        # Load files saved using SaveToDisk to an ModelData object.
         #
         # INPUTS
         #  - directory: location of files to be loaded
         #  - name: name of files to be loaded. 
         #  - collapseArrayVars: whether array variables are collapsed. Default is collapse.
         
-        tempName <- load(paste(dir, name, ".RData", sep = ""))
+        tempName <- load(paste(directory, name, ".RData", sep = ""))
         tempObj  <- get(tempName)
         for (field in names(.refClassDef@fieldClasses))
             .self$field(field, tempObj$field(field))
-        data <- read.csv(paste(dir, name, ".csv", sep = ""))
+        data <- read.csv(paste(directory, name, ".csv", sep = ""))
         .self$var <- data
         .self$removeData("group_export")
         if (collapseArrayVars)
