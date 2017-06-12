@@ -15,13 +15,16 @@ ModelData <- setRefClass(Class  = "ModelData",
                                        unique_group_sizes = "numeric"       # unique group sizes that appear in the dataset
                          ),
                          methods = list(
-                             initialize = function(..., varnames = NULL, const = list()) {
+                             initialize = function(..., stringsAsFactors = FALSE,
+                                                   varnames = NULL, const = list()) {
                                  data <- data.frame(..., check.names = TRUE)
-                                 if (nrow(data) == 0)
+                                 if (nrow(data) == 0) {
                                      return (.self)
+                                 }
                                  if (!is.null(varnames)) {
-                                     if (length(varnames) != ncol(data))
+                                     if (length(varnames) != ncol(data)) {
                                          stop("Wrong number of variable names supplied")
+                                     }
                                      colnames(data) <- varnames
                                  }
                                  .self$var      <- data.frame(data, obsindex = 1:nrow(data))
@@ -37,13 +40,16 @@ ModelData$methods(
     setGroup = function(value) {
         # Add a vector identifying groups in the panel. This vector must be sorted in ascending order
         #   with length equal to the number of observations in the dataset.
-        # In most cases, the group variable is also in the dataset. It's better to first sort the dataset
+        # In most cases, the group variable is also in the data. It's better to first sort the data
         #   by the group variable, then create the ModelData object and set the group variable.
+        # Input: a vector identifying groups
         
-        if (length(value) != .self$nobs)
+        if (length(value) != .self$nobs) {
             stop("The length of the group variable does not match the dataset")
-        if (any(value[2:.self$nobs] - value[1:.self$nobs - 1] < 0))
+        }
+        if (any(value[2:.self$nobs] - value[1:.self$nobs - 1] < 0)) {
             stop("The group variable is not sorted")
+        }
         .self$groupvar           <- value
         .self$ngroup             <- length(unique(.self$groupvar))
         .self$group_size         <- as.numeric(table(.self$groupvar))
@@ -51,12 +57,13 @@ ModelData$methods(
     },
     
     addData = function(..., names = NULL) {
-        # Input: the same as the constructor for a data.frame object plus an option of specifying variable names
+        # Input: the same as the constructor of data.frame plus an option of specifying variable names
         
-        newdata <- data.frame(...)
+        newdata <- data.frame(..., stringsAsFactors = FALSE)
         if (!is.null(names)) {
-            if (length(names) != ncol(newdata))
+            if (length(names) != ncol(newdata)) {
                 stop("Wrong number of variable names supplied")
+            }
             colnames(newdata) <- names
         }
         .self$var      <- data.frame(.self$var, newdata, check.names = TRUE)
@@ -67,8 +74,13 @@ ModelData$methods(
     removeData = function(col) {
         # Input: column index or variable names
         
-        if (is.character(col))
-            col <- which(.self$varnames %in% col)
+        if (is.character(col)) {
+            if (any(!col %in% varnames)) {
+                stop(sprintf("%s not in the data", paste(c(col[!col %in% .self$varnames]), collapse = ", ")))
+            } else {
+                col <- which(.self$varnames %in% col) 
+            }
+        }
         .self$var      <- .self$var[-col]
         .self$varnames <- colnames(.self$var)
         .self$nvars    <- ncol(.self$var)
@@ -94,14 +106,15 @@ ModelData$methods(
         # Input: a matrix or a 3-dimension array, added in the field var as a 3-dimension variable.
         
         d <- dim(data)
-        if (is.null(d))
+        if (is.null(d)) {
             stop("Not an array variable. Use addData instead")
-        if (d[1] != .self$nobs)
+        } else if (d[1] != .self$nobs) {
             stop("Length of array variable does not match data")
-        if (length(d) > 3)
+        } else if (length(d) > 3) {
             stop("Array structure is too complicated")
-        if (length(d) == 2)
+        } else if (length(d) == 2) {
             data <- array(data, c(d[1], d[2], 1))
+        }
         .self$var[[name]] <- data
         .self$varnames    <- colnames(.self$var)
         .self$nvars       <- ncol(.self$var)
@@ -135,7 +148,7 @@ ModelData$methods(
         arrays <- grep("_array_[0-9]+_[0-9]+$", .self$varnames, value = TRUE)
         arrayvars <- unique(sub("_array_[0-9]+_[0-9]+$", "", arrays))
         for (arrayvar in arrayvars) {
-            f = function (array) sub(paste(arrayvar, "_array_", sep = ""),  "", array)
+            f <- function (array) sub(paste(arrayvar, "_array_", sep = ""),  "", array)
             collection <- lapply(grep(arrayvar, arrays, value = TRUE), f)
             maxDimension <- as.integer(unlist(strsplit(max(unlist(collection)), "_")))
             newArray <- array(0, c(.self$nobs, maxDimension))
@@ -149,7 +162,7 @@ ModelData$methods(
         }
     },
     
-    saveToDisk = function(directory, name, precision = 4) {
+    saveToDisk = function(directory, name, precision = 8) {
         # Save an ModelData object to a directory. The field var is saved as .csv, 
         #   and the remaining fields are saved as .RData.
         # The group variable is added in the field var with name group_export. Array variables are expanded.
@@ -161,12 +174,13 @@ ModelData$methods(
         
         obj <- .self$copy()
         obj$expandArrayVars()
-        if (length(obj$groupvar))
+        if (length(obj$groupvar)) {
             obj$addData(group_export = obj$groupvar)
-        write.csv(round(obj$var, digits = precision), file = paste(directory, name, ".csv", sep = ""), 
+        }
+        write.csv(round(obj$var, digits = precision), file = paste(directory, "/", name, ".csv", sep = ""), 
                   row.names = FALSE)
         obj$var <- data.frame()
-        base::save(obj, file = paste(directory, name, ".RData", sep = ""))
+        saveRDS(obj, file = paste(directory, "/", name, ".rds", sep = ""))
     },
     
     loadFromDisk = function(directory, name, collapseArrayVars = 1) {
@@ -177,14 +191,15 @@ ModelData$methods(
         #  - name: name of files to be loaded. 
         #  - collapseArrayVars: whether array variables are collapsed. Default is collapse.
         
-        tempName <- load(paste(directory, name, ".RData", sep = ""))
-        tempObj  <- get(tempName)
-        for (field in names(.refClassDef@fieldClasses))
+        tempObj <- readRDS(paste(directory, "/", name, ".rds", sep = ""))
+        for (field in names(.refClassDef@fieldClasses)) {
             .self$field(field, tempObj$field(field))
-        data <- read.csv(paste(directory, name, ".csv", sep = ""))
+        }
+        data <- read.csv(paste(directory, "/", name, ".csv", sep = ""))
         .self$var <- data
         .self$removeData("group_export")
-        if (collapseArrayVars)
+        if (collapseArrayVars) {
             .self$collapseArrayVars()
+        }
     }
 )

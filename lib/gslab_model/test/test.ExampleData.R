@@ -1,36 +1,36 @@
 source("ExampleData.R")
-
-x <- rnorm(1000)
-y <- rnorm(1000)
-z <- rnorm(1000)
-w <- rnorm(1500)
+n <- 1000
+x <- rnorm(n)
+y <- rnorm(n)
+z <- rnorm(n)
+w <- rnorm(n + 1)
 rhs <- list(x = x, y = y)
 strvar <- c("f", "m", "m", "f", "m")
-group1 <- sort(sample(1:10, 1000, replace = TRUE))
-group2 <- sort(sample(1:10, 800, replace = TRUE))
-group3 <- sample(1:10, 1000, replace = TRUE)
-arrayVar1 <- array(rnorm(3000), c(1000, 3))
-arrayVar2 <- array(rnorm(6000), c(1000, 2, 3))
+group1 <- sort(sample(1:10, n, replace = TRUE))
+group2 <- sort(sample(1:10, n - 1, replace = TRUE))
+group3 <- sample(1:10, n, replace = TRUE)
+arrayVar1 <- array(rnorm(3 * n), c(n, 3))
+arrayVar2 <- array(rnorm(6 * n), c(n, 2, 3))
 
 test.ExampleData.initialize <- function() {
     a <- ExampleData(x, y, const = list(mu = 0, sigma = 1))
-    checkEquals(c(a$varnames, a$nobs, a$nvars, a$const$mu), c(c("x", "y", "obsindex"), 1000, 3, 0))
+    checkEquals(c(a$varnames, a$nobs, a$nvars, a$const$mu), c(c("x", "y", "obsindex"), n, 3, 0))
     b <- ExampleData(rhs, z, varnames = c("rhs1", "rhs2", "rhs3"))
-    checkEquals(c(b$varnames, b$nobs, b$nvars), c(c("rhs1", "rhs2", "rhs3", "obsindex"), 1000, 4))
-    c <- ExampleData(strvar, stringsAsFactors = FALSE, varnames = "gender")
-    checkEquals(c(c$varnames, c$nobs, c$nvars, class(c$var$gender)), c(c("gender", "obsindex"), 5, 2, "character"))
-    checkException(ExampleData(x, y, varnames = c("few")), silent = TRUE)
+    checkEquals(c(b$varnames, b$nobs, b$nvars), c(c("rhs1", "rhs2", "rhs3", "obsindex"), n, 4))
+    c <- ExampleData(strvar, stringsAsFactors = TRUE, varnames = "gender")
+    checkEquals(c(c$varnames, class(c$var$gender)), c(c("gender", "obsindex"), "factor"))
+    checkException(ExampleData(x, y, varnames = c("few")), silent = TRUE)  # Mismatched number of variable names
 }
 
 test.ExampleData.setGroup <- function() {
     a <- ExampleData(x, y)
     a$setGroup(group1)
-    checkEquals(a$ngroup, 10)
+    checkEquals(a$ngroup, length(unique(group1)))
     a <- ExampleData(x, y, group1)
     a$setGroup(a$var$group1)
     checkEquals(a$var$group1, a$groupvar)
-    checkException(a$setGroup(group2), silent = TRUE)
-    checkException(a$setGroup(group3), silent = TRUE)
+    checkException(a$setGroup(group2), silent = TRUE)  # Length unequal to the number of observations
+    checkException(a$setGroup(group3), silent = TRUE)  # Not sorted in ascending order
 }
 
 test.ExampleData.addData <- function() {
@@ -39,8 +39,8 @@ test.ExampleData.addData <- function() {
     checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("x", "obsindex", "y"), 3, 3))
     a$addData(rhs, names = c("var1", "var2"))
     checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("x", "obsindex", "y", "var1", "var2"), 5, 5))
-    checkException(a$addData(w), silent = TRUE)
-    checkException(a$addData(x, y, names = c("var1")), silent = TRUE)
+    checkException(a$addData(w), silent = TRUE)  # Add a variable with unequal length
+    checkException(a$addData(x, y, names = c("var1")), silent = TRUE)  # Wrong number of variable names
 }
 
 test.ExampleData.removeData <- function() {
@@ -49,6 +49,7 @@ test.ExampleData.removeData <- function() {
     checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("y", "z", "obsindex"), 3, 3))
     a$removeData(2)
     checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("y", "obsindex"), 2, 2))
+    checkException(a$removeData("w"), silent = TRUE)  # Delete a non-existence variable
 }
 
 test.ExampleData.selectData <- function() {
@@ -65,7 +66,7 @@ test.ExampleData.array <- function() {
     a <- ExampleData(x)
     a$addArrayVars(arrayVar1, "array1")
     checkEquals(c(a$varnames, a$nvars, ncol(a$var), dim(a$var$array1)), 
-                c(c("x", "obsindex", "array1"), 3, 3, c(1000, 3, 1)))
+                c(c("x", "obsindex", "array1"), 3, 3, c(n, 3, 1)))
     a$addArrayVars(arrayVar2, "array2")
     b <- a$copy()
     a$expandArrayVars()
@@ -80,12 +81,14 @@ test.ExampleData.SaveLoad <- function() {
     a$setGroup(group1)
     a$addArrayVars(arrayVar1, "array1")
     a$addArrayVars(arrayVar2, "array2")
+    a$saveToDisk(".", "myObj", 12)
+    checkException(a$saveToDisk("non-existent", "myObj"), silent = TRUE)  # Non-existent directory
     
-    a$saveToDisk("", "myObj", 8)
     b <- ExampleData()
-    b$loadFromDisk("", "myObj")
-    checkEquals(a, b, tolerance = 1e-8)
-    file.remove(c("myObj.RData", "myObj.csv"))
+    b$loadFromDisk(".", "myObj")
+    checkEquals(a, b, tolerance = 1e-12)
+    file.remove(c("myObj.rds", "myObj.csv"))
+    checkException(b$loadFromDisk(".", "myObj"), silent = TRUE)  # Non-existent file
 }
 
 test.ExampleData.misc <- function() {
