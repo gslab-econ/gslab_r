@@ -1,3 +1,4 @@
+library(stringr)
 ModelData <- setRefClass(Class  = "ModelData",
                          # A ModelData object stores dataset in the field var, an R data.frame object.
                          # The constructor ModelData() accepts the same inputs as the constructor for
@@ -13,36 +14,35 @@ ModelData <- setRefClass(Class  = "ModelData",
                                        ngroup             = "numeric",      # the number of groups in the panel
                                        group_size         = "numeric",      # a vector of size ngroups giving the number of observations in each group
                                        unique_group_sizes = "numeric"       # unique group sizes that appear in the dataset
-                         ),
-                         methods = list(
-                             initialize = function(..., stringsAsFactors = FALSE,
-                                                   varnames = NULL, const = list()) {
-                                 data <- data.frame(..., check.names = TRUE)
-                                 if (nrow(data) == 0) {
-                                     return (.self)
-                                 }
-                                 if (!is.null(varnames)) {
-                                     if (length(varnames) != ncol(data)) {
-                                         stop("Wrong number of variable names supplied")
-                                     }
-                                     colnames(data) <- varnames
-                                 }
-                                 .self$var      <- data.frame(data, obsindex = 1:nrow(data))
-                                 .self$varnames <- colnames(.self$var)
-                                 .self$nvars    <- ncol(.self$var)
-                                 .self$nobs     <- nrow(.self$var)
-                                 .self$const    <- const
-                             }
                          )
 )
 
 ModelData$methods(
+    initialize = function(..., stringsAsFactors = FALSE,
+                          varnames = NULL, const = list()) {
+        data <- data.frame(..., check.names = TRUE)
+        if (nrow(data) == 0) {
+            return (.self)
+        }
+        if (!is.null(varnames)) {
+            if (length(varnames) != ncol(data)) {
+                stop("Wrong number of variable names supplied")
+            }
+            colnames(data) <- varnames
+        }
+        .self$var      <- data.frame(data, obsindex = 1:nrow(data))
+        .self$varnames <- colnames(.self$var)
+        .self$nvars    <- ncol(.self$var)
+        .self$nobs     <- nrow(.self$var)
+        .self$const    <- const
+    },
+    
     setGroup = function(value) {
-        # Add a vector identifying groups in the panel. This vector must be sorted in ascending order
-        #   with length equal to the number of observations in the dataset.
+        # Input: a vector identifying groups
+        # Add a vector identifying groups in the panel. This vector must be sorted in ascending
+        #   order with length equal to the number of observations in the dataset.
         # In most cases, the group variable is also in the data. It's better to first sort the data
         #   by the group variable, then create the ModelData object and set the group variable.
-        # Input: a vector identifying groups
         
         if (length(value) != .self$nobs) {
             stop("The length of the group variable does not match the dataset")
@@ -57,7 +57,7 @@ ModelData$methods(
     },
     
     addData = function(..., names = NULL) {
-        # Input: the same as the constructor of data.frame plus an option of specifying variable names
+        # Input: same as the constructor of data.frame plus an option of specifying variable names
         
         newdata <- data.frame(..., stringsAsFactors = FALSE)
         if (!is.null(names)) {
@@ -76,7 +76,8 @@ ModelData$methods(
         
         if (is.character(col)) {
             if (any(!col %in% varnames)) {
-                stop(sprintf("%s not in the data", paste(c(col[!col %in% .self$varnames]), collapse = ", ")))
+                stop(sprintf("%s not in the data", paste(c(col[!col %in% .self$varnames]), 
+                                                         collapse = ", ")))
             } else {
                 col <- which(.self$varnames %in% col) 
             }
@@ -145,16 +146,21 @@ ModelData$methods(
         #   [varname] with dimensions R = max(d1) by C = max(d2)
         # The reverse function of expandArrayVars
         
-        arrays <- grep("_array_[0-9]+_[0-9]+$", .self$varnames, value = TRUE)
-        arrayvars <- unique(sub("_array_[0-9]+_[0-9]+$", "", arrays))
+        all_arrays <- grep("_array_[0-9]+_[0-9]+$", .self$varnames, value = TRUE)  # Find names of array var
+        arrayvars <- unique(sub("_array_[0-9]+_[0-9]+$", "", all_arrays))
         for (arrayvar in arrayvars) {
-            f <- function (array) sub(paste(arrayvar, "_array_", sep = ""),  "", array)
-            collection <- lapply(grep(arrayvar, arrays, value = TRUE), f)
-            maxDimension <- as.integer(unlist(strsplit(max(unlist(collection)), "_")))
+            # get all arrays of the array variable
+            arrays <- grep(arrayvar, all_arrays, value = TRUE)
+            f <- function(array) str_extract(array, "[0-9]+_[0-9]+$")
+            # get all suffix of the array variable
+            collection <- sapply(arrays, f)
+            # get the dimension of the array variable
+            maxDimension <- as.integer(strsplit(max(collection), "_")[[1]])
+            # initialize an array with maxDimension
             newArray <- array(0, c(.self$nobs, maxDimension))
-            for (array in grep(arrayvar, arrays, value = TRUE)) {
-                loc <- as.integer(unlist(strsplit(sub(paste(arrayvar, "_array_", sep = ""), 
-                                                      "", array), "_")))
+            for (array in arrays) {
+                # extract the location of an element of the array variable
+                loc <- as.integer(strsplit(str_extract(array, "[0-9]+_[0-9]+$"), "_")[[1]])
                 newArray[, loc[1], loc[2]] = .self$var[[array]]
                 .self$removeData(array)
             }
@@ -164,8 +170,8 @@ ModelData$methods(
     
     saveToDisk = function(directory, name, precision = 8) {
         # Save an ModelData object to a directory. The field var is saved as .csv, 
-        #   and the remaining fields are saved as .RData.
-        # The group variable is added in the field var with name group_export. Array variables are expanded.
+        #   and the remaining fields are saved as .rds.
+        # The group variable is added in the var with name group_export. Array variables are expanded.
         #
         # INPUTS
         #  - directory: location of files to be saved.

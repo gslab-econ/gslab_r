@@ -1,4 +1,5 @@
 source("ExampleData.R")
+set.seed(12345)
 n <- 1000
 x <- rnorm(n)
 y <- rnorm(n)
@@ -17,17 +18,17 @@ test.ExampleData.initialize <- function() {
     checkEquals(c(a$varnames, a$nobs, a$nvars, a$const$mu), c(c("x", "y", "obsindex"), n, 3, 0))
     b <- ExampleData(rhs, z, varnames = c("rhs1", "rhs2", "rhs3"))
     checkEquals(c(b$varnames, b$nobs, b$nvars), c(c("rhs1", "rhs2", "rhs3", "obsindex"), n, 4))
-    c <- ExampleData(strvar, stringsAsFactors = TRUE, varnames = "gender")
+    c <- ExampleData(strvar, stringsAsFactors = TRUE, varnames = "gender")  # Add string variables
     checkEquals(c(c$varnames, class(c$var$gender)), c(c("gender", "obsindex"), "factor"))
-    checkException(ExampleData(x, y, varnames = c("few")), silent = TRUE)  # Mismatched number of variable names
+    checkException(ExampleData(x, y, varnames = c("few")), silent = TRUE)  # Wrong number of variable names
 }
 
 test.ExampleData.setGroup <- function() {
     a <- ExampleData(x, y)
-    a$setGroup(group1)
+    a$setGroup(group1)  # Add a new group variable
     checkEquals(a$ngroup, length(unique(group1)))
     a <- ExampleData(x, y, group1)
-    a$setGroup(a$var$group1)
+    a$setGroup(a$var$group1)  # Add a group variable already in the dataset
     checkEquals(a$var$group1, a$groupvar)
     checkException(a$setGroup(group2), silent = TRUE)  # Length unequal to the number of observations
     checkException(a$setGroup(group3), silent = TRUE)  # Not sorted in ascending order
@@ -35,10 +36,11 @@ test.ExampleData.setGroup <- function() {
 
 test.ExampleData.addData <- function() {
     a <- ExampleData(x)
-    a$addData(y)
-    checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("x", "obsindex", "y"), 3, 3))
     a$addData(rhs, names = c("var1", "var2"))
-    checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("x", "obsindex", "y", "var1", "var2"), 5, 5))
+    checkEquals(c(a$varnames, a$nvars, ncol(a$var)), c(c("x", "obsindex", "var1", "var2"), 4, 4))
+    a$addData(y)
+    a$addData(y)  # Add a vraible twice
+    checkEquals(a$varnames, c("x", "obsindex", "var1", "var2", "y", "y.1"))
     checkException(a$addData(w), silent = TRUE)  # Add a variable with unequal length
     checkException(a$addData(x, y, names = c("var1")), silent = TRUE)  # Wrong number of variable names
 }

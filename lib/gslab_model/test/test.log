@@ -48,7 +48,7 @@ Warning messages:
   cannot open file 'non-existent/myObj.csv': No such file or directory
 2: In gzfile(file, "rb") :
   cannot open compressed file './myObj.rds', probable reason 'No such file or directory'
-RUNIT TEST PROTOCOL -- Mon Jun 12 15:08:06 2017 
+RUNIT TEST PROTOCOL -- Tue Jun 13 14:39:09 2017 
 *********************************************** 
 Number of test functions: 11 
 Number of errors: 0 
@@ -69,16 +69,16 @@ Involved directory:
 ./ 
 --------------------------- 
 Test file: .//test.ExampleData.R 
-test.ExampleData.addData: (4 checks) ... OK (0.02 seconds)
-test.ExampleData.array: (3 checks) ... OK (0.03 seconds)
+test.ExampleData.addData: (4 checks) ... OK (0.01 seconds)
+test.ExampleData.array: (3 checks) ... OK (0.02 seconds)
 test.ExampleData.initialize: (4 checks) ... OK (0.01 seconds)
-test.ExampleData.misc: (5 checks) ... OK (0.02 seconds)
-test.ExampleData.removeData: (3 checks) ... OK (0.01 seconds)
-test.ExampleData.SaveLoad: (3 checks) ... OK (0.21 seconds)
+test.ExampleData.misc: (5 checks) ... OK (0.01 seconds)
+test.ExampleData.removeData: (3 checks) ... OK (0 seconds)
+test.ExampleData.SaveLoad: (3 checks) ... OK (0.1 seconds)
 test.ExampleData.selectData: (3 checks) ... OK (0.01 seconds)
 test.ExampleData.setGroup: (4 checks) ... OK (0.01 seconds)
 --------------------------- 
 Test file: .//test.ExampleModel.R 
 test.ExampleModel.estimate: (1 checks) ... OK (0.01 seconds)
-test.ExampleModel.initialize: (3 checks) ... OK (0.01 seconds)
-test.ExampleModel.XBeta: (1 checks) ... OK (0.01 seconds)
+test.ExampleModel.initialize: (3 checks) ... OK (0 seconds)
+test.ExampleModel.XBeta: (1 checks) ... OK (0 seconds)

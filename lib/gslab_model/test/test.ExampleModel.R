@@ -1,13 +1,14 @@
 source("ExampleModel.R")
 
 test.ExampleModel.initialize <- function() {
-    a <- ExampleModel("y", c("x1", "x2"), suffix = "_c", include_constant = 1, startparam = c(0, 1, 2))
-    checkEquals(c(a$paramlist, a$lhslist, a$rhslist, a$nparam, a$include_constant, a$startparam),
-                c(c("x1_c", "x2_c", "constant"), "y", c("x1","x2"), 3, 1, c(0, 1, 2)))
+    a <- ExampleModel("y", c("x1", "x2"), suffix = "_c", startparam = c(0, 1, 2))
+    checkEquals(c(a$paramlist, a$lhslist, a$rhslist, a$nparam, a$startparam),
+                c(c("x1_c", "x2_c", "constant"), "y", c("x1","x2"), 3, c(0, 1, 2)))
     b <- ExampleModel(c("y1", "y2"), "z", include_constant = 0)
     checkEquals(c(b$paramlist, b$lhslist, b$rhslist, b$nparam, b$include_constant, b$startparam),
                 c("z_coeff", c("y1", "y2"), "z", 1, 0, 0))
     checkException(ExampleModel("y", "x", include_constant = 0, startparam = c(2, 2)), silent = TRUE)
+    # Wrong number of start parameters, should only have 1
 }
 
 test.ExampleModel.XBeta <- function() {
@@ -15,7 +16,8 @@ test.ExampleModel.XBeta <- function() {
     data    <- ModelData(x1 = rnorm(100), x2 = rnorm(100))
     varlist <- c("x1", "x2")
     param   <- c(0.2, 0.3, 1)
-    checkEquals(model$XBeta(varlist, data, param, 1), 0.2 * data$var$x1 + 0.3 * data$var$x2 + 1)
+    checkEquals(model$XBeta(varlist, data, param, 1),
+                0.2 * data$var$x1 + 0.3 * data$var$x2 + 1)
 }
 
 test.ExampleModel.estimate <- function() {
