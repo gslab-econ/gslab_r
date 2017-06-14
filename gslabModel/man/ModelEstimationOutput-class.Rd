@@ -4,7 +4,7 @@
 \name{ModelEstimationOutput-class}
 \alias{ModelEstimationOutput-class}
 \alias{ModelEstimationOutput}
-\title{A reference class that provides a template for model estimation output.}
+\title{A Reference Class that Provides a Template for Model Estimation Output.}
 \description{
 This class only provides the basic elements of the model estimation output.
 Subclasses should be created according to different models.
@@ -21,6 +21,10 @@ Subclasses should be created according to different models.
 \item{\code{model}}{model object used for estimation}
 
 \item{\code{nobs}}{number of observations in the data used for estimation}
+
+\item{\code{vcov}}{Variance-covariance matrix of parameters}
+
+\item{\code{se}}{Standard errors of parameters}
 }}
 
 

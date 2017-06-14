@@ -1,4 +1,4 @@
-#' A reference class that provides a template for data
+#' A Reference Class that Provides a Template for Data
 #' @description A ModelData object stores dataset in the field var, an R data.frame object.
 #' The constructor \code{ModelData()} accepts the same inputs as the constructor for a data frame,
 #' plus an option of specifying variable names and an option of adding a customer list of
@@ -175,10 +175,12 @@ ModelData$methods(
          \\code{varname} with dimensions \\code{R} = \\code{max(d1)} by \\code{C = max(d2)}.\n
          The reverse function of \\code{expandArrayVars}."
         
-        all_arrays <- grep("_array_[0-9]+_[0-9]+$", .self$varnames, value = TRUE)  # Find names of array var
+        # Find names of all elements of array variables
+        all_arrays <- grep("_array_[0-9]+_[0-9]+$", .self$varnames, value = TRUE)
+        # Find names of all array variables
         arrayvars <- unique(sub("_array_[0-9]+_[0-9]+$", "", all_arrays))
         for (arrayvar in arrayvars) {
-            # get all arrays of the array variable
+            # get all elements of the array variable
             arrays <- grep(arrayvar, all_arrays, value = TRUE)
             f <- function(array) stringr::str_extract(array, "[0-9]+_[0-9]+$")
             # get all suffix of the array variable
@@ -188,7 +190,7 @@ ModelData$methods(
             # initialize an array with maxDimension
             newArray <- array(0, c(.self$nobs, maxDimension))
             for (array in arrays) {
-                # extract the location of an element of the array variable
+                # extract the location of each element of the array variable
                 loc <- as.integer(strsplit(stringr::str_extract(array, "[0-9]+_[0-9]+$"), "_")[[1]])
                 newArray[, loc[1], loc[2]] = .self$var[[array]]
                 .self$removeData(array)

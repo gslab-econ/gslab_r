@@ -1,4 +1,4 @@
-#' A reference class that provides a template for models
+#' A Reference Class that Provides a Template for Models
 #' @description This class only provides the basic elements of a model. Subclasses should be
 #' created to accommodate different situations and goals.
 #' @field paramlist a vector of parameter names
@@ -28,17 +28,38 @@ Model$methods(
         return (TRUE)
     },
     
-    XBeta = function(varlist, data, param, include_constant = 0,
-                     coef_prefix = "", datavar_suffix = "", constname = "constant") {
-        "Return X * beta"
+    XBeta = function(varlist, data, param, constant = 0, constname = "constant", coeff_prefix = "",
+                     coeff_suffix = "_coeff", datavar_prefix = "", datavar_suffix = "") {
+        "Return the product of data and coefficients.\n
+        \\code{varlist}: A list of variables names.\n
+        \\code{data}: A ModelData object.\n
+        \\code{param}: A list of coefficients. The order of the coefficients should be the same as 
+        the field \\code{varnames} of the \\code{Model} object.\n
+        \\code{constant}: Whether the calculation includes constant or not.\n
+        \\code{constname}: The name of the constant.\n
+        \\code{coeff_prefix}: The prefix of coefficient names in the model.\n
+        \\code{coeff_suffix}: The suffix of coefficient names in the model.\n
+        \\code{datavar_prefix}: The prefix of variable names in the dataset.\n
+        \\code{datavar_suffix}: The suffix of variable names in the dataset.\n"
+        
         xbeta <- rep(0, data$nobs)
         for (name in varlist) {
-            coeffname <- paste(coef_prefix, name, "_coeff", sep = "")
-            dataname  <- paste(name, datavar_suffix, sep = "")
-            xbeta     <- xbeta + param[.self$indices[[coeffname]]] * data$var[[dataname]]
+            coeffname <- sprintf("%s%s%s", coeff_prefix, name, coeff_suffix)
+            dataname  <- sprintf("%s%s", name, datavar_suffix)
+            if (!dataname %in% data$varnames) {
+                stop(sprintf("%s is not in the dataset", dataname))
+            } else if (!coeffname %in% names(.self$indices)) {
+                stop(sprintf("%s is not in the model", coeffname))
+            }
+            xbeta <- xbeta + param[.self$indices[[coeffname]]] * data$var[[dataname]]
         }
-        if (include_constant)
-            xbeta = xbeta + param[.self$indices[[paste(coef_prefix, constname, sep = "")]]]
+        if (constant) {
+            coeffname <- sprintf("%s%s", coeff_prefix, constname)
+            if (!coeffname %in% names(.self$indices)) {
+                stop(sprintf("%s is not in the model", coeffname))         
+            }
+            xbeta = xbeta + param[.self$indices[[coeffname]]]
+        }
         return (xbeta)
     }
 )

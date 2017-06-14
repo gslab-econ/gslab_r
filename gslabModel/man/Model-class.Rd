@@ -4,7 +4,7 @@
 \name{Model-class}
 \alias{Model-class}
 \alias{Model}
-\title{A reference class that provides a template for models}
+\title{A Reference Class that Provides a Template for Models}
 \description{
 This class only provides the basic elements of a model. Subclasses should be
 created to accommodate different situations and goals.
@@ -30,7 +30,27 @@ created to accommodate different situations and goals.
 \describe{
 \item{\code{isValidModel()}}{A method to determine if it's a valid instantiation and should be overridden in subclasses.}
 
-\item{\code{XBeta(varlist, data, param, include_constant = 0, coef_prefix = "",
-  datavar_suffix = "", constname = "constant")}}{Return X * beta}
+\item{\code{XBeta(varlist, data, param, constant = 0, constname = "constant",
+  coeff_prefix = "", coeff_suffix = "_coeff", datavar_prefix = "",
+  datavar_suffix = "")}}{Return the product of data and coefficients.
+
+        \code{varlist}: A list of variables names.
+
+        \code{data}: A ModelData object.
+
+        \code{param}: A list of coefficients. The order of the coefficients should be the same as 
+        the field \code{varnames} of the \code{Model} object.
+
+        \code{constant}: Whether the calculation includes constant or not.
+
+        \code{constname}: The name of the constant.
+
+        \code{coeff_prefix}: The prefix of coefficient names in the model.
+
+        \code{coeff_suffix}: The suffix of coefficient names in the model.
+
+        \code{datavar_prefix}: The prefix of variable names in the dataset.
+
+        \code{datavar_suffix}: The suffix of variable names in the dataset.}
 }}
 

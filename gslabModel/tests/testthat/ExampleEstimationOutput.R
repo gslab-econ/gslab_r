@@ -1,9 +1,5 @@
 ExampleEstimationOutput<- setRefClass(Class    = "ExampleEstimationOutput",
-                                      contains = "ModelEstimationOutput",
-                                      fields   = list(vcov = "matrix",   # Variance-covariance matrix of parameters
-                                                      se   = "numeric"   # Standard errors of parameters
-                                      )
-)
+                                      contains = "ModelEstimationOutput")
 
 ExampleEstimationOutput$methods(
     initialize = function(est, model, data) {

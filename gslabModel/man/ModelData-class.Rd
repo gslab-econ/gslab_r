@@ -4,7 +4,7 @@
 \name{ModelData-class}
 \alias{ModelData-class}
 \alias{ModelData}
-\title{A reference class that provides a template for data}
+\title{A Reference Class that Provides a Template for Data}
 \description{
 A ModelData object stores dataset in the field var, an R data.frame object.
 The constructor \code{ModelData()} accepts the same inputs as the constructor for a data frame,
