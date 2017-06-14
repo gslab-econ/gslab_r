@@ -1,7 +1,3 @@
-source("../Model.R")
-source("ExampleData.R")
-source("ExampleEstimationOutput.R")
-
 ExampleModel <- setRefClass(Class    ="ExampleModel",
                             contains = "Model",
                             fields   = list(include_constant = "numeric")

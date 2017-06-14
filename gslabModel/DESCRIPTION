@@ -1,0 +1,19 @@
+Package: gslabModel
+Title: General GSLab Model Package
+Version: 0.0.0.9000
+Authors@R: c(
+  person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre")), 
+  person("Jesse", "Shapiro", email = "jesse_shapiro_1@brown.edu", role = c("aut"))
+  )
+Description: A general framework for working with data, model, and estimation.
+Depends: R (>= 3.3.2)
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Imports:
+  stringr,
+  methods
+Suggests: 
+  testthat, 
+  devtools

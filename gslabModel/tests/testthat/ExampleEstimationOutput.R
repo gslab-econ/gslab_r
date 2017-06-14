@@ -1,5 +1,3 @@
-source("../ModelEstimationOutput.R")
-
 ExampleEstimationOutput<- setRefClass(Class    = "ExampleEstimationOutput",
                                       contains = "ModelEstimationOutput",
                                       fields   = list(vcov = "matrix",   # Variance-covariance matrix of parameters
