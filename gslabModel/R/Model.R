@@ -1,12 +1,12 @@
 #' A Reference Class that Provides a Template for Models
 #' @description This class only provides the basic elements of a model. Subclasses should be
 #' created to accommodate different situations and goals.
-#' @field paramlist a vector of parameter names
-#' @field nparam the number of parameters
-#' @field startparam a vector of starting parameter values for estimation
-#' @field indices a list giving the index of each parameter
-#' @field lhslist names of dependent (i.e., stochastic) variables
-#' @field rhslist names of independent (i.e., non-stochastic) variables
+#' @field paramlist A vector of parameter names
+#' @field nparam The number of parameters
+#' @field startparam A vector of starting parameter values for estimation
+#' @field indices A list giving the index of each parameter
+#' @field lhslist The names of dependent (i.e., stochastic) variables
+#' @field rhslist The names of independent (i.e., non-stochastic) variables
 #' 
 #' @export Model
 #' @exportClass Model

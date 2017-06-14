@@ -16,11 +16,11 @@ Subclasses should be created according to different models.
 
 \item{\code{value}}{The value of objective function at estimated parameters}
 
-\item{\code{convergence}}{flag for convergence}
+\item{\code{convergence}}{A flag for convergence}
 
-\item{\code{model}}{model object used for estimation}
+\item{\code{model}}{A Model object used for estimation}
 
-\item{\code{nobs}}{number of observations in the data used for estimation}
+\item{\code{nobs}}{The nnumber of observations in the data used for estimation}
 
 \item{\code{vcov}}{Variance-covariance matrix of parameters}
 

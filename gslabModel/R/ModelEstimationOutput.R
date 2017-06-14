@@ -3,9 +3,9 @@
 #' Subclasses should be created according to different models.
 #' @field param Estimated parameters
 #' @field value The value of objective function at estimated parameters
-#' @field convergence flag for convergence
-#' @field model model object used for estimation
-#' @field nobs number of observations in the data used for estimation
+#' @field convergence A flag for convergence
+#' @field model A Model object used for estimation
+#' @field nobs The nnumber of observations in the data used for estimation
 #' @field vcov Variance-covariance matrix of parameters
 #' @field se Standard errors of parameters
 #' @export ModelEstimationOutput

@@ -12,17 +12,17 @@ created to accommodate different situations and goals.
 \section{Fields}{
 
 \describe{
-\item{\code{paramlist}}{a vector of parameter names}
+\item{\code{paramlist}}{A vector of parameter names}
 
-\item{\code{nparam}}{the number of parameters}
+\item{\code{nparam}}{The number of parameters}
 
-\item{\code{startparam}}{a vector of starting parameter values for estimation}
+\item{\code{startparam}}{A vector of starting parameter values for estimation}
 
-\item{\code{indices}}{a list giving the index of each parameter}
+\item{\code{indices}}{A list giving the index of each parameter}
 
-\item{\code{lhslist}}{names of dependent (i.e., stochastic) variables}
+\item{\code{lhslist}}{The names of dependent (i.e., stochastic) variables}
 
-\item{\code{rhslist}}{names of independent (i.e., non-stochastic) variables}
+\item{\code{rhslist}}{The names of independent (i.e., non-stochastic) variables}
 }}
 
 \section{Methods}{
