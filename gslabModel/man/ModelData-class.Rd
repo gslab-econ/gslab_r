@@ -6,7 +6,7 @@
 \alias{ModelData}
 \title{A Reference Class that Provides a Template for Data}
 \description{
-A ModelData object stores dataset in the field var, an R data.frame object.
+A ModelData object stores dataset in the field \code{var}, an R data.frame object.
 The constructor \code{ModelData()} accepts the same inputs as the constructor for a data frame,
 plus an option of specifying variable names and an option of adding a customer list of
 constants characterizing the data.

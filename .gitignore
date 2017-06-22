@@ -17,4 +17,6 @@
 *.out
 *.svn
 .sconsign.dblite
-.Rproj.user
+*.RData
+*.Rproj
+*.Rproj.user

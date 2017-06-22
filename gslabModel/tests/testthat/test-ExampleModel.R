@@ -25,14 +25,15 @@ test_that("XBeta", {
 })
 
 test_that("estimate", {
-    x1    <- rnorm(10000)
-    x2    <- rnorm(10000)
-    y     <- 0.2 * x1 + 0.5 * x2 + 1 + rnorm(10000)
+    n     <- 10000
+    x1    <- rnorm(n)
+    x2    <- rnorm(n)
+    y     <- 0.2 * x1 + 0.5 * x2 + 1 + rnorm(n)
     model <- ExampleModel("y", c("x1", "x2"), include_constant = 1)
     data  <- ExampleData(x1, x2, y)
     est   <- model$estimate(data)
     expect_identical(c(est$nobs, est$model$nparam, est$vcov, est$se),
-                     c(10000, 3, diag(3), rep(1, 3)))
+                     c(n, 3, diag(3), rep(1, 3)))
     expect_equal(lm(y~x1+x2)$coeff[["x1"]], est$param[1], tolerance = 1e-3)
     expect_equal(lm(y~x1+x2)$coeff[["x2"]], est$param[2], tolerance = 1e-3)
     expect_equal(lm(y~x1+x2)$coeff[["(Intercept)"]], est$param[3], tolerance = 1e-3)

@@ -27,6 +27,8 @@ The `document` function should be used to produce the help files in the `man` su
 
 During development the `devtools::check` function should be used to preform the unit tests in the `tests` subdirectory and check a large number of other package aspects. This function centralies and adds utilities to functions in the `testthat` package. The `tests` directory must be conform to the format used by `testthat`. 
 
+To just run unit tests in a package, set your working directory at `[package name]/tests`, and run `testthat.R` in Rstudio.
+
 To install a package from GitHub, use the `install_github` function.
 
 ### Workflow

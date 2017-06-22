@@ -86,12 +86,14 @@ test_that("SaveLoad", {
     a$addArrayVars(arrayVar2, "array2")
     saveToDisk(a, ".", "myObj", 12)
     expect_error(saveToDisk(a, "non-existent", "myObj"), "cannot open the connection")
-    
-    b <- ExampleData()
-    loadFromDisk(b, ".", "myObj")
-    expect_equal(a, b, tolerance = 1e-12)
+
+    b <- loadFromDisk(".", "myObj")
+    expect_equal(class(a), class(b))
+    expect_equal(c(a$var, a$varnames, a$groupvar, a$ngroup, a$group_size), 
+                 c(b$var, b$varnames, b$groupvar, b$ngroup, b$group_size),
+                 tolerance = 1e-12)
     file.remove(c("myObj.rds", "myObj.csv"))
-    expect_error(loadFromDisk(b, ".", "myObj"), "cannot open the connection")
+    expect_error(loadFromDisk(".", "myObj"), "cannot open the connection")
 })
 
 test_that("misc", {

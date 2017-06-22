@@ -4,11 +4,9 @@
 \alias{loadFromDisk}
 \title{Load a \code{ModelData} object from files saved using \code{saveToDisk}}
 \usage{
-loadFromDisk(obj, directory, name, collapseArrayVars = 1)
+loadFromDisk(directory, name, collapseArrayVars = 1)
 }
 \arguments{
-\item{obj}{A ModelData object, typically an empty one.}
-
 \item{directory}{location of files to be loaded.}
 
 \item{name}{name of files to be loaded.}

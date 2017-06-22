@@ -1,11 +1,11 @@
-Package: gslabModel
+Package: GSLabModel
 Title: General GSLab Model Package
 Version: 0.1.0
 Authors@R: c(
   person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre")), 
   person("Jesse", "Shapiro", email = "jesse_shapiro_1@brown.edu", role = c("aut"))
   )
-Description: A general framework for working with data, model, and estimation.
+Description: A general framework for working with data, models, and estimation.
 Depends: R (>= 3.3.2)
 License: MIT + file LICENSE
 Encoding: UTF-8
