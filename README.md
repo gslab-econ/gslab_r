@@ -1,6 +1,6 @@
 # Overview
 
-This repository is used to store R packages created by the GSLab for use in two or more projects/repositories. If a stable release of a package is available from another source, then it should not be stored in this repository. Since different useres will draw on these packages across multiple projects, we follow a standard strategy for development, testing, and documentation. 
+This repository is used to store R packages created by the GSLab for use in two or more projects/repositories. If a stable release of a package is available from another source, then it should not be stored in this repository. Since different users will draw on these packages across multiple projects, we follow a standard strategy for development, testing, and documentation. 
 
 Useful tools on package development are given in the table below.
 
