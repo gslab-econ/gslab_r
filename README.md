@@ -1,6 +1,6 @@
 # Overview
 
-This repository is used to store R packages created by the GSLab for use in two or more projects/repositories. If a stable release of a package is available from another source, then it should not be stored in this repository. Since different users will draw on these packages across multiple projects, we follow a standard strategy for development, testing, and documentation. 
+This repository is used to store R packages created by GSLab for use in multiple projects/repositories. If a stable release of a package is available from another source, then it should not be stored in this repository. Since different users will draw on these packages across multiple projects, we follow a standard strategy for development, testing, and documentation. 
 
 Useful tools on package development are given in the table below.
 
@@ -15,21 +15,19 @@ Useful tools on package development are given in the table below.
 
 ## Development Process
 
-We follow the development process for code libraries outlined in the [RA manual](https://github.com/gslab-econ/admin/wiki/Version-Control) We store each package in its own directory within `gslab_r`. The default name scheme is to give the package directory the same name as the package. 
+We follow the development process for code libraries outlined in the [RA manual](https://github.com/gslab-econ/admin/wiki/Version-Control). We store each package in its own directory within `gslab_r`. The default name scheme is to give the package directory the same name as the package. 
 
 ### Tools
 
-We use the `devtools`, `roxygen2`, and `testthat` packages as our primary tools in the package development process. `devtools` is a convenient wrapper for the functions in the others. The commands below are from`devtools`, but the syntax belongs to  `roxygen2` and `testthat`.
+We use the `devtools`, `roxygen2`, and `testthat` packages as our primary tools in the package development process. `devtools` is a convenient wrapper for the functions in the others. The commands below are from `devtools`, but the syntax belongs to `roxygen2` and `testthat`.
 
 The `create` function initializes a package with the `DESCRIPTION`, `R` and `NAMESPACE` fields. The `LICENSE` file must be created manually, the `DESCRIPTION` file must be edited manually.
 
-The `document` function should be used to produce the help files in the `man` subdirectory and appropriately fill the the `NAMESPACE` file. This function is a wrapper for the `roxygenise` function from the `roxygen2` package. This functions read from `DESCRIPTION` and the documentation for the files in `R`. Formatting must align with `roxygen2` standards.
+The `document` function should be used to produce the help files in the `man` subdirectory and appropriately fill the `NAMESPACE` file. This function is a wrapper for the `roxygenise` function from the `roxygen2` package. This functions read from `DESCRIPTION` and the documentation for the files in `R`. Formatting must align with `roxygen2` standards. Each time you update the documentation, run `document()` at the root of the package directory.
 
-During development the `devtools::check` function should be used to preform the unit tests in the `tests` subdirectory and check a large number of other package aspects. This function centralies and adds utilities to functions in the `testthat` package. The `tests` directory must be conform to the format used by `testthat`. 
+During development, `devtools::check` function should be used to preform the unit tests in the `tests` subdirectory and check a large number of other package aspects. This function centralies and adds utilities to functions in the `testthat` package. The `tests` directory must be conform to the format used by `testthat`. To just run unit tests in the `tests` subdirectory without running the rest of tests, run the script `testthat.R` at `tests` subdirectory.
 
-To just run unit tests in a package, set your working directory at `[package name]/tests`, and run `testthat.R` in Rstudio.
-
-To install a package from GitHub, use the `install_github` function.
+To install a package from GitHub, use the `install_github` function. To install or update the package stored in a local folder, use the `install` function at the root of `gslab_r`.
 
 ### Workflow
 
