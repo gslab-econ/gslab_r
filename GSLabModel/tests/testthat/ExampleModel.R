@@ -1,3 +1,5 @@
+library(methods)
+
 ExampleModel <- setRefClass(Class    = "ExampleModel",
                             contains = "Model",
                             fields   = list(include_constant = "numeric")

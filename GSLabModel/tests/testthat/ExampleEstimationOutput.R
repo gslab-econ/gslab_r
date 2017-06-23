@@ -1,3 +1,5 @@
+library(methods)
+
 ExampleEstimationOutput<- setRefClass(Class    = "ExampleEstimationOutput",
                                       contains = "ModelEstimationOutput")
 

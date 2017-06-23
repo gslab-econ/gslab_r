@@ -25,7 +25,7 @@ The `create` function initializes a package with the `DESCRIPTION`, `R` and `NAM
 
 The `document` function should be used to produce the help files in the `man` subdirectory and appropriately fill the `NAMESPACE` file. This function is a wrapper for the `roxygenise` function from the `roxygen2` package. This functions read from `DESCRIPTION` and the documentation for the files in `R`. Formatting must align with `roxygen2` standards. Each time you update the documentation, run `document()` at the root of the package directory.
 
-During development, `devtools::check` function should be used to preform the unit tests in the `tests` subdirectory and check a large number of other package aspects. This function centralies and adds utilities to functions in the `testthat` package. The `tests` directory must be conform to the format used by `testthat`. To just run unit tests in the `tests` subdirectory without running the rest of tests, run the script `testthat.R` at `tests` subdirectory.
+During development, `devtools::check` function should be used to preform the unit tests in the `tests` subdirectory and check a large number of other package aspects. This function centralizes and adds utilities to functions in the `testthat` package. The `tests` directory must be conform to the format used by `testthat`. To just run unit tests in the `tests` subdirectory without running the rest of tests, run the script `testthat.R` at `tests` subdirectory.
 
 To install a package from GitHub, use the `install_github` function. To install or update the package stored in a local folder, use the `install` function at the root of `gslab_r`.
 
