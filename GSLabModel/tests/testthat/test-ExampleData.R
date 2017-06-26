@@ -39,9 +39,7 @@ test_that("addData", {
     a <- ExampleData(x)
     a$addData(rhs, names = c("var1", "var2"))
     expect_identical(c(a$varnames, a$nvars, ncol(a$var)), c(c("x", "obsindex", "var1", "var2"), 4, 4))
-    a$addData(y)
-    a$addData(y)  # Add a vraible twice
-    expect_identical(a$varnames, c("x", "obsindex", "var1", "var2", "y", "y.1"))
+    expect_error(a$addData(x), "Duplicated variable names added")
     expect_error(a$addData(w), "arguments imply differing number of rows")
     expect_error(a$addData(x, y, names = c("var1")), "Wrong number of variable names supplied")
 })

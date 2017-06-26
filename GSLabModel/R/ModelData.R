@@ -88,6 +88,9 @@ ModelData$methods(
             }
             colnames(newdata) <- names
         }
+        if (any(colnames(newdata) %in% .self$varnames)) {
+            stop("Duplicated variable names added")
+        }
         .self$var      <- data.frame(.self$var, newdata, check.names = TRUE)
         .self$varnames <- colnames(.self$var)
         .self$nvars    <- ncol(.self$var)
