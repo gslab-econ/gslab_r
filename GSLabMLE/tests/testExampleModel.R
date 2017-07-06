@@ -15,9 +15,11 @@ model <- ExampleModel("y")
 model$estimate(data)
 
 param <- c(mu, sigma)
-expect_identical(model$transformErrors(data, param, y), y)
-expect_identical(model$transformUnobservables(data, param, y), y)
+expect_equal(model$transformErrors(data, param, y), y)
+expect_equal(model$transformUnobservables(data, param, y), y)
 
-simdata <- model$simulate(param, data)
-expect_identical(simdata$varnames, c("obsindex", "epsilon", "eta", "nu", "y"))
-expect_identical(simdata$var$y, mu + simdata$var$epsilon * sigma)
+simopts <- MLESimulationOptions(seed = 2)
+simdata <- model$simulate(param, data, simopts)
+expect_equal(simdata$varnames, c("obsindex", "epsilon", "eta", "nu", "y"))
+expect_equal(simdata$var$y, mu + simdata$var$epsilon * sigma)
+

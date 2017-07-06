@@ -1,4 +1,5 @@
-drawErrors <- function(.self, data) {
+drawErrors <- function(.self, data, simopts) {
+    set.seed(simopts$seed)
     draws <- list()
     for (i in 1:length(.self$error_list)) {
         var_name    <- .self$error_list[i]

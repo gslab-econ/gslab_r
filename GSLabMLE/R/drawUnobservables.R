@@ -1,6 +1,10 @@
-drawUnobservables <- function(.self, data) {
+drawUnobservables <- function(.self, data, simopts) {
+    set.seed(simopts$seed)
     draws <- list()
     if (length(.self$group_unobs_list)) {
+        if (length(data$groupvar) == 0) {
+            stop("Group variable is not set in the data.")
+        }
         for (i in 1:length(.self$group_unobs_list)) {
             group_draws <- rnorm(data$ngroup)
             draws[[.self$group_unobs_list[i]]] <- group_draws[data$groupvar]

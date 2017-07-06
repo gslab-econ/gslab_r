@@ -54,7 +54,7 @@ MLEModel <- setRefClass(Class    = "MLEModel",
                                 .self$ndparam             <- length(.self$dparamlist)
                                 if (.self$ndparam != 0) {
                                     .self$dindices        <- as.list(1:.self$ndparam)
-                                    names(.self$dindices)  <- .self$dparamlist
+                                    names(.self$dindices) <- .self$dparamlist
                                 }
                                 .self$numerical_integral  <- (.self$ngroup_unobs | .self$nindiv_unobs)
                             }
