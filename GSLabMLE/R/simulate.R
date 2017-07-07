@@ -1,4 +1,7 @@
-simulate <- function(.self, param, data, simopts = MLESimulationOptions()) {
+simulate <- function(.self, param, data, simopts = NULL) {
+    if (is.null(simopts)) {
+        simopts <- MLESimulationOptions()
+    }
     if (simopts$replications > 1) {
         simdata <- MLESetOfDatasets()
         simopts$seed <- simopts$seed - 1
@@ -12,12 +15,18 @@ simulate <- function(.self, param, data, simopts = MLESimulationOptions()) {
     return (simdata)
 }
 
-singleSimulation <- function(.self, param, data, simopts) {
+singleSimulation <- function(model, param, data, simopts) {
     simdata   <- data$copy()
     if (length(model$error_list)) {
         raw_error <- model$drawErrors(simdata, simopts)
         error     <- model$transformErrors(param, simdata, raw_error)
-        simdata$addData(error)
+        for (name in names(error)) {
+            if (ncol(error[[name]]) > 1) {
+                simdata$addArrayVars(error[[name]], name = name)
+            } else {
+                simdata$addData(error[[name]], names = name)
+            }
+        }
     }
     if (model$ngroup_unobs | model$nindiv_unobs) {
         raw_unobs <- model$drawUnobservables(simdata, simopts)
@@ -25,7 +34,11 @@ singleSimulation <- function(.self, param, data, simopts) {
         simdata$addData(unobs)
     }
     lhs <- model$computeOutcomes(param, simdata)
-    simdata$removeData(model$lhslist)
-    simdata$addData(lhs)
+    for (name in names(lhs)) {
+        if (name %in% simdata$varnames) {
+            simdata$removeData(name)
+        }
+        simdata$addData(lhs[[name]], names = name)
+    }
     return (simdata)
 }

@@ -1,11 +1,21 @@
-MLESetOfDatasets <- setRefClass(Class  = "MLESetOfDatasets",
-                                fields = list(
-                                    datasets  =  "list",
-                                    ndatasets = "numeric"
+#' A Reference Class that holds a list of \code{MLEData} objects.
+#' @field datasets A list of MLEData objects
+#' @field ndatasets The number of MLEData objects
+#' @export MLESetOfDatasets
+#' @exportClass MLESetOfDatasets
+#' 
+MLESetOfDatasets <- setRefClass(Class   = "MLESetOfDatasets",
+                                fields  = list(datasets  =  "list",
+                                               ndatasets = "numeric"
                                 ),
                                 methods = list(
-                                    initialize = function(datasets = list()) {
-                                        .self$datasets  <- datasets
+                                    initialize = function(datasets = NULL) {
+                                        .self$datasets <- list()
+                                        if (!is.null(datasets)) {
+                                            for (i in 1:length(datasets)) {
+                                                .self$datasets[[i]]  <- datasets[i]
+                                            }
+                                        }
                                         .self$ndatasets <- length(.self$datasets)
                                     }
                                 )
@@ -13,6 +23,8 @@ MLESetOfDatasets <- setRefClass(Class  = "MLESetOfDatasets",
 
 MLESetOfDatasets$methods(
     addDataset = function(dataset) {
+        "Add a new MLEData object in the list of datasets.\n
+         \\code{dataset}: An MLEData object to be added."
         .self$datasets[[.self$ndatasets + 1]] <- dataset
         .self$ndatasets <- length(.self$datasets)
     },

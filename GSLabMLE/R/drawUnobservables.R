@@ -1,3 +1,4 @@
+#' Draws unobservable vectors for an \code{MLEModel} object.
 drawUnobservables <- function(.self, data, simopts) {
     set.seed(simopts$seed)
     draws <- list()
