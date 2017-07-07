@@ -17,7 +17,7 @@ simulate <- function(.self, param, data, simopts = NULL) {
 
 singleSimulation <- function(model, param, data, simopts) {
     simdata   <- data$copy()
-    if (length(model$error_list)) {
+    if (model$nerrors) {
         raw_error <- model$drawErrors(simdata, simopts)
         error     <- model$transformErrors(param, simdata, raw_error)
         for (name in names(error)) {

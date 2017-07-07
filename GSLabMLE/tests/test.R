@@ -1,3 +1,4 @@
 library("testthat")
-test_file("testMLESetOfDatasets.R")
-test_file("testExampleModel.R")
+test_file("test-MLESetOfDatasets.R")
+test_file("test-simulation.R")
+test_file("test-ExampleModel.R")

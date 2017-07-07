@@ -1,5 +1,4 @@
 library(GSLabModel)
-source("../R/estimate.R")
 source("../R/simulate.R")
 source("../R/drawErrors.R")
 source("../R/drawUnobservables.R")
@@ -62,10 +61,9 @@ MLEModel <- setRefClass(Class    = "MLEModel",
 )
 
 MLEModel$methods(
-    estimate = estimate,
-    transformErrors = transformErrors,
-    transformUnobservables = transformUnobservables,
     drawErrors = drawErrors,
     drawUnobservables = drawUnobservables,
+    transformErrors = transformErrors,
+    transformUnobservables = transformUnobservables,
     simulate = simulate
 )
