@@ -1,9 +1,19 @@
 library(GSLabModel)
-source("../R/simulate.R")
-source("../R/drawErrors.R")
-source("../R/drawUnobservables.R")
-source("../R/transformErrors.R")
-source("../R/transformUnobservables.R")
+#' A Reference Class that Provides a Template for Maximum Likelihood Models
+#' @field group_unobs_list A vector of names of group-level unobservables (integrated numerically).
+#' @field indiv_unobs_list A vector of names of individual-level unobservables (integrated numerically).
+#' @field error_list: A vector of names of individual-level errors (not integrated numerically).
+#' @field error_distributions A list that contains the distributions of all errors in \code{error_list}.
+#' @field error_dimensions A list that contains the number of dimensions of each observations of
+#' all errors in \code{error_list}.
+#' @field dparamlist A vector of names of derived parameters.
+#' @field ngroup_unobs The number of group-level unobservables in \code{group_unobs_list}.
+#' @field nindiv_unobs The number of individual-level unobservables in \code{indiv_unobs_list}.
+#' @field nerrors The number of error terms in \code{error_list}.
+#' @field ndparam The number of derived parameters in \code{dparamlist}.
+#' @field dindices A list that gives the index of each derived parameter.
+#' @field numerical_integral An indicator of whether the model requires numerical integration.
+#' 
 
 MLEModel <- setRefClass(Class    = "MLEModel",
                         contains = "Model",
@@ -61,9 +71,12 @@ MLEModel <- setRefClass(Class    = "MLEModel",
 )
 
 MLEModel$methods(
+    estimate = estimate,
     drawErrors = drawErrors,
     drawUnobservables = drawUnobservables,
     transformErrors = transformErrors,
     transformUnobservables = transformUnobservables,
-    simulate = simulate
+    simulate = simulate,
+    derivedParam = derivedParam,
+    getDerivedParam = getDerivedParam
 )

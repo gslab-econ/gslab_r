@@ -1,4 +1,4 @@
-#' A Reference Class that holds a list of \code{MLEData} objects.
+#' A Reference Class that Holds a Vector of \code{MLEData} Objects.
 #' @field datasets A list of MLEData objects
 #' @field ndatasets The number of MLEData objects
 #' @export MLESetOfDatasets

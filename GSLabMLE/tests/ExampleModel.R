@@ -1,4 +1,3 @@
-source("../R/MLEModel.R")
 ExampleModel <- setRefClass(Class    = "ExampleModel",
                             contains = "MLEModel"
 )
@@ -25,5 +24,11 @@ ExampleModel$methods(
         lhs <- NULL
         lhs[[.self$lhslist]] <- param[.self$indices$mu] + param[.self$indices$sigma] * data$var$epsilon
         return (lhs)
+    },
+    derivedParam = function(param, paramname, constants = NULL) {
+        dparam <- switch(paramname,
+                         "lnsigma" = log(param[.self$indices$sigma]),
+                         "CV"      = param[.self$indices$sigma] / param[.self$indices$mu])
+        return (dparam)
     }
 )

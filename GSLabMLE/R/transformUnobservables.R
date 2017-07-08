@@ -1,8 +1,8 @@
 #' Transform unobservables in the model.
 #' @description This function takes as input a vector of parameters, a \code{MLEData} data, and 
 #' a list of i.i.d. draws of unobservables, and returns a list of transformed unobservables.
-#' The \cde{MleModel} of this method simply passes through the raw unobservables. Implementing 
-#' subclasses will typically transform the unobservables as a function of parameters and data.
+#' In \code{MLEModel}, this method simply passes through the raw unobservables. Implementing 
+#' subclasses typically transform the unobservables as a function of parameters and data.
 #' For models with no unobservables, this method can simply return an empty list.
 #' @param .self A \code{MLEModel} object.
 #' @param param A vector of parameters at which to evaluate unobservables.
