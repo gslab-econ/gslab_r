@@ -2,7 +2,7 @@
 % Please edit documentation in R/derivedParam.R
 \name{derivedParam}
 \alias{derivedParam}
-\title{Compute a derived parameter.}
+\title{Compute a derived parameter}
 \usage{
 derivedParam(.self, param, dparamname, constants)
 }

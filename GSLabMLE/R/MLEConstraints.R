@@ -1,4 +1,4 @@
-#' A Reference Class that Defines Constraints of Parameters.
+#' A Reference Class that Defines Constraints of Parameters for a Maximum Likelihood Model.
 #' @field lower The lower limit of the parameters.
 #' @field upper The upper limit of the parameters.
 #' @export MLEConstraints

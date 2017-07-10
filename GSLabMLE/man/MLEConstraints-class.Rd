@@ -4,9 +4,9 @@
 \name{MLEConstraints-class}
 \alias{MLEConstraints-class}
 \alias{MLEConstraints}
-\title{A Reference Class that Defines Constraints of Parameters.}
+\title{A Reference Class that Defines Constraints of Parameters for a Maximum Likelihood Model.}
 \description{
-A Reference Class that Defines Constraints of Parameters.
+A Reference Class that Defines Constraints of Parameters for a Maximum Likelihood Model.
 }
 \section{Fields}{
 

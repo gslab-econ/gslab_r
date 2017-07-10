@@ -1,4 +1,3 @@
-library(GSLabModel)
 #' A Reference Class that Provides a Template for Maximum Likelihood Models
 #' @field group_unobs_list A vector of names of group-level unobservables (integrated numerically).
 #' @field indiv_unobs_list A vector of names of individual-level unobservables (integrated numerically).
@@ -13,8 +12,10 @@ library(GSLabModel)
 #' @field ndparam The number of derived parameters in \code{dparamlist}.
 #' @field dindices A list that gives the index of each derived parameter.
 #' @field numerical_integral An indicator of whether the model requires numerical integration.
-#' 
-
+#' @export MLEModel
+#' @exportClass MLEModel
+#' @importClassesFrom GSLabModel Model
+#'
 MLEModel <- setRefClass(Class    = "MLEModel",
                         contains = "Model",
                         fields   = list(group_unobs_list    = "character",

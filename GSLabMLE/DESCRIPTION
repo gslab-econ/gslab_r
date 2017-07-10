@@ -1,10 +1,37 @@
 Package: GSLabMLE
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Title: GSLab Maximum Likelihood Estimation Models.
+Version: 0.1.0
+Authors@R: c(
+  person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre")), 
+  person("Jesse", "Shapiro", email = "jesse_shapiro_1@brown.edu", role = c("aut"))
+  )
+Description: A general framework for working with data, models, and estimation of Maximum Likelihood Estimation Models.
 Depends: R (>= 3.3.2)
-License: What license is it under?
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
+Imports:
+  GSLabModel,
+  methods,
+  utils
+Suggests: 
+  testthat, 
+  devtools
+Collate: 
+    'MLEConstraints.R'
+    'class-ModelData.R'
+    'MLEData.R'
+    'MLEEstimationOptions.R'
+    'MLEEstimationOutput.R'
+    'MLEModel.R'
+    'MLESetOfDatasets.R'
+    'MLESimulationOptions.R'
+    'derivedParam.R'
+    'drawErrors.R'
+    'drawUnobservables.R'
+    'estimate.R'
+    'getDerivedParam.R'
+    'simulate.R'
+    'transformErrors.R'
+    'transformUnobservables.R'

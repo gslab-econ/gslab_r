@@ -2,7 +2,7 @@
 % Please edit documentation in R/drawErrors.R
 \name{drawErrors}
 \alias{drawErrors}
-\title{Draws error vectors for an \code{MLEModel} object.}
+\title{Draws error vectors for an \code{MLEModel} object}
 \usage{
 drawErrors(.self, data, simopts)
 }
@@ -14,5 +14,5 @@ drawErrors(.self, data, simopts)
 \item{simopts}{An \code{MLESimulationOptions} object.}
 }
 \description{
-Draws error vectors for an \code{MLEModel} object.
+Draws error vectors for an \code{MLEModel} object
 }

@@ -1,7 +1,8 @@
-#' Draws error vectors for an \code{MLEModel} object.
+#' Draws error vectors for an \code{MLEModel} object
 #' @param .self An \code{MLEModel} object.
 #' @param data An \code{MLEData} object.
 #' @param simopts An \code{MLESimulationOptions} object.
+#' @export
 #' 
 drawErrors <- function(.self, data, simopts) {
     set.seed(simopts$seed)

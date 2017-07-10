@@ -2,7 +2,7 @@
 % Please edit documentation in R/drawUnobservables.R
 \name{drawUnobservables}
 \alias{drawUnobservables}
-\title{Draws unobservable vectors for an \code{MLEModel} object.}
+\title{Draws unobservable vectors for an \code{MLEModel} object}
 \usage{
 drawUnobservables(.self, data, simopts)
 }
@@ -14,5 +14,5 @@ drawUnobservables(.self, data, simopts)
 \item{simopts}{An \code{MLESimulationOptions} object.}
 }
 \description{
-Draws unobservable vectors for an \code{MLEModel} object.
+Draws unobservable vectors for an \code{MLEModel} object
 }

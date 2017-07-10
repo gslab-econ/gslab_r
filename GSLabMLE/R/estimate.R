@@ -1,4 +1,11 @@
+#' Estimate a Maximum Likelihood Estimation Model
+#' @param .self An \code{MLEModel} object.
+#' @param data An \code{MLEData} object.
+#' @param estopt An \code{MLEEstimationOptions} object.
+#' @export
+#' 
 estimate <- function(.self, data, estopts = NULL) {
+    "Model"
     if (is.null(estopts)) {
         estopts <- MLEEstimationOptions()
     }
