@@ -1,8 +1,3 @@
-source("../R/MLEData.R")
-source("../R/MLESimulationOptions.R")
-source("../R/MLEConstraints.R")
-source("../R/MLEEstimationOptions.R")
-source("../R/MLEEstimationOutput.R")
 source("ExampleModel.R")
 
 set.seed(1)
@@ -14,11 +9,11 @@ y     <- rnorm(n, mu, sigma)
 data  <- MLEData(y)
 model <- ExampleModel("y")
 
+expect_silent(model$isValidParameterVector(param))
 expect_equal(model$transformErrors(data, param, y), y)
 expect_equal(model$transformUnobservables(data, param, y), y)
 
-simopts <- MLESimulationOptions(seed = 2)
-simdata <- model$simulate(param, data, simopts)
+simdata <- model$simulate(param, data, MLESimulationOptions())
 expect_equal(simdata$varnames, c("obsindex", "epsilon", "eta", "phi", "y"))
 expect_equal(simdata$var$y, mu + simdata$var$epsilon * sigma)
 

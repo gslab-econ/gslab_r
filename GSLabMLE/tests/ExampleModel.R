@@ -16,15 +16,18 @@ ExampleModel$methods(
             .self$field(field, obj$field(field))
         }
     },
+    
     computeConditionalLikelihoodVector = function(param, data) {
         clik <- dnorm(data$var[[.self$lhslist[1]]], param[.self$indices$mu], param[.self$indices$sigma])
         return (clik)
     },
+    
     computeOutcomes = function(param, data) {
         lhs <- NULL
         lhs[[.self$lhslist]] <- param[.self$indices$mu] + param[.self$indices$sigma] * data$var$epsilon
         return (lhs)
     },
+    
     derivedParam = function(param, paramname, constants = NULL) {
         dparam <- switch(paramname,
                          "lnsigma" = log(param[.self$indices$sigma]),

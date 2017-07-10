@@ -2,12 +2,20 @@ simulate <- function(.self, param, data, simopts = NULL) {
     if (is.null(simopts)) {
         simopts <- MLESimulationOptions()
     }
-    if (simopts$replications > 1) {
+    .self$isValidParameterVector(param)
+    if (class(data) == "MLESetOfDatasets") {
         simdata <- MLESetOfDatasets()
-        simopts$seed <- simopts$seed - 1
+        for (i in 1:data$ndatasets) {
+            simoptsrep <- simopts
+            simoptsrep$seed <- simopts$seed + i - 1
+            simdata$addDataset(singleSimulation(.self, param, data$datasets[[i]], simoptsrep))
+        }
+    } else if (simopts$replications > 1) {
+        simdata <- MLESetOfDatasets()
         for (i in 1:simopts$replications) {
-            simopts$seed <- simopts$seed + 1
-            simdata$addDataset(singleSimulation(.self, param, data, simopts))
+            simoptsrep <- simopts
+            simoptsrep$seed <- simopts$seed + i - 1
+            simdata$addDataset(singleSimulation(.self, param, data, simoptsrep))
         }
     } else {
         simdata <- singleSimulation(.self, param, data, simopts)
@@ -16,29 +24,24 @@ simulate <- function(.self, param, data, simopts = NULL) {
 }
 
 singleSimulation <- function(model, param, data, simopts) {
-    simdata   <- data$copy()
+    simdata <- data$copy()
     if (model$nerrors) {
         raw_error <- model$drawErrors(simdata, simopts)
         error     <- model$transformErrors(param, simdata, raw_error)
         for (name in names(error)) {
             if (ncol(error[[name]]) > 1) {
-                simdata$addArrayVars(error[[name]], name = name)
+                simdata$addArrayVars(error[[name]], name = name, replace = TRUE)
             } else {
-                simdata$addData(error[[name]], names = name)
+                simdata$addData(error[[name]], names = name, replace = TRUE)
             }
         }
     }
     if (model$ngroup_unobs | model$nindiv_unobs) {
         raw_unobs <- model$drawUnobservables(simdata, simopts)
         unobs     <- model$transformUnobservables(param, simdata, raw_unobs)
-        simdata$addData(unobs)
+        simdata$addData(unobs, replace = TRUE)
     }
     lhs <- model$computeOutcomes(param, simdata)
-    for (name in names(lhs)) {
-        if (name %in% simdata$varnames) {
-            simdata$removeData(name)
-        }
-        simdata$addData(lhs[[name]], names = name)
-    }
+    simdata$addData(lhs, replace = TRUE)
     return (simdata)
 }

@@ -12,19 +12,25 @@ Subclasses should be created according to different models.
 \section{Fields}{
 
 \describe{
-\item{\code{param}}{Estimated parameters}
+\item{\code{param}}{Locally optimal primal solution.}
 
-\item{\code{value}}{The value of objective function at estimated parameters}
+\item{\code{fval}}{The value of objective function at the optimal solution.}
 
-\item{\code{convergence}}{A flag for convergence}
+\item{\code{exitflag}}{Knitro’s status message.}
 
-\item{\code{model}}{A Model object used for estimation}
+\item{\code{lambda}}{Locally optimal dual solution.}
 
-\item{\code{nobs}}{The number of observations in the data used for estimation}
+\item{\code{constraints}}{Constraints value at the optimal solution.}
 
-\item{\code{vcov}}{Variance-covariance matrix of parameters}
+\item{\code{estopts}}{A \code{ModelEstimationOptions} object.}
 
-\item{\code{se}}{Standard errors of parameters}
+\item{\code{model}}{A \code{Model} object used for estimation.}
+
+\item{\code{nobs}}{The number of observations in the data used for estimation.}
+
+\item{\code{vcov}}{Variance-covariance matrix of parameters.}
+
+\item{\code{se}}{Standard errors of parameters.}
 }}
 
 

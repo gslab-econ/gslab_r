@@ -14,35 +14,35 @@ constants characterizing the data.
 \section{Fields}{
 
 \describe{
-\item{\code{var}}{A data.frame object to hold dataset}
+\item{\code{var}}{A data.frame object to hold dataset.}
 
-\item{\code{varnames}}{A vector of variable names in the dataset}
+\item{\code{varnames}}{A vector of variable names in the dataset.}
 
-\item{\code{nvars}}{The number of variables in the dataset}
+\item{\code{nvars}}{The number of variables in the dataset.}
 
-\item{\code{nobs}}{The number of observations in the dataset}
+\item{\code{nobs}}{The number of observations in the dataset.}
 
-\item{\code{const}}{A list to hold constants characterizing the dataset}
+\item{\code{const}}{A list to hold constants characterizing the dataset.}
 
-\item{\code{groupvar}}{A vector identifying groups in the panel}
+\item{\code{groupvar}}{A vector identifying groups in the panel.}
 
-\item{\code{ngroup}}{The number of groups in the panel}
+\item{\code{ngroup}}{The number of groups in the panel.}
 
-\item{\code{group_size}}{A vector of size ngroups giving the number of observations in each group}
+\item{\code{group_size}}{A vector of size ngroups giving the number of observations in each group.}
 
-\item{\code{unique_group_sizes}}{Unique group sizes that appear in the dataset}
+\item{\code{unique_group_sizes}}{Unique group sizes that appear in the dataset.}
 }}
 
 \section{Methods}{
 
 \describe{
-\item{\code{addArrayVars(data, name = "arrayvar")}}{Add a matrix or 3-dimension variable in the field \code{var}.
+\item{\code{addArrayVars(data, name = "arrayvar", replace = FALSE)}}{Add a matrix or 3-dimension variable in the field \code{var}.
 
         \code{data}: A matrix or a 3-dimension array.
 
         \code{name}: The name of the array variable added.}
 
-\item{\code{addData(..., names = NULL)}}{Add variables to columns.
+\item{\code{addData(..., names = NULL, replace = FALSE)}}{Add variables to columns.
 
         \code{...}: The same as the constructor of data.frame.
 

@@ -1,5 +1,3 @@
-library(methods)
-
 ExampleModel <- setRefClass(Class    = "ExampleModel",
                             contains = "Model",
                             fields   = list(include_constant = "numeric")
@@ -37,15 +35,18 @@ ExampleModel$methods(
         }
     },
     
-    estimate = function(data, coeff_suffix = "_coeff") {
+    estimate = function(data, estopts, coeff_suffix = "_coeff") {
+        if (!length(estopts$startparam)) {
+            estopts$startparam <- .self$startparam
+        }
         # Estimate a linear regression
         f <- function(param) {
             xbeta <- .self$XBeta(.self$rhslist, data, param, .self$include_constant, coeff_suffix = "_coeff")
             L2 <- sum((data$var[[.self$lhslist]] - xbeta)^2)
             return (L2)
         }
-        est <- optim(.self$startparam, f)
-        est <- ExampleEstimationOutput(est, .self, data)
+        slvr <- knitro(x0 = estopts$startparam, objective = f)
+        est  <- ExampleEstimationOutput(slvr, .self, data, estopts)
         return (est)
     }
 )

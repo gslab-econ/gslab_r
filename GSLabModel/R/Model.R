@@ -1,13 +1,12 @@
 #' A Reference Class that Provides a Template for Models
 #' @description This class only provides the basic elements of a model. Subclasses should be
 #' created to accommodate different situations and goals.
-#' @field paramlist A vector of parameter names
-#' @field nparam The number of parameters
-#' @field startparam A vector of starting parameter values for estimation
-#' @field indices A list giving the index of each parameter
-#' @field lhslist The names of dependent (i.e., stochastic) variables
-#' @field rhslist The names of independent (i.e., non-stochastic) variables
-#' 
+#' @field paramlist A vector of parameter names.
+#' @field nparam The number of parameters.
+#' @field startparam A vector of starting parameter values for estimation.
+#' @field indices A list giving the index of each parameter.
+#' @field lhslist The names of dependent (i.e., stochastic) variables.
+#' @field rhslist The names of independent (i.e., non-stochastic) variables.
 #' @export Model
 #' @exportClass Model
 #' @import methods
@@ -28,12 +27,20 @@ Model$methods(
         return (TRUE)
     },
     
+    isValidParameterVector = function(param) {
+        "A method to determine if the parameters are valid for the model.\n
+        \\code{param}: A vector of parameters."
+        if (length(param) != .self$nparam) {
+            stop("Wrong length of parameters provided.")
+        }
+    },
+    
     XBeta = function(varlist, data, param, constant = 0, constname = "constant", coeff_prefix = "",
                      coeff_suffix = "_coeff", datavar_prefix = "", datavar_suffix = "") {
         "Return the product of data and coefficients.\n
-        \\code{varlist}: A list of variables names.\n
+        \\code{varlist}: A vector of variables names.\n
         \\code{data}: A ModelData object.\n
-        \\code{param}: A list of coefficients. The order of the coefficients should be the same as 
+        \\code{param}: A vector of coefficients. The order of the coefficients should be the same as 
         the field \\code{varnames} of the \\code{Model} object.\n
         \\code{constant}: Whether the calculation includes constant or not.\n
         \\code{constname}: The name of the constant.\n
@@ -42,6 +49,7 @@ Model$methods(
         \\code{datavar_prefix}: The prefix of variable names in the dataset.\n
         \\code{datavar_suffix}: The suffix of variable names in the dataset.\n"
         
+        .self$isValidParameterVector(param)
         xbeta <- rep(0, data$nobs)
         for (name in varlist) {
             coeffname <- sprintf("%s%s%s", coeff_prefix, name, coeff_suffix)

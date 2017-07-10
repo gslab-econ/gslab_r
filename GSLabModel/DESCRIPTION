@@ -1,6 +1,6 @@
 Package: GSLabModel
 Title: General GSLab Model Package
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
   person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre")), 
   person("Jesse", "Shapiro", email = "jesse_shapiro_1@brown.edu", role = c("aut"))
@@ -14,7 +14,8 @@ RoxygenNote: 6.0.1
 Imports:
   stringr,
   methods,
-  utils
+  utils,
+  KnitroR
 Suggests: 
   testthat, 
   devtools

@@ -2,11 +2,13 @@
 
 export(Model)
 export(ModelData)
+export(ModelEstimationOptions)
 export(ModelEstimationOutput)
 export(loadFromDisk)
 export(saveToDisk)
 exportClasses(Model)
 exportClasses(ModelData)
+exportClasses(ModelEstimationOptions)
 exportClasses(ModelEstimationOutput)
 import(methods)
 import(stringr)

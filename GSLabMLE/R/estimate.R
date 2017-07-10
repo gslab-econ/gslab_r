@@ -13,9 +13,14 @@ estimate <- function(.self, data, estopts = NULL) {
         estopts$startparam <- .self$startparam
     }
     f <- function(param) sumLoglik(.self, param, data)
-    slvr <- optim(estopts$startparam, f, method = estopts$method, lower = estopts$constr$lower,
-                    upper = estopts$constr$upper, control = list(maxit = estopts$maxit))
-    est <- MLEEstimationOutput(slvr, estopts, .self, data)
+    slvr <- knitro(x0 = estopts$startparam,
+                   objective = f,
+                   constraints = estopts$constr$con,
+                   xL = estopts$constr$xL,
+                   xU = estopts$constr$xU,
+                   cL = estopts$constr$cL,
+                   cU = estopts$constr$cU)
+    est <- MLEEstimationOutput(slvr, .self, data, estopts)
     return (est)
 }
 
