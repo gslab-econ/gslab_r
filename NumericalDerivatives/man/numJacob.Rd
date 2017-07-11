@@ -7,15 +7,16 @@
 numJacob(func, x0, xTol)
 }
 \arguments{
-\item{func}{The function to calculate the Jacob Matrix.}
+\item{func}{The function on which Jacob matrix is calculated.}
 
-\item{x0}{The parameters at which to evaluate the numerical derivatives.}
+\item{x0}{The values of arguments at which the Jacob matrix is evaluated.}
 
-\item{xTol}{The minimum distance to move from \code{x0} when numerically calculating derivatives.}
+\item{xTol}{The tolerance, where a small \code{xTol} corresponds to increased accuracy
+of the numerical procedure.}
 }
 \description{
-The function numerically calculates the Jacob Matrix of a given function at 
-given parameters.
+The function numerically calculates the Jacob matrix of a given function 
+evaluated at given values of arguments.
 }
 \examples{
 example <- function(x) x[1]^2 + x[2]^2

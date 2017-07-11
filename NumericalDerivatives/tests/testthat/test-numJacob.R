@@ -1,24 +1,23 @@
-test1 <- function(x) {
-    a <- x^2
-    return (a)
-}
-test2 <- function(x) {
-    a1 <- x^2
-    a2 <- x
-    return (c(a1, a2))
-}
-test3 <- function(x) {
-    a1 <- x[1]^2 / x[2]
-    a2 <- x[1] + 2 * x[2]^3
-    return (c(a1, a2))
-}
-test4 <- function(x) {
-    a1 <- x[1, 1]^2 / x[1, 2]
-    a2 <- x[2, 1] + 2 * x[2, 2]^3
-    return (c(a1, a2))
-}
-
 test_that("numJacob", {
+    test1 <- function(x) {
+        a <- x^2
+        return (a)
+    }
+    test2 <- function(x) {
+        a1 <- x^2
+        a2 <- x
+        return (c(a1, a2))
+    }
+    test3 <- function(x) {
+        a1 <- x[1]^2 / x[2]
+        a2 <- x[1] + 2 * x[2]^3
+        return (c(a1, a2))
+    }
+    test4 <- function(x) {
+        a1 <- x[1, 1]^2 / x[1, 2]
+        a2 <- x[2, 1] + 2 * x[2, 2]^3
+        return (c(a1, a2))
+    }
     x1   <- 2
     x2   <- 2
     x3   <- c(2, 3)

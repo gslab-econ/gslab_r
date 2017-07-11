@@ -1,9 +1,10 @@
 #' Numerically Calculate Jacob Matrix
-#' @description The function numerically calculates the Jacob Matrix of a given function at 
-#' given parameters.  
-#' @param func The function to calculate the Jacob Matrix.
-#' @param x0 The parameters at which to evaluate the numerical derivatives.
-#' @param xTol The minimum distance to move from \code{x0} when numerically calculating derivatives.
+#' @description The function numerically calculates the Jacob matrix of a given function 
+#' evaluated at given values of arguments.
+#' @param func The function on which Jacob matrix is calculated.
+#' @param x0 The values of arguments at which the Jacob matrix is evaluated.
+#' @param xTol The tolerance, where a small \code{xTol} corresponds to increased accuracy
+#' of the numerical procedure.
 #' @examples
 #' example <- function(x) x[1]^2 + x[2]^2
 #' numJacob(example, c(1, 2), 1e-6)
