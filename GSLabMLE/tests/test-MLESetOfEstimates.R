@@ -1,0 +1,20 @@
+source("ExampleModel.R")
+
+test_that("MLESetOfEstimates", {
+    set.seed(1)
+    data1 <- MLEData(y = rnorm(10000, 1, 2))
+    data2 <- MLEData(y = rnorm(10000, 1, 2))
+    model <- ExampleModel("y")
+    constr <- MLEConstraints(xL = c(-1e20, 0))
+    estopt1 <- MLEEstimationOptions(constr = constr, startparam = c(0, 2))
+    est1    <- model$estimate(data1, estopt1)
+    estopt2 <- MLEEstimationOptions(constr = constr, compute_hessian = 0)
+    est2    <- model$estimate(data2, estopt2)
+    estimates <- MLESetOfEstimates(list(est1, est2))
+    
+    expect_equal(estimates$nest, 2)
+    expect_identical(estimates$estimates[[1]], est1)
+    expect_identical(estimates$estimates[[2]], est2)
+    expect_equal(estimates$startparam_list[[1]], c(0, 2))
+    expect_equal(estimates$dstartparam_list[[2]], c(0, Inf))
+})

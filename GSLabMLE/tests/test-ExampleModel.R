@@ -2,7 +2,7 @@ source("ExampleModel.R")
 
 set.seed(1)
 n     <- 10000
-mu    <- 1
+mu    <- -1
 sigma <- 2
 param <- c(mu, sigma)
 y     <- rnorm(n, mu, sigma)
@@ -17,7 +17,9 @@ simdata <- model$simulate(param, data, MLESimulationOptions())
 expect_equal(simdata$varnames, c("obsindex", "epsilon", "eta", "phi", "y"))
 expect_equal(simdata$var$y, mu + simdata$var$epsilon * sigma)
 
-est <- model$estimate(data)
+constr <- MLEConstraints(xL = c(-1e20, 0))
+estopts <- MLEEstimationOptions(constr = constr)
+est <- model$estimate(data, estopts)
 
 for (paramname in model$dparamlist) {
     dparam <- model$derivedParam(est$param, paramname)

@@ -1,5 +1,6 @@
 removeBound <- function(.self, constr_paramlist) {
     ncparam <- length(constr_paramlist)
-    .self$setUpperBound(constr_paramlist, rep(Inf, ncparam))
-    .self$setLowerBound(constr_paramlist, rep(-Inf, ncparam))
+    inf     <- 1e20
+    .self$setUpperBound(constr_paramlist, rep(inf, ncparam))
+    .self$setLowerBound(constr_paramlist, rep(-inf, ncparam))
 }

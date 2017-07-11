@@ -1,4 +1,6 @@
 #' A Reference Class that Defines Options for the \code{simulate} Method of \code{MLEModel} Class.
+#' @field hessian Numerical Hessian matrix at estimated parameters.
+#' @field jacobian Numerical Jacobian matrix at estimated parameters.
 #' @field constr An \code{MLEConstaints} object.
 #' @field dparam A vector of derived parameters.
 #' @field const A list of constants used in estimation.

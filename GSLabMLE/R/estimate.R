@@ -1,11 +1,10 @@
-#' Estimate a Maximum Likelihood Estimation Model
+#' Estimate an \code{MLEModel} by maximum Likelihood with numerical integration
 #' @param .self An \code{MLEModel} object.
 #' @param data An \code{MLEData} object.
 #' @param estopt An \code{MLEEstimationOptions} object.
 #' @export
 #' 
 estimate <- function(.self, data, estopts = NULL) {
-    "Model"
     if (is.null(estopts)) {
         estopts <- MLEEstimationOptions()
     }
@@ -22,9 +21,13 @@ estimate <- function(.self, data, estopts = NULL) {
                    cU = estopts$constr$cU)
     if (estopts$compute_hessian) {
         slvr$hessian <- compute_hessian(.self, slvr$x, data, estopts)
+    } else {
+        slvr$hessian <- matrix(0, 0, 0)
     }
     if (estopts$compute_jacobian) {
         slvr$jacobian <- compute_jacobian(.self, slvr$x, data, estopts)
+    } else {
+        slvr$jacobian <- matrix(0, 0, 0)
     }
     est <- MLEEstimationOutput(slvr, .self, data, estopts)
     return (est)
@@ -33,6 +36,7 @@ estimate <- function(.self, data, estopts = NULL) {
 logLik <- function(.self, param, data) {
     return (log(.self$computeConditionalLikelihoodVector(param, data)))
 }
+
 sumLogLik <- function(.self, param, data) {
     return (-sum(logLik(.self, param, data)))
 }
