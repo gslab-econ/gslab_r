@@ -49,8 +49,6 @@ MLEConstraints$methods(
     setLowerBound = setLowerBound,
     setFixedBound = setFixedBound,
     removeBound   = removeBound,
-    constraints = function(param) {
-        return (.self$con(param))
-    }
+    isConsistent  = isConsistent
 )
 

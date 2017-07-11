@@ -17,15 +17,14 @@ source("../R/MLEConstraints/setLowerBound.R")
 source("../R/MLEConstraints/setFixedBound.R")
 source("../R/MLEConstraints/removeBound.R")
 source("../R/MLEConstraints/MLEConstraints.R")
+source("../R/MLEConstraints/isConsistent.R")
 
 source("../R/MLEData.R")
 source("../R/MLEModel.R")
 source("../R/MLESimulationOptions.R")
 source("../R/MLESetOfDatasets.R")
-source("../R/MLEConstraints/MLEConstraints.R")
 source("../R/MLEEstimationOptions.R")
 source("../R/MLEEstimationOutput.R")
-
 
 test_file("test-MLESetOfDatasets.R")
 test_file("test-simulation.R")

@@ -6,10 +6,10 @@ setUpperBound <- function(.self, constr_paramlist, bounds) {
     if (any(!constr_paramlist %in% .self$paramlist)) {
         stop("Names not in the list of parameters")
     }
-    if (!length(.self$cU)) {
-        .self$cU <- rep(Inf, .self$nparam)
+    if (!length(.self$xU)) {
+        .self$xU <- rep(Inf, .self$nparam)
     }
     for (i in 1:ncparam) {
-        .self$cU[.self$indices[[constr_paramlist[i]]]] <- bounds[i]
+        .self$xU[.self$indices[[constr_paramlist[i]]]] <- bounds[i]
     }
 }
