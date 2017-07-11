@@ -1,12 +1,4 @@
-constraints <- function(param) {
-    summation  <- sum(param[1], param[2], param[3], param[4], param[5], param[6])
-    summation2 <- sum(param[1], 2*param[2], 3*param[3], 4*param[4], 5*param[5], 6*param[6])
-    return(c(summation, summation2))
-}
-
-constr <- MLEConstraints(con = constraints, cL = c(0, 0), cU = c(10, 20),
-                         paramlist = c("a", "b", "c", "d", "e", "f"))
-
+constr <- MLEConstraints(paramlist = c("a", "b", "c", "d", "e", "f"))
 test_that("setUpperBound", {
     constr$setUpperBound("c", 5)
     expect_equal(constr$xU, c(Inf, Inf, 5, Inf, Inf, Inf))
@@ -34,13 +26,6 @@ test_that("setFixedBound", {
     expect_equal(constr$xL, c(1, 2, 3, -2, -Inf, -3))
 })
 
-test_that("isConsistent", {
-    param <- c(1, 2, 3, 4, 5, 6)
-    expect_false(constr$isConsistent(param))
-    param <- c(1, 2, 3, 0, 0, 0)
-    expect_true(constr$isConsistent(param))
-})
-
 test_that("removeBound", {
     constr$removeBound(c("c", "f"))
     expect_equal(constr$xU, c(1, 2, Inf, 2, Inf, Inf))
@@ -51,3 +36,34 @@ test_that("removeBound", {
     expect_error(constr$removeBound("g"), "Names not in the list of parameters")
 })
 
+test_that("isConsistent_JacobianOfConstraints",{
+    lin <- function(param) {
+        a1 <- param[1]
+        a2 <- 2 * param[1] + param[2] + 3 * param[3]
+        return (c(a1, a2))
+    }
+    nonlin <- function(param) {
+        a1 <- param[2] / param[1] + param[3] * param[4]^2
+        a2 <- param[4] * sqrt(abs(param[1])) - param[3]
+        return (c(a1, a2))
+    }
+    constr1 <- MLEConstraints(xL = c(-1, 2, -5, -Inf), xU = c(-1, 4, 5, Inf))
+    expect_true(constr1$isConsistent(c(-1, 2, 0, 0)))
+    expect_false(constr1$isConsistent(c(-2, 5, 6, 0)))
+    expect_equal(constr1$JacobianOfConstraints(c(-1, 2, 0, 0))$xL, diag(4))
+    
+    constr2 <- MLEConstraints(con = lin, cL = c(-1, 3), cU = c(-1, 3))
+    expect_true(constr2$isConsistent(c(-1, 2, 1, 4)))
+    expect_false(constr2$isConsistent(c(2, 1, 0, 0)))
+    expect_equal(constr2$JacobianOfConstraints(c(-1, 2, 1, 4))$cU[2,], c(2, 1, 3, 0), tolerance = 1e-3)
+    
+    constr3 <- MLEConstraints(con = lin, cU = c(-1, 3))
+    expect_true(constr3$isConsistent(c(-5, 0, 1, 0)))
+    expect_false(constr3$isConsistent(c(-1, 2, 4, 4)))
+    expect_equal(constr3$JacobianOfConstraints(c(-5, 0, 1, 0))$cL, NULL)
+    
+    constr4 <- MLEConstraints(con = nonlin, cL = c(6, 1), cU = c(6, 1))
+    expect_true(constr4$isConsistent(c(1, 2, 1, 2)))
+    expect_false(constr4$isConsistent(c(1, 2, 1, 4)))
+    expect_equal(constr4$JacobianOfConstraints(c(1, 2, 1, 2))$cL[1,], c(-2, 1, 4, 4), tolerance = 1e-3)
+})

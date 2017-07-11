@@ -11,6 +11,7 @@
 #' @field paramlist A vector of parameter names.
 #' @field nparam The number of parameters.
 #' @field indices A list giving the index of each parameter.
+#' @field jacob_tol Default numerical precision for evaluating Jacobian.
 #' @export MLEConstraints
 #' @exportClass MLEConstraints
 #' 
@@ -22,7 +23,8 @@ MLEConstraints <- setRefClass(Class   = "MLEConstraints",
                                              cU        = "numeric",
                                              paramlist = "character",
                                              nparam    = "numeric",
-                                             indices   = "list"
+                                             indices   = "list",
+                                             jacob_tol = "numeric"
                               ),
                               methods = list(
                                   initialize = function(xL        = numeric(0),
@@ -30,7 +32,8 @@ MLEConstraints <- setRefClass(Class   = "MLEConstraints",
                                                         con       = function(x) NULL,
                                                         cL        = numeric(0),
                                                         cU        = numeric(0),
-                                                        paramlist = character(0)) {
+                                                        paramlist = character(0),
+                                                        jacob_tol = 1e-4) {
                                       .self$xL        <- xL
                                       .self$xU        <- xU
                                       .self$con       <- con
@@ -40,6 +43,7 @@ MLEConstraints <- setRefClass(Class   = "MLEConstraints",
                                       .self$nparam    <- length(.self$paramlist)
                                       .self$indices   <- as.list(1:.self$nparam)
                                       names(.self$indices)   <- .self$paramlist
+                                      .self$jacob_tol <- jacob_tol
                                   }
                               )
 )
@@ -49,6 +53,7 @@ MLEConstraints$methods(
     setLowerBound = setLowerBound,
     setFixedBound = setFixedBound,
     removeBound   = removeBound,
-    isConsistent  = isConsistent
+    isConsistent  = isConsistent,
+    JacobianOfConstraints = JacobianOfConstraints
 )
 
