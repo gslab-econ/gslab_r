@@ -18,13 +18,12 @@ numJacob <- function(func, x0, xTol) {
     if (is.null(paramdim)) {
         paramdim <- nparam
     }
-    Jacobian <- matrix(0, noutput, nparam)
-    for (j in 1:nparam) {
+    f <- function(j) {
         increment    <- array(0, paramdim)
         increment[j] <- max(abs(x0[j]) * xTol, xTol)
-        x1 <- x0 + increment
-        f1 <- func(x1)
-        Jacobian[, j] <- (f1 - f0) / increment[j]  
+        f1 <- func(x0 + increment)
+        return ((f1 - f0) / increment[j])
     }
+    Jacobian <- sapply(1:nparam, f)
     return (Jacobian)
 }
