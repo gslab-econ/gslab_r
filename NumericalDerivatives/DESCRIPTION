@@ -5,7 +5,7 @@ Authors@R: c(
   person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre")), 
   person("Jesse", "Shapiro", email = "jesse_shapiro_1@brown.edu", role = c("aut"))
   )
-Description: Functions to calculate derivatives numerically.
+Description: Functions to calculate Jacob and Hessian matrix numerically.
 Depends: R (>= 3.3.2)
 License: MIT + file LICENSE
 Encoding: UTF-8
