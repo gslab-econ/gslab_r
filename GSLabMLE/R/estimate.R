@@ -12,7 +12,7 @@ estimate <- function(.self, data, estopts = NULL) {
     if (!length(estopts$startparam)) {
         estopts$startparam <- .self$startparam
     }
-    f <- function(param) sumLoglik(.self, param, data)
+    f <- function(param) sumLogLik(.self, param, data)
     slvr <- knitro(x0 = estopts$startparam,
                    objective = f,
                    constraints = estopts$constr$con,
@@ -20,6 +20,12 @@ estimate <- function(.self, data, estopts = NULL) {
                    xU = estopts$constr$xU,
                    cL = estopts$constr$cL,
                    cU = estopts$constr$cU)
+    if (estopts$compute_hessian) {
+        slvr$hessian <- compute_hessian(.self, slvr$x, data, estopts)
+    }
+    if (estopts$compute_jacobian) {
+        slvr$jacobian <- compute_jacobian(.self, slvr$x, data, estopts)
+    }
     est <- MLEEstimationOutput(slvr, .self, data, estopts)
     return (est)
 }
@@ -27,6 +33,16 @@ estimate <- function(.self, data, estopts = NULL) {
 logLik <- function(.self, param, data) {
     return (log(.self$computeConditionalLikelihoodVector(param, data)))
 }
-sumLoglik <- function(.self, param, data) {
+sumLogLik <- function(.self, param, data) {
     return (-sum(logLik(.self, param, data)))
+}
+
+compute_hessian <- function(.self, param, data, estopts) {
+    hessian <- numHess(function(param) -sumLogLik(.self, param, data), param, estopts$hesstol)
+    return (hessian)
+}
+
+compute_jacobian <- function(.self, param, data, estopts) {
+    jacobian <- numJacob(function(param) -logLik(.self, param, data), param, estopts$hesstol)
+    return (jacobian)
 }

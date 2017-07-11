@@ -7,9 +7,11 @@
 #' 
 MLEEstimationOutput <- setRefClass(Class    = "MLEEstimationOutput",
                                    contains = "ModelEstimationOutput",
-                                   fields   = list(const   = "list",
-                                                   dparam  = "numeric",
-                                                   constr = "MLEConstraints"
+                                   fields   = list(hessian  = "matrix",
+                                                   jacobian = "matrix",
+                                                   const    = "list",
+                                                   dparam   = "numeric",
+                                                   constr   = "MLEConstraints"
                                    ),
                                    methods = list(
                                        initialize = function(slvr, model, data, estopts) {
@@ -18,9 +20,11 @@ MLEEstimationOutput <- setRefClass(Class    = "MLEEstimationOutput",
                                                .self$field(field, obj$field(field))
                                            }
                                            rm(obj)
-                                           .self$const       <- data$const
-                                           .self$constr      <- estopts$constr
-                                           .self$dparam      <- .self$model$getDerivedParam(.self$param, .self$const)
+                                           .self$hessian  <- slvr$hessian
+                                           .self$jacobian <- slvr$jacobian
+                                           .self$const    <- data$const
+                                           .self$constr   <- estopts$constr
+                                           .self$dparam   <- .self$model$getDerivedParam(.self$param, .self$const)
                                        }
                                    )
 )
