@@ -1,9 +1,9 @@
-#' Numerically Calculate Jacob Matrix
-#' @description The function numerically calculates the Jacob matrix of a given function 
+#' Numerically Calculate Jacobian Matrix
+#' @description The function numerically calculates the Jacobian matrix of a given function 
 #' evaluated at given values of arguments.
-#' @param func The function on which Jacob matrix is calculated.
-#' @param x0 The values of arguments at which the Jacob matrix is evaluated.
-#' @param xTol The tolerance, where a small \code{xTol} corresponds to increased accuracy
+#' @param func The function on which Jacobian matrix is calculated.
+#' @param x0 The values of arguments at which the Jacobian matrix is evaluated.
+#' @param xTol The tolerance, where a smaller \code{xTol} corresponds to increased accuracy
 #' of the numerical procedure.
 #' @examples
 #' example <- function(x) x[1]^2 + x[2]^2

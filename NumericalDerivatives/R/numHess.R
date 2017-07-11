@@ -3,7 +3,7 @@
 #' evaluated at given values of arguments.
 #' @param func The function on which Hessian matrix is calculated.
 #' @param x0 The values of arguments at which the Hessian matrix is evaluated.
-#' @param xTol The tolerance, where a small \code{xTol} corresponds to increased accuracy
+#' @param xTol The tolerance, where a smaller \code{xTol} corresponds to increased accuracy
 #' of the numerical procedure.
 #' @param ind_rowvar Index of rows where the Hessian matrix is calculated. Default is all rows.
 #' @param ind_colvar Index of columns where the Hessian matrix is calculated. Default is all columns.

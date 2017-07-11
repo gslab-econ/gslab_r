@@ -12,7 +12,7 @@ numHess(func, x0, xTol, ind_rowvar = 1:length(x0),
 
 \item{x0}{The values of arguments at which the Hessian matrix is evaluated.}
 
-\item{xTol}{The tolerance, where a small \code{xTol} corresponds to increased accuracy
+\item{xTol}{The tolerance, where a smaller \code{xTol} corresponds to increased accuracy
 of the numerical procedure.}
 
 \item{ind_rowvar}{Index of rows where the Hessian matrix is calculated. Default is all rows.}

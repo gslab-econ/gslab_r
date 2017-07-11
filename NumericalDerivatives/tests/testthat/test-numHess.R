@@ -17,7 +17,7 @@ test_that("numHess", {
                                  sqrt(10/3), sqrt(5/6),
                                  sqrt(6/5), sqrt(3/10)),
                         nrow = 3, ncol = 2, byrow = TRUE)
-
+    
     expect_equal(hess1, truehess1, tolerance = 1e-3)
     expect_equal(hess2, truehess2, tolerance = 1e-3)
 })

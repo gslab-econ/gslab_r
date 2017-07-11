@@ -2,20 +2,20 @@
 % Please edit documentation in R/numJacob.R
 \name{numJacob}
 \alias{numJacob}
-\title{Numerically Calculate Jacob Matrix}
+\title{Numerically Calculate Jacobian Matrix}
 \usage{
 numJacob(func, x0, xTol)
 }
 \arguments{
-\item{func}{The function on which Jacob matrix is calculated.}
+\item{func}{The function on which Jacobian matrix is calculated.}
 
-\item{x0}{The values of arguments at which the Jacob matrix is evaluated.}
+\item{x0}{The values of arguments at which the Jacobian matrix is evaluated.}
 
-\item{xTol}{The tolerance, where a small \code{xTol} corresponds to increased accuracy
+\item{xTol}{The tolerance, where a smaller \code{xTol} corresponds to increased accuracy
 of the numerical procedure.}
 }
 \description{
-The function numerically calculates the Jacob matrix of a given function 
+The function numerically calculates the Jacobian matrix of a given function 
 evaluated at given values of arguments.
 }
 \examples{
