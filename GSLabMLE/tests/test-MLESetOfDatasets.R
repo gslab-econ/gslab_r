@@ -17,7 +17,7 @@ test_that("simulate", {
     simdata <- model$simulate(c(1, 2), data, simopts)
     expect_equal(simdata$ndatasets, replications)
     expect_equal(length(simdata$datasets), replications)
-    expect_equal(class(simdata$datasets[[1]])[1], "MLEData")
+    expect_is(simdata$datasets[[1]], "MLEData")
 })
 
 test_that("saveload", {

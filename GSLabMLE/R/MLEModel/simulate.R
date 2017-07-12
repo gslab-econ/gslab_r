@@ -25,6 +25,11 @@ simulate <- function(.self, param, data, simopts = NULL) {
 
 singleSimulation <- function(model, param, data, simopts) {
     simdata <- data$copy()
+    if (model$ngroup_unobs | model$nindiv_unobs) {
+        raw_unobs <- model$drawUnobservables(simdata, simopts)
+        unobs     <- model$transformUnobservables(param, simdata, raw_unobs)
+        simdata$addData(unobs, replace = TRUE)
+    }
     if (model$nerrors) {
         raw_error <- model$drawErrors(simdata, simopts)
         error     <- model$transformErrors(param, simdata, raw_error)
@@ -35,11 +40,6 @@ singleSimulation <- function(model, param, data, simopts) {
                 simdata$addData(error[[name]], names = name, replace = TRUE)
             }
         }
-    }
-    if (model$ngroup_unobs | model$nindiv_unobs) {
-        raw_unobs <- model$drawUnobservables(simdata, simopts)
-        unobs     <- model$transformUnobservables(param, simdata, raw_unobs)
-        simdata$addData(unobs, replace = TRUE)
     }
     lhs <- model$computeOutcomes(param, simdata)
     simdata$addData(lhs, replace = TRUE)

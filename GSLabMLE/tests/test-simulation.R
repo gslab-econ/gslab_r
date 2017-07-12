@@ -10,8 +10,8 @@ model <- ExampleModel("y")
 replications <- 10
 
 test_simdata <- function(simdata) {
-    expect_equal(class(simdata)[1], "MLEData")
-    expect_equal(simdata$varnames, c("obsindex", "epsilon", "eta", "phi", "y"))
+    expect_is(simdata, "MLEData")
+    expect_equal(simdata$varnames, c("obsindex", "eta", "phi", "epsilon", "y"))
     expect_equal(simdata$var$y, mu + simdata$var$epsilon * sigma)
 }
 

@@ -14,7 +14,7 @@ expect_equal(model$transformErrors(data, param, y), y)
 expect_equal(model$transformUnobservables(data, param, y), y)
 
 simdata <- model$simulate(param, data, MLESimulationOptions())
-expect_equal(simdata$varnames, c("obsindex", "epsilon", "eta", "phi", "y"))
+expect_equal(simdata$varnames, c("obsindex", "eta", "phi", "epsilon", "y"))
 expect_equal(simdata$var$y, mu + simdata$var$epsilon * sigma)
 
 constr <- MLEConstraints(xL = c(-1e20, 0))
