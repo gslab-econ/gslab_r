@@ -12,13 +12,15 @@ estimate <- function(.self, data, estopts = NULL) {
         estopts$startparam <- .self$startparam
     }
     f <- function(param) sumLogLik(.self, param, data)
-    slvr <- knitro(x0 = estopts$startparam,
-                   objective = f,
+    slvr <- knitro(x0          = estopts$startparam,
+                   objective   = f,
                    constraints = estopts$constr$con,
-                   xL = estopts$constr$xL,
-                   xU = estopts$constr$xU,
-                   cL = estopts$constr$cL,
-                   cU = estopts$constr$cU)
+                   xL          = estopts$constr$xL,
+                   xU          = estopts$constr$xU,
+                   cL          = estopts$constr$cL,
+                   cU          = estopts$constr$cU,
+                   options     = append(list(outlev = estopts$outlev),
+                                        estopts$knitrotxt))
     if (estopts$compute_hessian) {
         slvr$hessian <- compute_hessian(.self, slvr$x, data, estopts)
     } else {

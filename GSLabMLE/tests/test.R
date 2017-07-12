@@ -31,6 +31,7 @@ source("../R/MLESetOfDatasets.R")
 source("../R/MLESetOfEstimates.R")
 source("../R/MLESimulationOptions.R")
 
+source("../R/misc.R")
 source("ExampleModel.R")
 
 test_file("test-ExampleModel.R")
@@ -39,3 +40,4 @@ test_file("test-MLEEstimationOptions.R")
 test_file("test-MLESetOfDatasets.R")
 test_file("test-MLESetOfEstimates.R")
 test_file("test-simulation.R")
+test_file("test-misc.R")

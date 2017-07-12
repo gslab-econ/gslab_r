@@ -18,7 +18,7 @@ expect_equal(simdata$varnames, c("obsindex", "epsilon", "eta", "phi", "y"))
 expect_equal(simdata$var$y, mu + simdata$var$epsilon * sigma)
 
 constr <- MLEConstraints(xL = c(-1e20, 0))
-estopts <- MLEEstimationOptions(constr = constr)
+estopts <- MLEEstimationOptions(constr = constr, outlev = 2)
 est <- model$estimate(data, estopts)
 
 for (paramname in model$dparamlist) {

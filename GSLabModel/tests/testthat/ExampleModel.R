@@ -35,7 +35,10 @@ ExampleModel$methods(
         }
     },
     
-    estimate = function(data, estopts, coeff_suffix = "_coeff") {
+    estimate = function(data, estopts = NULL, coeff_suffix = "_coeff") {
+        if (is.null(estopts)) {
+            estopts <- ModelEstimationOptions()
+        }
         if (!length(estopts$startparam)) {
             estopts$startparam <- .self$startparam
         }
@@ -45,7 +48,10 @@ ExampleModel$methods(
             L2 <- sum((data$var[[.self$lhslist]] - xbeta)^2)
             return (L2)
         }
-        slvr <- knitro(x0 = estopts$startparam, objective = f)
+        slvr <- knitro(x0        = estopts$startparam,
+                       objective = f,
+                       options   = append(list(outlev = estopts$outlev),
+                                          estopts$knitrotxt))
         est  <- ExampleEstimationOutput(slvr, .self, data, estopts)
         return (est)
     }
