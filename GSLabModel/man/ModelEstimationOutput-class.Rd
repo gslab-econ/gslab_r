@@ -20,8 +20,6 @@ Subclasses should be created according to different models.
 
 \item{\code{lambda}}{Locally optimal dual solution.}
 
-\item{\code{constraints}}{Constraints value at the optimal solution.}
-
 \item{\code{estopts}}{A \code{ModelEstimationOptions} object.}
 
 \item{\code{model}}{A \code{Model} object used for estimation.}

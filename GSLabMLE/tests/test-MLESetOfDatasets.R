@@ -1,8 +1,3 @@
-source("../R/MLEData.R")
-source("../R/MLESimulationOptions.R")
-source("../R/MLESetOfDatasets.R")
-source("ExampleModel.R")
-
 set.seed(1)
 n <- 100
 replications <- 10

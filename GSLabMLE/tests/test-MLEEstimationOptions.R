@@ -1,0 +1,21 @@
+test_that("MLEEstimationOptions", {
+    set.seed(1)
+    data     <- MLEData(y = rnorm(10000, 1, 2))
+    model    <- ExampleModel("y")
+    constr   <- MLEConstraints(xL = c(2, 0))
+    estopts1 <- MLEEstimationOptions()
+    estopts2 <- MLEEstimationOptions(constr = constr)
+    estopts3 <- MLEEstimationOptions(compute_hessian = 0)
+    estopts4 <- MLEEstimationOptions(compute_jacobian = 0)
+    
+    est1     <- model$estimate(data, estopts1)
+    est2     <- model$estimate(data, estopts2)
+    est3     <- model$estimate(data, estopts3)
+    est4     <- model$estimate(data, estopts4)
+
+    expect_equal(est1$param, est3$param)
+    expect_equal(est1$dparam, est4$dparam)
+    expect_equal(est2$param[1], 2)
+    expect_false(length(est3$hessian) | length(est4$jacobian))
+    expect_true(length(est3$jacobian) & length(est4$hessian))
+})

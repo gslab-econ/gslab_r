@@ -5,7 +5,6 @@
 #' @field fval The value of objective function at the optimal solution.
 #' @field exitflag Knitro’s status message.
 #' @field lambda Locally optimal dual solution.
-#' @field constraints Constraints value at the optimal solution.
 #' @field estopts A \code{ModelEstimationOptions} object.
 #' @field model A \code{Model} object used for estimation.
 #' @field nobs The number of observations in the data used for estimation.
@@ -20,7 +19,6 @@ ModelEstimationOutput <- setRefClass(Class  = "ModelEstimationOutput",
                                                    fval        = "numeric",
                                                    exitflag    = "character",
                                                    lambda      = "numeric",
-                                                   constraints = "numeric",
                                                    estopts     = "ModelEstimationOptions",
                                                    model       = "Model",
                                                    nobs        = "numeric",
@@ -33,7 +31,6 @@ ModelEstimationOutput <- setRefClass(Class  = "ModelEstimationOutput",
                                              .self$fval        <- slvr$objective
                                              .self$exitflag    <- slvr$statusMessage
                                              .self$lambda      <- slvr$lambda
-                                             .self$constraints <- slvr$constraints
                                              .self$estopts     <- estopts
                                              .self$model       <- model
                                              .self$nobs        <- data$nobs
