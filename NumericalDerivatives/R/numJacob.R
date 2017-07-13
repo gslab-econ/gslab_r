@@ -11,19 +11,17 @@
 #' @export
 #' 
 numJacob <- function(func, x0, xTol) {
-    f0       <- func(x0)
-    noutput  <- length(f0)
-    nparam   <- length(x0)
-    paramdim <- dim(x0)
-    if (is.null(paramdim)) {
-        paramdim <- nparam
-    }
-    f <- function(j) {
+    f <- function(j, func, x0, xTol) {
+        f0       <- func(x0)
+        paramdim <- dim(x0)
+        if (is.null(paramdim)) {
+            paramdim <- length(x0)
+        }
         increment    <- array(0, paramdim)
         increment[j] <- max(abs(x0[j]) * xTol, xTol)
         f1 <- func(x0 + increment)
         return ((f1 - f0) / increment[j])
     }
-    Jacobian <- sapply(1:nparam, f)
+    Jacobian <- sapply(1:length(x0), f, func, x0, xTol)
     return (Jacobian)
 }

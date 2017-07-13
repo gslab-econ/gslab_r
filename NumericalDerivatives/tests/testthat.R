@@ -1,4 +1,5 @@
 library(testthat)
+library(NumericalDerivatives)
 
 sink("tests.log")
 sprintf("Tests begin at %s", Sys.time())
