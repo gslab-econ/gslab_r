@@ -84,3 +84,21 @@ test_that("avgWithin", {
     expect_equal(ncol(out$group), ncol_group)
     expect_equal(ncol(out$value), ncol_value)
 })
+
+test_that("expandArray", {
+    numrep  <- 1e5
+    x       <- matrix(1:5, 5)
+    y       <- matrix(1:10, 5, byrow = TRUE)
+    z       <- do.call("rbind", rep(list(y), numrep))
+    
+    countsx <- matrix(c(1, 1, 3, 2, 1), 5) # A matrix with one row 
+    countsy <- c(1, 2, 1, 1, 2) # A vector
+    countsz <- rep(countsy, numrep)
+    answerx <- matrix(c(1, 2, 3, 3, 3, 4, 4, 5), 8)
+    answery <- matrix(c(1, 2, 3, 4, 3, 4, 5, 6, 7, 8, 9, 10, 9, 10), 7, byrow = TRUE)
+    answerz <- do.call("rbind", rep(list(answery), numrep))
+    
+    expect_equal(expand_array(x, countsx), answerx)
+    expect_equal(expand_array(y, countsy), answery)
+    expect_equal(expand_array(z, countsz), answerz)
+})
