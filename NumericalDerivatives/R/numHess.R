@@ -25,12 +25,12 @@ numHess <- function(func, x0, xTol, ind_rowvar = 1:length(x0), ind_colvar = 1:le
         f_ij <- func(x0 + increment_ij)
         return ((f_ij + f0 - f_i - f_j) / (increment_i[row] * increment_j[col]))   
     }
-    f_row <- function(row, func, x0, xTol) f(row, col, func, x0, xTol)
-    Hess <- sapply(ind_colvar,
-                   function(col, func, x0, xTol)
-                       sapply(ind_rowvar,
-                              function(row, func, x0, xTol) f(row, col, func, x0, xTol),
-                              func, x0, xTol),
-                   func, x0, xTol)
+    f_col <- function(col, func, x0, xTol) {
+        sapply(ind_rowvar,
+               function(row, func, x0, xTol)
+                   f(row, col, func, x0, xTol),
+               func, x0, xTol)  
+    }
+    Hess <- sapply(ind_colvar, f_col, func, x0, xTol)
     return (Hess)
 }
