@@ -3,6 +3,7 @@ library(NumericalDerivatives)
 library(devtools)
 library(testthat)
 library(KnitroR)
+library(SparseGrid)
 
 source("../R/MLEModel/derivedParam.R")
 source("../R/MLEModel/drawErrors.R")

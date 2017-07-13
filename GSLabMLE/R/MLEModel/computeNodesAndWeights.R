@@ -1,5 +1,3 @@
-source("ExampleModel.R")
-
 set.seed(1)
 n     <- 10
 mu    <- 1
@@ -18,7 +16,8 @@ computeNodesAndWeights <- function(.self, data, quadacc) {
             data$setGroup(data$var$obsindex)   
         }
         nobs_by_group <- sumWithin(rep(1, data$nobs), data$groupvar)$value
-        groups        <- sumWithin(rep(1, data$nobs), data$groupvar)$group
+        group         <- sumWithin(rep(1, data$nobs), data$groupvar)$group
+        group_mapping <- match(data$groupvar, group)
         unique_obs    <- unique(nobs_by_group)
         gnodes    <- list()
         inodes    <- list()
@@ -39,10 +38,11 @@ computeNodesAndWeights <- function(.self, data, quadacc) {
         numnodes  <- allocateToGroups(nobs_by_group, numnodes)
         nodeindex <- allocateToGroups(nobs_by_group, nodeindex)
         
-        weights <- arrangeWeights(data, weights, numnodes)
-        nodes   <- arrangeNodes(model, data, gnodes, inodes, numnodes, nodeindex)
+        weights  <- arrangeWeights(data, weights, numnodes)
+        nodes    <- arrangeNodes(model, data, gnodes, inodes, numnodes, nodeindex, group_mapping)
         data_rep <- data$copy()
         data_rep$selectData(nodes$obs)
+        data_rep$setGroup(groups(cbind(nodes$group, nodes$nodenum)))
     } else {
         nodes         <- list()
         nodes$group   <- data$groupvar
@@ -107,12 +107,12 @@ allocateToGroups <- function(nobs_by_group, var) {
 arrangeWeights <- function(data, raw_weights, numnodes) {
     weights <- list()
     weights$wgt   <- raw_weights
-    weights$group <- expandArray(matrix(1:data$ngroup), numnodes[match(data$groupvar, groups)])
+    weights$group <- expandArray(1:data$ngroup, numnodes)
     #weights$node  <- seqwithin(weights$group)
     return (weights)
 }
 
-arrangeNodes <- function(model, data, gnodes, inodes, numnodes, nodeindex) {
+arrangeNodes <- function(model, data, gnodes, inodes, numnodes, nodeindex, group_mapping) {
     nodes <- list()
     if (model$ngroup_unobs) {
         for (i in 1 : model$ngroup_unobs) {
@@ -127,8 +127,8 @@ arrangeNodes <- function(model, data, gnodes, inodes, numnodes, nodeindex) {
         }
     }
     nodenum <- nodeindex
-    obs     <- expand_array(matrix(data$var$obsindex), numnodes[match(data$groupvar, groups)])
-    group   <- expand_array(matrix(data$groupvar), numnodes[match(data$groupvar, groups)])
+    obs     <- expandArray(data$var$obsindex, numnodes[group_mapping])
+    group   <- expandArray(data$groupvar, numnodes[group_mapping])
     m <- cbind(group, nodenum, obs, 1:length(group))
     m <- m[order(m[, 1], m[, 2], m[, 3]), ]
     nodes$group   <- as.matrix(m[, 1])

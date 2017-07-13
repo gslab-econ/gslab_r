@@ -98,7 +98,21 @@ test_that("expandArray", {
     answery <- matrix(c(1, 2, 3, 4, 3, 4, 5, 6, 7, 8, 9, 10, 9, 10), 7, byrow = TRUE)
     answerz <- do.call("rbind", rep(list(answery), numrep))
     
-    expect_equal(expand_array(x, countsx), answerx)
-    expect_equal(expand_array(y, countsy), answery)
-    expect_equal(expand_array(z, countsz), answerz)
+    expect_equal(expandArray(x, countsx), answerx)
+    expect_equal(expandArray(y, countsy), answery)
+    expect_equal(expandArray(z, countsz), answerz)
+})
+
+test_that("groups", {
+    vec <- c(1, -1, -1, 3, 1, 5)
+    mat <- matrix(c(1, 2, -1, 0, -1, 0, 3, 4, 1, 2, 5, 6), 6, byrow = TRUE)
+    strvec <- c("a", "b", "b", "c", "a", "d")
+    strmat <- matrix(c("a", "b", "b", "c", "b", "c", "c", "d", "a", "b", "d", "e"), 6, byrow = TRUE)
+    
+    answer <- c(2, 1, 1, 3, 2, 4)
+    stranswer <- c(1, 2, 2, 3, 1, 4)
+    expect_equal(groups(vec), answer)
+    expect_equal(groups(mat), answer)
+    expect_equal(groups(strvec), stranswer)
+    expect_equal(groups(strmat), stranswer)
 })
