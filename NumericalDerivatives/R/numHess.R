@@ -13,10 +13,11 @@
 #' @export
 #' 
 numHess <- function(func, x0, xTol, ind_rowvar = 1:length(x0), ind_colvar = 1:length(x0)) {
-    f  <- function(row, col, func, x0, xTol) {
-        f0 <- func(x0)
-        increment_i <- rep(0, length(x0))
-        increment_j <- rep(0, length(x0))
+    f0 <- func(x0)
+    n  <- length(x0)
+    f  <- function(row, col, func, f0, x0, n, xTol) {
+        increment_i <- rep(0, n)
+        increment_j <- rep(0, n)
         increment_i[row] <- max(x0[row] * xTol, xTol)
         increment_j[col] <- max(x0[col] * xTol, xTol)
         increment_ij <- increment_i + increment_j
@@ -25,12 +26,12 @@ numHess <- function(func, x0, xTol, ind_rowvar = 1:length(x0), ind_colvar = 1:le
         f_ij <- func(x0 + increment_ij)
         return ((f_ij + f0 - f_i - f_j) / (increment_i[row] * increment_j[col]))   
     }
-    f_col <- function(col, func, x0, xTol) {
+    f_col <- function(col, func, f0, x0, n, xTol) {
         sapply(ind_rowvar,
-               function(row, func, x0, xTol)
-                   f(row, col, func, x0, xTol),
-               func, x0, xTol)  
+               function(row, func, f0, x0, n, xTol)
+                   f(row, col, func, f0, x0, n, xTol),
+               func, f0, x0, n, xTol)  
     }
-    Hess <- sapply(ind_colvar, f_col, func, x0, xTol)
+    Hess <- sapply(ind_colvar, f_col, func, f0, x0, n, xTol)
     return (Hess)
 }
