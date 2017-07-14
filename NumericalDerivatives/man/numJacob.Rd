@@ -9,10 +9,14 @@ numJacob(func, x0, xTol)
 \arguments{
 \item{func}{The function on which Jacobian matrix is calculated.}
 
-\item{x0}{The values of arguments at which the Jacobian matrix is evaluated.}
+\item{x0}{A vector or a matrix of argument values at which the Jacobian matrix is evaluated.}
 
 \item{xTol}{The tolerance, where a smaller \code{xTol} corresponds to increased accuracy
 of the numerical procedure.}
+}
+\value{
+A matrix with the number of rows equal to the length of output of \code{func}, and the
+number of columns equal to the length of \code{x0}.
 }
 \description{
 The function numerically calculates the Jacobian matrix of a given function 

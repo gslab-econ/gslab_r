@@ -10,7 +10,7 @@ numHess(func, x0, xTol, ind_rowvar = 1:length(x0),
 \arguments{
 \item{func}{The function on which Hessian matrix is calculated.}
 
-\item{x0}{The values of arguments at which the Hessian matrix is evaluated.}
+\item{x0}{A vector of argument values of at which the Hessian matrix is evaluated.}
 
 \item{xTol}{The tolerance, where a smaller \code{xTol} corresponds to increased accuracy
 of the numerical procedure.}
@@ -18,6 +18,10 @@ of the numerical procedure.}
 \item{ind_rowvar}{Index of rows where the Hessian matrix is calculated. Default is all rows.}
 
 \item{ind_colvar}{Index of columns where the Hessian matrix is calculated. Default is all columns.}
+}
+\value{
+A matrix with the number of rows equal to the length of \code{ind_rowvar}, and the
+number of columns equal to the length of \code{ind_colvar}.
 }
 \description{
 This function numerically calculates the Hessian matrix of a given function
