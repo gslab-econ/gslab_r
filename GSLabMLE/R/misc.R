@@ -1,5 +1,5 @@
 #' Compute group summation.
-#' The function takes as input a value matrix and a group matrix. A group is defined by an entire
+#' @description The function takes as input a value matrix and a group matrix. A group is defined by an entire
 #' row in the group matrix. For each column of the value matrix, the function computes the summation  
 #' of all values within each unique group.
 #' @param value A matrix or a vector.
@@ -20,7 +20,7 @@ sumWithin <- function(value, group) {
 }
 
 #' Compute group product.
-#' The function takes as input a value matrix and a group matrix. A group is defined by an entire
+#' @description The function takes as input a value matrix and a group matrix. A group is defined by an entire
 #' row in the group matrix. For each column of the value matrix, the function computes the product
 #' of all values within each unique group.
 #' @param value A matrix or a vector.
@@ -41,7 +41,7 @@ prodWithin <- function(value, group) {
 }
 
 #' Compute group average.
-#' The function takes as input a value matrix and a group matrix. A group is defined by an entire
+#' @description The function takes as input a value matrix and a group matrix. A group is defined by an entire
 #' row in the group matrix. For each column of the value matrix, the function computes the average
 #' of all values within each unique group.
 #' @param value A matrix or a vector.
@@ -90,4 +90,29 @@ groups <- function(x) {
     v     <- c(1, cumsum(1 - diff) + 1)
     v[index] <- v
     return (v)
+}
+
+#' Sort group variable and create index within each group.
+#' @description The function takes as input a group matrix. A group is defined by an entire
+#' row in the group matrix. The function sort the group matrix by first column, then second, ...
+#' It also return a single-column matrix that indicates the index of each row within each group.
+#' @param group A matrix or a vector to be sorted.
+#' @return The function returns a list with two fields: \code{sorted_group}, which contains the
+#' sorted group matrix, and \code{indices}, which contains the index.
+#' @examples 
+#' seqWithin(matrix(c(2, 3, 1, 1, 3, 3, 2, 2, 3, 3, 1, 1, 3, 3), 7, byrow = TRUE))
+#' 
+seqWithin <- function(group) {
+    group        <- as.matrix(group)
+    sorted_group <- as.matrix(group[do.call(order, lapply(1 : ncol(group), function(i) group[, i])), ])
+    indices      <- matrix(1, nrow(sorted_group))
+    for (i in 2:nrow(sorted_group)) {
+        if (all(sorted_group[i, ] == sorted_group[i - 1, ])) {
+            indices[i] = indices[i - 1] + 1
+        } else {
+            indices[i] = 1
+        }
+    }
+    return (list(indices      = indices,
+                 sorted_group =  sorted_group))
 }
