@@ -3,7 +3,7 @@ test_that("MLEEstimationOptions", {
     data     <- MLEData(y = rnorm(10000, 1, 2))
     model    <- ExampleModel("y")
     constr   <- MLEConstraints(xL = c(2, 0))
-    estopts1 <- MLEEstimationOptions()
+    estopts1 <- MLEEstimationOptions(outlev = 2)
     estopts2 <- MLEEstimationOptions(constr = constr)
     estopts3 <- MLEEstimationOptions(compute_hessian = 0)
     estopts4 <- MLEEstimationOptions(compute_jacobian = 0)

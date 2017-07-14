@@ -1,22 +1,11 @@
-set.seed(1)
-n     <- 10
-mu    <- 1
-sigma <- 2
-param <- c(mu, sigma)
-y     <- rnorm(n, mu, sigma)
-group <- sort(sample(8, n, replace = TRUE))
-data  <- MLEData(y)
-data$setGroup(group)
-model <- ExampleModel("y")
-quadacc <- 3
-
 computeNodesAndWeights <- function(.self, data, quadacc) {
-    if (model$numerical_integral) {
+    if (.self$numerical_integral) {
         if (!length(data$groupvar)) {
             data$setGroup(data$var$obsindex)   
         }
-        nobs_by_group <- sumWithin(rep(1, data$nobs), data$groupvar)$value
-        group         <- sumWithin(rep(1, data$nobs), data$groupvar)$group
+        result <- sumWithin(rep(1, data$nobs), data$groupvar)
+        nobs_by_group <- result$value
+        group         <- result$group
         group_mapping <- match(data$groupvar, group)
         unique_obs    <- unique(nobs_by_group)
         gnodes    <- list()
@@ -25,7 +14,7 @@ computeNodesAndWeights <- function(.self, data, quadacc) {
         numnodes  <- list()
         nodeindex <- list()
         for (nobs in unique_obs) {
-            result <- getRaw(nobs, model$nindiv_unobs, model$ngroup_unobs, quadacc)
+            result <- getRaw(nobs, .self$nindiv_unobs, .self$ngroup_unobs, quadacc)
             gnodes[[nobs]]    <- result$gnodes
             inodes[[nobs]]    <- result$inodes
             weights[[nobs]]   <- result$weights
@@ -37,9 +26,8 @@ computeNodesAndWeights <- function(.self, data, quadacc) {
         weights   <- allocateToGroups(nobs_by_group, weights)
         numnodes  <- allocateToGroups(nobs_by_group, numnodes)
         nodeindex <- allocateToGroups(nobs_by_group, nodeindex)
-        
-        weights  <- arrangeWeights(data, weights, numnodes)
-        nodes    <- arrangeNodes(model, data, gnodes, inodes, numnodes, nodeindex, group_mapping)
+        weights  <- arrangeWeights(data, weights, numnodes, group)
+        nodes    <- arrangeNodes(.self, data, gnodes, inodes, numnodes, nodeindex, group_mapping)
         data_rep <- data$copy()
         data_rep$selectData(nodes$obs)
         data_rep$setGroup(groups(cbind(nodes$group, nodes$nodenum)))
@@ -60,9 +48,9 @@ computeNodesAndWeights <- function(.self, data, quadacc) {
 }
 
 getRaw <- function(nobs, nindiv, ngroup, quadacc) {
-    dim <- nobs * nindiv + ngroup
+    dim      <- nobs * nindiv + ngroup
     result   <- createSparseGrid("KPN", dim, quadacc)
-    nodes    <- result$nodes
+    nodes    <- as.matrix(result$nodes)
     weights  <- as.matrix(result$weights)
     numnodes <- dim(nodes)[1]
     if (ngroup) {
@@ -92,23 +80,23 @@ getRaw <- function(nobs, nindiv, ngroup, quadacc) {
 #' @examples 
 #' nodemat <- matrix(c(1:6,6:1), 2, byrow = TRUE)
 #' reshapeNodemat(nodemat, 3, 2)
-reshapeNodemat <- function(nodemat, nobs, nvars) {
-    numnodes <- nrow(nodemat)
-    temp <- array(nodemat, c(numnodes, nvars, nobs))
-    temp <- aperm(temp, c(1, 3, 2))
-    nodemat_out <- array(temp, c(numnodes * nobs, nvars))
-    return (nodemat_out)
+reshapeNodemat <- function(nodes, nobs, nvars) {
+    numnodes <- nrow(nodes)
+    temp     <- array(nodes, c(numnodes, nvars, nobs))
+    temp     <- aperm(temp, c(1, 3, 2))
+    nodes    <- matrix(temp, nrow = numnodes * nobs)
+    return (nodes)
 }
 
 allocateToGroups <- function(nobs_by_group, var) {
     return (do.call(rbind, var[nobs_by_group]))
 }
 
-arrangeWeights <- function(data, raw_weights, numnodes) {
-    weights <- list()
+arrangeWeights <- function(data, raw_weights, numnodes, group) {
+    weights       <- list()
     weights$wgt   <- raw_weights
-    weights$group <- expandArray(1:data$ngroup, numnodes)
-    #weights$node  <- seqwithin(weights$group)
+    weights$group <- as.matrix(group[expandArray(1:data$ngroup, numnodes)])
+    weights$node  <- seqWithin(weights$group)$indices
     return (weights)
 }
 

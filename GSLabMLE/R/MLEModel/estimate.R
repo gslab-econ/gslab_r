@@ -11,6 +11,10 @@ estimate <- function(.self, data, estopts = NULL) {
     if (!length(estopts$startparam)) {
         estopts$startparam <- .self$startparam
     }
+    result   <- .self$computeNodesAndWeights(data, estopts$quadacc)
+    nodes    <- result$nodes
+    weights  <- result$weights
+    data_rep <- result$data_rep
     f <- function(param) sumLogLik(.self, param, data)
     slvr <- knitro(x0          = estopts$startparam,
                    objective   = f,

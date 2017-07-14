@@ -130,6 +130,7 @@ ModelData$methods(
         .self$varnames <- colnames(.self$var)
         .self$nvars    <- ncol(.self$var)
         .self$nobs     <- nrow(.self$var)
+        .self$addData(1:.self$nobs, names = "obsindex", replace = TRUE)
     },
     
     isVariable = function(varname) {

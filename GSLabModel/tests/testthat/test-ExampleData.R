@@ -59,9 +59,9 @@ test_that("removeData", {
 test_that("selectData", {
     a <- ExampleData(x, y, z, rhs, varnames = c("x", "y", "z", "x1", "y1"))
     a$selectData(col = c(1, 2, 4))
-    expect_equal(c(a$varnames, a$nvars), c(c("x", "y", "x1"), 3))
+    expect_equal(c(a$varnames, a$nvars), c(c("x", "y", "x1", "obsindex"), 4))
     a$selectData(c(1:2, 5:8), col = c("x"))
-    expect_equal(c(a$varnames, a$nobs, a$nvars), c("x", 6, 1))
+    expect_equal(c(a$varnames, a$nobs, a$nvars), c(c("x", "obsindex"), 6, 2))
     a$selectData(a$var$x > 0)
     expect_equal(a$nobs, nrow(a$var))
 })

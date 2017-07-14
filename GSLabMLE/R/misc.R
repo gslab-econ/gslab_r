@@ -4,16 +4,15 @@
 #' of all values within each unique group.
 #' @param value A matrix or a vector.
 #' @param group A matrix or a vector. The number of rows is the same as \code{value}.
-#' @return The function returns a list with two fields: group, which contains the unique groups,
-#' and value, which contains the summation by group.
-#' 
+#' @return The function returns a list with two fields: \code{group}, a matrix that contains the
+#' unique groups, and \code{value}, a matrix that contains the summation by group.
 sumWithin <- function(value, group) {
     group <- as.matrix(group)
     value <- as.matrix(value)
     ncol1 <- ncol(group)
     ncol2 <- ncol(value)
-    data <- data.frame(group, value)
-    data <- aggregate(data[(ncol1 + 1) : (ncol1 + ncol2)], by = data[1 : ncol1], FUN = sum)
+    data  <- data.frame(group, value)
+    data  <- aggregate(data[(ncol1 + 1) : (ncol1 + ncol2)], by = data[1 : ncol1], FUN = sum)
     group <- unname(as.matrix(data[1 : ncol1]))
     value <- unname(as.matrix(data[(ncol1 + 1) : (ncol1 + ncol2)]))
     return (list(group = group, value = value))
@@ -25,16 +24,15 @@ sumWithin <- function(value, group) {
 #' of all values within each unique group.
 #' @param value A matrix or a vector.
 #' @param group A matrix or a vector. The number of rows is the same as \code{value}.
-#' @return The function returns a list with two fields: group, which contains the unique groups,
-#' and value, which contains the products by group.
-#' 
+#' @return The function returns a list with two fields: \code{group}, a matrix that contains the
+#' unique groups, and \code{value}, a matrix that contains the products by group.
 prodWithin <- function(value, group) {
     group <- as.matrix(group)
     value <- as.matrix(value)
     ncol1 <- ncol(group)
     ncol2 <- ncol(value)
-    data <- data.frame(group, value)
-    data <- aggregate(data[(ncol1 + 1) : (ncol1 + ncol2)], by = data[1 : ncol1], FUN = prod)
+    data  <- data.frame(group, value)
+    data  <- aggregate(data[(ncol1 + 1) : (ncol1 + ncol2)], by = data[1 : ncol1], FUN = prod)
     group <- unname(as.matrix(data[1 : ncol1]))
     value <- unname(as.matrix(data[(ncol1 + 1) : (ncol1 + ncol2)]))
     return (list(group = group, value = value))
@@ -46,9 +44,8 @@ prodWithin <- function(value, group) {
 #' of all values within each unique group.
 #' @param value A matrix or a vector.
 #' @param group A matrix or a vector. The number of rows is the same as \code{value}.
-#' @return The function returns a list with two fields: group, which contains the unique groups,
-#' and value, which contains the averages value by group.
-#' 
+#' @return The function returns a list with two fields: \code{group}, a matrix that contains the
+#' unique groups, and \code{value}, a matrix that contains the averages by group.
 avgWithin <- function(value, group) {
     group <- as.matrix(group)
     value <- as.matrix(value)
@@ -59,6 +56,30 @@ avgWithin <- function(value, group) {
     group <- unname(as.matrix(data[1 : ncol1]))
     value <- unname(as.matrix(data[(ncol1 + 1) : (ncol1 + ncol2)]))
     return (list(group = group, value = value))
+}
+
+#' Sort group variable and create index within each group.
+#' @description The function takes as input a group matrix. A group is defined by an entire
+#' row in the group matrix. The function sort the group matrix by first column, then second, ...
+#' It also return a single-column matrix that indicates the index of each row within each group.
+#' @param group A matrix or a vector to be sorted.
+#' @return The function returns a list with two fields: \code{sorted_group}, the sorted group
+#' matrix, and \code{indices}, a single-column matrix of the group indices.
+#' @examples 
+#' seqWithin(matrix(c(2, 3, 1, 1, 3, 3, 2, 2, 3, 3, 1, 1, 3, 3), 7, byrow = TRUE))
+seqWithin <- function(group) {
+    group        <- as.matrix(group)
+    sorted_group <- as.matrix(group[do.call(order, lapply(1 : ncol(group), function(i) group[, i])), ])
+    indices      <- matrix(1, nrow(sorted_group))
+    for (i in 2:nrow(sorted_group)) {
+        if (all(sorted_group[i, ] == sorted_group[i - 1, ])) {
+            indices[i] = indices[i - 1] + 1
+        } else {
+            indices[i] = 1
+        }
+    }
+    return (list(indices      = indices,
+                 sorted_group =  sorted_group))
 }
 
 #' Replicate each row of a matrix a specified number of times.
@@ -77,7 +98,7 @@ expandArray <- function(array, counts) {
 }
 
 #' Create a vector indexing the groups defined by the columns of a matrix.
-#' @param mat A vector or a matrix that defines groups.
+#' @param x A vector or a matrix that defines groups.
 #' @return A vector of group indices.
 groups <- function(x) {
     mat   <- as.matrix(x)
@@ -90,29 +111,4 @@ groups <- function(x) {
     v     <- c(1, cumsum(1 - diff) + 1)
     v[index] <- v
     return (v)
-}
-
-#' Sort group variable and create index within each group.
-#' @description The function takes as input a group matrix. A group is defined by an entire
-#' row in the group matrix. The function sort the group matrix by first column, then second, ...
-#' It also return a single-column matrix that indicates the index of each row within each group.
-#' @param group A matrix or a vector to be sorted.
-#' @return The function returns a list with two fields: \code{sorted_group}, which contains the
-#' sorted group matrix, and \code{indices}, which contains the index.
-#' @examples 
-#' seqWithin(matrix(c(2, 3, 1, 1, 3, 3, 2, 2, 3, 3, 1, 1, 3, 3), 7, byrow = TRUE))
-#' 
-seqWithin <- function(group) {
-    group        <- as.matrix(group)
-    sorted_group <- as.matrix(group[do.call(order, lapply(1 : ncol(group), function(i) group[, i])), ])
-    indices      <- matrix(1, nrow(sorted_group))
-    for (i in 2:nrow(sorted_group)) {
-        if (all(sorted_group[i, ] == sorted_group[i - 1, ])) {
-            indices[i] = indices[i - 1] + 1
-        } else {
-            indices[i] = 1
-        }
-    }
-    return (list(indices      = indices,
-                 sorted_group =  sorted_group))
 }

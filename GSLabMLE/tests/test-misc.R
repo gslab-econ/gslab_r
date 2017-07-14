@@ -1,3 +1,9 @@
+test_matrix <- function(objects) {
+    for (obj in objects) {
+        expect_is(obj, "matrix")
+    }
+}
+
 test_that("sumWithin", {
     vin_1 <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8), 2, 4, byrow = TRUE)
     out1  <- sumWithin(vin_1, c(1, 1))
@@ -25,6 +31,9 @@ test_that("sumWithin", {
     expect_equal(nrow(out$value), ngroup^ncol_group)
     expect_equal(ncol(out$group), ncol_group)
     expect_equal(ncol(out$value), ncol_value)
+    
+    test_matrix(list(out1$group, out2$group, out3$group, out4$group, out$group,
+                     out1$value, out2$value, out3$value, out4$value, out$value))
 })
 
 test_that("prodWithin", {
@@ -54,6 +63,9 @@ test_that("prodWithin", {
     expect_equal(nrow(out$value), ngroup^ncol_group)
     expect_equal(ncol(out$group), ncol_group)
     expect_equal(ncol(out$value), ncol_value)
+    
+    test_matrix(list(out1$group, out2$group, out3$group, out4$group, out$group,
+                     out1$value, out2$value, out3$value, out4$value, out$value))
 })
 
 test_that("avgWithin", {
@@ -83,38 +95,9 @@ test_that("avgWithin", {
     expect_equal(nrow(out$value), ngroup^ncol_group)
     expect_equal(ncol(out$group), ncol_group)
     expect_equal(ncol(out$value), ncol_value)
-})
-
-test_that("expandArray", {
-    numrep  <- 1e5
-    x       <- matrix(1:5, 5)
-    y       <- matrix(1:10, 5, byrow = TRUE)
-    z       <- do.call("rbind", rep(list(y), numrep))
     
-    countsx <- matrix(c(1, 1, 3, 2, 1), 5) # A matrix with one row 
-    countsy <- c(1, 2, 1, 1, 2) # A vector
-    countsz <- rep(countsy, numrep)
-    answerx <- matrix(c(1, 2, 3, 3, 3, 4, 4, 5), 8)
-    answery <- matrix(c(1, 2, 3, 4, 3, 4, 5, 6, 7, 8, 9, 10, 9, 10), 7, byrow = TRUE)
-    answerz <- do.call("rbind", rep(list(answery), numrep))
-    
-    expect_equal(expandArray(x, countsx), answerx)
-    expect_equal(expandArray(y, countsy), answery)
-    expect_equal(expandArray(z, countsz), answerz)
-})
-
-test_that("groups", {
-    vec <- c(1, -1, -1, 3, 1, 5)
-    mat <- matrix(c(1, 2, -1, 0, -1, 0, 3, 4, 1, 2, 5, 6), 6, byrow = TRUE)
-    strvec <- c("a", "b", "b", "c", "a", "d")
-    strmat <- matrix(c("a", "b", "b", "c", "b", "c", "c", "d", "a", "b", "d", "e"), 6, byrow = TRUE)
-    
-    answer <- c(2, 1, 1, 3, 2, 4)
-    stranswer <- c(1, 2, 2, 3, 1, 4)
-    expect_equal(groups(vec), answer)
-    expect_equal(groups(mat), answer)
-    expect_equal(groups(strvec), stranswer)
-    expect_equal(groups(strmat), stranswer)
+    test_matrix(list(out1$group, out2$group, out3$group, out4$group, out$group,
+                     out1$value, out2$value, out3$value, out4$value, out$value))
 })
 
 test_that("seqWithin", {
@@ -133,4 +116,41 @@ test_that("seqWithin", {
     expect_equal(out4$sorted_group, matrix(c(1, 2, 3, 4)))
     expect_equal(out5$indices, matrix(c(1, 2, 1, 1, 1, 2, 3)))
     expect_equal(out5$sorted_group, matrix(c(1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3), 7, byrow = TRUE))
+    
+    test_matrix(list(out1$indices, out2$indices, out3$indices, out4$indices, out5$indices,
+                     out1$sorted_group, out2$sorted_group, out3$sorted_group, out4$sorted_group, out5$sorted_group))
+})
+
+test_that("expandArray", {
+    numrep  <- 1e5
+    x       <- matrix(1:5, 5)
+    y       <- matrix(1:10, 5, byrow = TRUE)
+    z       <- do.call("rbind", rep(list(y), numrep))
+    
+    countsx <- matrix(c(1, 1, 3, 2, 1), 5) # A matrix with one row 
+    countsy <- c(1, 2, 1, 1, 2) # A vector
+    countsz <- rep(countsy, numrep)
+    answerx <- matrix(c(1, 2, 3, 3, 3, 4, 4, 5), 8)
+    answery <- matrix(c(1, 2, 3, 4, 3, 4, 5, 6, 7, 8, 9, 10, 9, 10), 7, byrow = TRUE)
+    answerz <- do.call("rbind", rep(list(answery), numrep))
+    
+    expect_equal(expandArray(x, countsx), answerx)
+    expect_equal(expandArray(y, countsy), answery)
+    expect_equal(expandArray(z, countsz), answerz)
+    
+    test_matrix(list(expandArray(x, countsx), expandArray(y, countsy), expandArray(z, countsz)))
+})
+
+test_that("groups", {
+    vec <- c(1, -1, -1, 3, 1, 5)
+    mat <- matrix(c(1, 2, -1, 0, -1, 0, 3, 4, 1, 2, 5, 6), 6, byrow = TRUE)
+    strvec <- c("a", "b", "b", "c", "a", "d")
+    strmat <- matrix(c("a", "b", "b", "c", "b", "c", "c", "d", "a", "b", "d", "e"), 6, byrow = TRUE)
+    
+    answer    <- c(2, 1, 1, 3, 2, 4)
+    stranswer <- c(1, 2, 2, 3, 1, 4)
+    expect_equal(groups(vec), answer)
+    expect_equal(groups(mat), answer)
+    expect_equal(groups(strvec), stranswer)
+    expect_equal(groups(strmat), stranswer)
 })

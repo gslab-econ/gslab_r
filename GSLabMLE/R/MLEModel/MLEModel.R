@@ -79,5 +79,6 @@ MLEModel$methods(
     transformUnobservables = transformUnobservables,
     simulate = simulate,
     derivedParam = derivedParam,
-    getDerivedParam = getDerivedParam
+    getDerivedParam = getDerivedParam,
+    computeNodesAndWeights = computeNodesAndWeights
 )
