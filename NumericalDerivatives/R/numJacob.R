@@ -11,7 +11,10 @@
 #' @export
 #' 
 numJacob <- function(func, x0, xTol) {
-    f0       <- func(x0)
+    f0 <- func(x0)
+    if (is.na(f0)) {
+        stop("Invalid function or argument input")
+    }
     paramdim <- dim(x0)
     if (is.null(paramdim)) {
         paramdim <- length(x0)

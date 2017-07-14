@@ -38,5 +38,5 @@ test_that("numJacob", {
     expect_equal(Jacob2, trueJacob2, tolerance = 1e-3)
     expect_equal(Jacob3, trueJacob3, tolerance = 1e-3)
     expect_equal(Jacob4, trueJacob4, tolerance = 1e-3)
-    
+    expect_error(numJacob(test1, 1, xTol), "Invalid function or argument input")
 })

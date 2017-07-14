@@ -14,6 +14,9 @@
 #' 
 numHess <- function(func, x0, xTol, ind_rowvar = 1:length(x0), ind_colvar = 1:length(x0)) {
     f0 <- func(x0)
+    if (is.na(f0)) {
+        stop("Invalid function or argument input")
+    }
     n  <- length(x0)
     f  <- function(row, col, func, f0, x0, n, xTol) {
         increment_i <- rep(0, n)

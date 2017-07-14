@@ -1,6 +1,7 @@
 test_that("numHess", {
     func1 <- function(x) prod(x)
     func2 <- function(x) sqrt(prod(x))
+    func3 <- function(x) x[1]^2 + x[2]
     
     x1   <- c(1, 2, 3)
     x2   <- c(1, 2, 3, 4, 5)
@@ -20,4 +21,5 @@ test_that("numHess", {
     
     expect_equal(hess1, truehess1, tolerance = 1e-3)
     expect_equal(hess2, truehess2, tolerance = 1e-3)
+    expect_error(numHess(func3, 1, xTol), "Invalid function or argument input")
 })
