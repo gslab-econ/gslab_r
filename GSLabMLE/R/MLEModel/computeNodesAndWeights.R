@@ -105,7 +105,7 @@ arrangeNodes <- function(model, data, gnodes, inodes, numnodes, nodeindex, group
     if (model$ngroup_unobs) {
         for (i in 1 : model$ngroup_unobs) {
             name <- model$group_unobs_list[i]
-            nodes$values[name] <- gnodes[,i]
+            nodes$values[[name]] <- gnodes[,i]
         }
     }
     if (model$nindiv_unobs) {

@@ -1,18 +1,17 @@
 computeLikelihoodByGroup <- function(.self, param, data, nodes, weights) {
-    if (model$numerical_integral) {
-        unobs <- model$transformUnobservables(param, data, nodes$values)
-        data$addData(unobs)
+    if (.self$numerical_integral) {
+        unobs <- .self$transformUnobservables(param, data, nodes$values)
+        data$addData(unobs, replace = TRUE)
     }
-    condik <- model$computeConditionalLikelihoodVector(param, data)
+    condlik <- .self$computeConditionalLikelihoodVector(param, data)
     if (length(data$groupvar) & data$ngroup < data$nobs) {
-        grouplik <- prodWithin(condlik, data$groupvar)
+        grouplik <- prodWithin(condlik, data$groupvar)$value
     } else {
         grouplik <- condlik
     }
-    
-    if (model$numerical_integral) {
-        grouplok <- sunwithin(grouplik * weights$wgt, weights$group)
+    if (.self$numerical_integral) {
+        grouplik <- sumWithin(grouplik * weights$wgt, weights$group)$value
     }
-    grouplik[grouplik <= 0] <- eps
+    grouplik[grouplik <= 0] <- exp(1)
     return (grouplik)
 }

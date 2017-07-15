@@ -1,9 +1,10 @@
 set.seed(1)
-n <- 100
+n       <- 1000
+data    <- MLEData(y = rnorm(n, -1, 2), group = sort(sample(ngroup, n, replace = TRUE)))
+data$setGroup(data$var$group)
+model   <- ExampleModel("y")
 replications <- 10
 simopts <- MLESimulationOptions(replications = replications)
-data    <- MLEData(y = rnorm(n, 1, 2))
-model   <- ExampleModel("y")
 
 test_that("initialize", {
     a <- MLEData(x1 = rnorm(n))

@@ -1,18 +1,18 @@
-source("ExampleModel.R")
-
 set.seed(1)
-n     <- 10
-mu    <- 1
-sigma <- 2
-param <- c(mu, sigma)
-data  <- MLEData(y = rnorm(n, mu, sigma))
-model <- ExampleModel("y")
+n      <- 10000
+mu     <- -1
+sigma  <- 2
+ngroup <- 100
+param  <- c(mu, sigma)
+data   <- MLEData(y = rnorm(n, mu, sigma), group = sort(sample(ngroup, n, replace = TRUE)))
+data$setGroup(data$var$group)
+model  <- ExampleModel("y")
 replications <- 10
 
 test_simdata <- function(simdata) {
     expect_is(simdata, "MLEData")
-    expect_equal(simdata$varnames, c("obsindex", "eta", "phi", "epsilon", "y"))
-    expect_equal(simdata$var$y, mu + simdata$var$epsilon * sigma)
+    expect_equal(simdata$varnames, c("group", "obsindex", "eta", "epsilon", "y"))
+    expect_equal(simdata$var$y, simdata$var$epsilon + simdata$var$eta)
 }
 
 test_that("simulation", {
