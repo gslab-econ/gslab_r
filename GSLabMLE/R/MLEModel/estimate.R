@@ -15,7 +15,9 @@ estimate <- function(.self, data, estopts = NULL) {
     nodes    <- result$nodes
     weights  <- result$weights
     data_rep <- result$data_rep
-    f <- function(param) sumLogLik(.self, param, data)
+    f <- function(param) {
+        sumLogLik(.self, param, data_rep, nodes, weights)
+    }
     slvr <- knitro(x0          = estopts$startparam,
                    objective   = f,
                    constraints = estopts$constr$con,
@@ -26,12 +28,12 @@ estimate <- function(.self, data, estopts = NULL) {
                    options     = append(list(outlev = estopts$outlev),
                                         estopts$knitrotxt))
     if (estopts$compute_hessian) {
-        slvr$hessian <- compute_hessian(.self, slvr$x, data, estopts)
+        slvr$hessian <- computeHessian(.self, slvr$x, data, estopts)
     } else {
         slvr$hessian <- matrix(0, 0, 0)
     }
     if (estopts$compute_jacobian) {
-        slvr$jacobian <- compute_jacobian(.self, slvr$x, data, estopts)
+        slvr$jacobian <- computeJacobian(.self, slvr$x, data, estopts)
     } else {
         slvr$jacobian <- matrix(0, 0, 0)
     }
@@ -39,20 +41,18 @@ estimate <- function(.self, data, estopts = NULL) {
     return (est)
 }
 
-logLik <- function(.self, param, data) {
-    return (log(.self$computeConditionalLikelihoodVector(param, data)))
+logLik <- function(.self, param, data, nodes, weights) {
+    log(.self$computeLikelihoodByGroup(param, data, nodes, weights))
 }
 
-sumLogLik <- function(.self, param, data) {
-    return (-sum(logLik(.self, param, data)))
+sumLogLik <- function(.self, param, data, nodes, weights) {
+    -sum(logLik(.self, param, data, nodes, weights))
 }
 
-compute_hessian <- function(.self, param, data, estopts) {
-    hessian <- numHess(function(param) -sumLogLik(.self, param, data), param, estopts$hesstol)
-    return (hessian)
+computeHessian <- function(.self, param, data, estopts) {
+    numHess(function(param) -sumLogLik(.self, param, data), param, estopts$hesstol)
 }
 
-compute_jacobian <- function(.self, param, data, estopts) {
-    jacobian <- numJacob(function(param) -logLik(.self, param, data), param, estopts$hesstol)
-    return (jacobian)
+computeJacobian <- function(.self, param, data, estopts) {
+    numJacob(function(param) -logLik(.self, param, data), param, estopts$hesstol)
 }

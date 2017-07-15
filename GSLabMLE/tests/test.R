@@ -14,6 +14,7 @@ source("../R/MLEModel/simulate.R")
 source("../R/MLEModel/transformErrors.R")
 source("../R/MLEModel/transformUnobservables.R")
 source("../R/MLEModel/computeNodesAndWeights.R")
+source("../R/MLEModel/computeLikelihoodByGroup.R")
 source("../R/MLEModel/MLEModel.R")
 
 source("../R/MLEConstraints/setUpperBound.R")

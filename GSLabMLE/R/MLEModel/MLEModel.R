@@ -80,5 +80,6 @@ MLEModel$methods(
     simulate = simulate,
     derivedParam = derivedParam,
     getDerivedParam = getDerivedParam,
-    computeNodesAndWeights = computeNodesAndWeights
+    computeNodesAndWeights = computeNodesAndWeights,
+    computeLikelihoodByGroup = computeLikelihoodByGroup
 )

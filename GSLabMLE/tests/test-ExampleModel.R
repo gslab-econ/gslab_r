@@ -9,6 +9,9 @@ y     <- rnorm(n, mu, sigma)
 data  <- MLEData(y)
 model <- ExampleModel("y")
 
+model$computeLikelihoodByGroup(param, result$data_rep, result$nodes, result$weights)
+
+
 test_that("misc", {
     expect_silent(model$isValidParameterVector(param))
 })
