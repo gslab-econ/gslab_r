@@ -1,15 +1,25 @@
 source("ExampleModel.R")
 
-set.seed(1)
+set.seed(2)
 n      <- 10000
-mu     <- -1
-sigma  <- 2
+mu     <- 1
+sigma  <- 1
 ngroup <- 100
 param  <- c(mu, sigma)
 group  <- sort(sample(ngroup, n, replace = TRUE))
 data   <- MLEData(group = group)
 data$setGroup(data$var$group)
 model  <- ExampleModel("y")
+
+simdata <- model$simulate(param, data)
+data    <- MLEData(simdata$var$group, simdata$var$y, varnames = c("group", "y"))
+data$setGroup(data$var$group)
+
+constr  <- MLEConstraints(xL = c(-1e20, 0))
+estopts <- MLEEstimationOptions(constr = constr, quadacc = 9)
+result  <- model$computeNodesAndWeights(data, estopts$quadacc)
+
+est     <- model$estimate(data, estopts)
 
 test_that("misc", {
     expect_silent(model$isValidParameterVector(param))
@@ -75,3 +85,4 @@ test_that("getDerivedParam", {
                  est$param[est$model$indices[["sigma"]]] / est$param[est$model$indices[["mu"]]])
 })
 
+ave(data$var$y, data$var$group, FUN = mean)

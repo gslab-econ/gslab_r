@@ -1,4 +1,5 @@
 computeLikelihoodByGroup <- function(.self, param, data, nodes, weights) {
+    print(param)
     if (.self$numerical_integral) {
         unobs <- .self$transformUnobservables(param, data, nodes$values)
         data$addData(unobs, replace = TRUE)
@@ -12,6 +13,6 @@ computeLikelihoodByGroup <- function(.self, param, data, nodes, weights) {
     if (.self$numerical_integral) {
         grouplik <- sumWithin(grouplik * weights$wgt, weights$group)$value
     }
-    grouplik[grouplik <= 0] <- exp(1)
+    grouplik[grouplik <= 0] <- 1e-300
     return (grouplik)
 }

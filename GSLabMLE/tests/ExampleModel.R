@@ -5,7 +5,7 @@ ExampleModel <- setRefClass(Class    = "ExampleModel",
 ExampleModel$methods(
     initialize = function(varname) {
         "Model: eta_j ~ N(mu, sigma), j=1,2,...J, epsilon_i ~ N(eta_j, 1), where i belongs to group j"
-            obj <- MLEModel(paramlist          = c("mu", "sigma"),
+        obj <- MLEModel(paramlist          = c("mu", "sigma"),
                         lhslist            = varname, # one-dimensional outcome variable
                         rhslist            = "group",
                         startparam         = c(0, 1),
@@ -20,12 +20,12 @@ ExampleModel$methods(
     },
     
     transformUnobservables = function(param, data, unobs) {
-        unobs[["eta"]] <- param[.self$indices[["mu"]]] +unobs[["eta"]] * param[.self$indices[["sigma"]]] 
+        unobs[["eta"]] <- param[.self$indices[["mu"]]] + unobs[["eta"]] * param[.self$indices[["sigma"]]] 
         return (unobs)
     },
     
     computeConditionalLikelihoodVector = function(param, data) {
-        clik <- dnorm(data$var[[.self$lhslist[1]]], param[.self$indices$mu], param[.self$indices$sigma])
+        clik <- dnorm(data$var[[.self$lhslist[1]]], data$var$eta, 1)
         return (clik)
     },
     

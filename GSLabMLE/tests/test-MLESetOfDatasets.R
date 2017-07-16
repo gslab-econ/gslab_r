@@ -1,6 +1,6 @@
 set.seed(1)
 n       <- 1000
-data    <- MLEData(y = rnorm(n, -1, 2), group = sort(sample(ngroup, n, replace = TRUE)))
+data    <- MLEData(y = rnorm(n, -1, 2), group = sort(sample(10, n, replace = TRUE)))
 data$setGroup(data$var$group)
 model   <- ExampleModel("y")
 replications <- 10
