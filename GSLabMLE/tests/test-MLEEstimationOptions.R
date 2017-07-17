@@ -1,7 +1,7 @@
+set.seed(1)
 test_that("MLEEstimationOptions", {
-    set.seed(1)
     data     <- MLEData(y = rnorm(10000, 1, 2))
-    model    <- ExampleModel("y")
+    model    <- SimpleModel("y")
     constr   <- MLEConstraints(xL = c(2, 0))
     estopts1 <- MLEEstimationOptions(outlev = 2)
     estopts2 <- MLEEstimationOptions(constr = constr)

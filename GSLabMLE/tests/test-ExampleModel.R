@@ -1,10 +1,9 @@
 source("ExampleModel.R")
-
-set.seed(2)
-n      <- 10000
+set.seed(1)
+n      <- 100000
 mu     <- 1
 sigma  <- 1
-ngroup <- 100
+ngroup <- 5000
 param  <- c(mu, sigma)
 group  <- sort(sample(ngroup, n, replace = TRUE))
 data   <- MLEData(group = group)
@@ -20,6 +19,7 @@ estopts <- MLEEstimationOptions(constr = constr, quadacc = 9)
 result  <- model$computeNodesAndWeights(data, estopts$quadacc)
 
 est     <- model$estimate(data, estopts)
+est$param
 
 test_that("misc", {
     expect_silent(model$isValidParameterVector(param))
@@ -84,5 +84,3 @@ test_that("getDerivedParam", {
     expect_equal(est$dparam[est$model$dindices[["CV"]]],
                  est$param[est$model$indices[["sigma"]]] / est$param[est$model$indices[["mu"]]])
 })
-
-ave(data$var$y, data$var$group, FUN = mean)

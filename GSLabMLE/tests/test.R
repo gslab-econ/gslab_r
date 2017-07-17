@@ -35,13 +35,15 @@ source("../R/MLESetOfEstimates.R")
 source("../R/MLESimulationOptions.R")
 
 source("../R/misc.R")
+source("SimpleModel.R")
 source("ExampleModel.R")
 
 test_file("test-misc.R")
 test_file("test-simulation.R")
 test_file("test-MLEConstraints.R")
 test_file("test-MLESetOfDatasets.R")
-test_file("test-ExampleModel.R")
+test_file("test-SimpleModel.R")
 test_file("test-MLEEstimationOptions.R")
 test_file("test-MLESetOfEstimates.R")
 
+test_file("test-ExampleModel.R")

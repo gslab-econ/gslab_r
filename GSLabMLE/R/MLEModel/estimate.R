@@ -18,27 +18,26 @@ estimate <- function(.self, data, estopts = NULL) {
     f <- function(param) {
         sumLogLik(.self, param, data_rep, nodes, weights)
     }
-    est <- optim(estopts$startparam, f)
-    # slvr <- knitro(x0          = estopts$startparam,
-    #                objective   = f,
-    #                constraints = estopts$constr$con,
-    #                xL          = estopts$constr$xL,
-    #                xU          = estopts$constr$xU,
-    #                cL          = estopts$constr$cL,
-    #                cU          = estopts$constr$cU,
-    #                options     = append(list(outlev = estopts$outlev),
-    #                                     estopts$knitrotxt))
-    # if (estopts$compute_hessian) {
-    #     slvr$hessian <- computeHessian(.self, slvr$x, data, estopts)
-    # } else {
-    #     slvr$hessian <- matrix(0, 0, 0)
-    # }
-    # if (estopts$compute_jacobian) {
-    #     slvr$jacobian <- computeJacobian(.self, slvr$x, data, estopts)
-    # } else {
-    #     slvr$jacobian <- matrix(0, 0, 0)
-    # }
-    # est <- MLEEstimationOutput(slvr, .self, data, estopts)
+    slvr <- knitro(x0          = estopts$startparam,
+                   objective   = f,
+                   constraints = estopts$constr$con,
+                   xL          = estopts$constr$xL,
+                   xU          = estopts$constr$xU,
+                   cL          = estopts$constr$cL,
+                   cU          = estopts$constr$cU,
+                   options     = append(list(outlev = estopts$outlev),
+                                        estopts$knitrotxt))
+    if (estopts$compute_hessian) {
+        slvr$hessian <- computeHessian(.self, slvr$x, data, estopts)
+    } else {
+        slvr$hessian <- matrix(0, 0, 0)
+    }
+    if (estopts$compute_jacobian) {
+        slvr$jacobian <- computeJacobian(.self, slvr$x, data, estopts)
+    } else {
+        slvr$jacobian <- matrix(0, 0, 0)
+    }
+    est <- MLEEstimationOutput(slvr, .self, data, estopts)
     return (est)
 }
 
@@ -47,7 +46,9 @@ logLik <- function(.self, param, data_rep, nodes, weights) {
 }
 
 sumLogLik <- function(.self, param, data_rep, nodes, weights) {
-    -sum(logLik(.self, param, data_rep, nodes, weights))
+    temp <- -sum(logLik(.self, param, data_rep, nodes, weights))
+    print(temp)
+    return (temp)
 }
 
 computeHessian <- function(.self, param, data, estopts) {

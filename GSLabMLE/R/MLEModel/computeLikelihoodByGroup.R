@@ -5,7 +5,7 @@ computeLikelihoodByGroup <- function(.self, param, data, nodes, weights) {
         data$addData(unobs, replace = TRUE)
     }
     condlik <- .self$computeConditionalLikelihoodVector(param, data)
-    if (length(data$groupvar) & data$ngroup < data$nobs) {
+    if (length(data$groupvar) & all(data$ngroup < data$nobs)) {
         grouplik <- prodWithin(condlik, data$groupvar)$value
     } else {
         grouplik <- condlik

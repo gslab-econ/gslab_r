@@ -32,15 +32,9 @@ computeNodesAndWeights <- function(.self, data, quadacc) {
         data_rep$selectData(nodes$obs)
         data_rep$setGroup(groups(cbind(nodes$group, nodes$nodenum)))
     } else {
-        nodes         <- list()
-        nodes$group   <- data$groupvar
-        nodes$nodenum <- rep(1, data$nobs)
-        nodes$obs     <- 1 : data$nobs
-        nodes$values  <- list()
-        weights       <- list()
-        weights$group <- 1 : data$ngroup
-        weights$wgt   <- c()
-        data_rep      <- data$copy()
+        nodes    <- list()
+        weights  <- list()
+        data_rep <- data$copy()
     }
     return (list(nodes    = nodes,
                  weights  = weights,
