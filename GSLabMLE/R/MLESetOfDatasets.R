@@ -42,10 +42,10 @@ MLESetOfDatasets$methods(
         \\code{indices}: The positional indices of the datasets to save. If not specified,
         all datasets wil be saved.\n}"
         if (is.null(indices)) {
-            incides = 1:.self$ndatasets
+            indices <- 1:.self$ndatasets
         }
         if (length(indices) == 1) {
-            indices = 1:indices  
+            indices <- 1:indices  
         }
         for (i in indices) {
             GSLabModel::saveToDisk(.self$datasets[[i]], directory, paste(name, "_", i, sep = ""), precision)
@@ -62,7 +62,7 @@ MLESetOfDatasets$methods(
         \\code{indices}: The positional indices of the datasets to load.\n
         \\code{collapseArrayVars}: Whether array variables are collapsed. Default is collapse.}"
         if (length(indices) == 1) {
-            indices = 1:indices  
+            indices <- 1:indices  
         }
         for (i in indices) {
             .self$datasets[[i]] <- GSLabModel::loadFromDisk(directory, paste(name, "_", i, sep = ""),

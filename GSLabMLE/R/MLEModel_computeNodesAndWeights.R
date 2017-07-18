@@ -68,7 +68,7 @@ MLEModel$methods(
 
 getRaw <- function(nobs, nindiv, ngroup, quadacc) {
     dim      <- nobs * nindiv + ngroup
-    result   <- createSparseGrid("KPN", dim, quadacc)
+    result   <- SparseGrid::createSparseGrid("KPN", dim, quadacc)
     nodes    <- as.matrix(result$nodes)
     weights  <- as.matrix(result$weights)
     numnodes <- dim(nodes)[1]

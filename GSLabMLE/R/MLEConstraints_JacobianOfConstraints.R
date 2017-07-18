@@ -16,10 +16,10 @@ MLEConstraints$methods(
             J[["xU"]] <- diag(length(.self$xU)) 
         }
         if (length(.self$cL)) {
-            J[["cL"]] <- numJacob(.self$con, param, xtol)
+            J[["cL"]] <- NumericalDerivatives::numJacob(.self$con, param, xtol)
         }
         if (length(.self$cU)) {
-            J[["cU"]] <- numJacob(.self$con, param, xtol)
+            J[["cU"]] <- NumericalDerivatives::numJacob(.self$con, param, xtol)
         }
         return (J)
     }

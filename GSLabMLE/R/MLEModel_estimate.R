@@ -20,24 +20,24 @@ MLEModel$methods(
         weights  <- result$weights
         data_rep <- result$data_rep
         f <- function(param) {
-            sumLogLik(.self, param, data_rep, nodes, weights)
+            GSLabMLE:::sumLogLik(.self, param, data_rep, nodes, weights)
         }
-        slvr <- knitro(x0          = estopts$startparam,
-                       objective   = f,
-                       constraints = estopts$constr$con,
-                       xL          = estopts$constr$xL,
-                       xU          = estopts$constr$xU,
-                       cL          = estopts$constr$cL,
-                       cU          = estopts$constr$cU,
-                       options     = append(list(outlev = estopts$outlev),
-                                            estopts$knitrotxt))
+        slvr <- KnitroR::knitro(x0          = estopts$startparam,
+                                objective   = f,
+                                constraints = estopts$constr$con,
+                                xL          = estopts$constr$xL,
+                                xU          = estopts$constr$xU,
+                                cL          = estopts$constr$cL,
+                                cU          = estopts$constr$cU,
+                                options     = append(list(outlev = estopts$outlev),
+                                                     estopts$knitrotxt))
         if (estopts$compute_hessian) {
-            slvr$hessian <- computeHessian(.self, slvr$x, data, estopts)
+            slvr$hessian <- GSLabMLE:::computeHessian(.self, slvr$x, data, estopts)
         } else {
             slvr$hessian <- matrix(0, 0, 0)
         }
         if (estopts$compute_jacobian) {
-            slvr$jacobian <- computeJacobian(.self, slvr$x, data, estopts)
+            slvr$jacobian <- GSLabMLE:::computeJacobian(.self, slvr$x, data, estopts)
         } else {
             slvr$jacobian <- matrix(0, 0, 0)
         }
@@ -46,30 +46,32 @@ MLEModel$methods(
     }
 )
 
-logLik <- function(.self, param, data_rep, nodes, weights) {
-    log(.self$computeLikelihoodByGroup(param, data_rep, nodes, weights))
+logLik <- function(model, param, data_rep, nodes, weights) {
+    log(model$computeLikelihoodByGroup(param, data_rep, nodes, weights))
 }
 
-sumLogLik <- function(.self, param, data_rep, nodes, weights) {
-    temp <- -sum(logLik(.self, param, data_rep, nodes, weights))
-    print(temp)
-    return (temp)
+sumLogLik <- function(model, param, data_rep, nodes, weights) {
+    -sum(GSLabMLE:::logLik(model, param, data_rep, nodes, weights))
 }
 
-computeHessian <- function(.self, param, data, estopts) {
-    result   <- .self$computeNodesAndWeights(data, estopts$quadacc_deriv)
+computeHessian <- function(model, param, data, estopts) {
+    result   <- model$computeNodesAndWeights(data, estopts$quadacc_deriv)
     nodes    <- result$nodes
     weights  <- result$weights
     data_rep <- result$data_rep
-    return (numHess(function(param)-sumLogLik(.self, param, data_rep, nodes, weights),
-                    param, estopts$hesstol))
+    Hess     <- NumericalDerivatives::numHess(function(param)
+        -GSLabMLE:::sumLogLik(model, param, data_rep, nodes, weights),
+        param, estopts$hesstol)
+    return (Hess)
 }
 
-computeJacobian <- function(.self, param, data, estopts) {
-    result   <- .self$computeNodesAndWeights(data, estopts$quadacc_deriv)
+computeJacobian <- function(model, param, data, estopts) {
+    result   <- model$computeNodesAndWeights(data, estopts$quadacc_deriv)
     nodes    <- result$nodes
     weights  <- result$weights
     data_rep <- result$data_rep
-    return (numJacob(function(param) -logLik(.self, param, data_rep, nodes, weights),
-                     param, estopts$hesstol))
+    Jacob    <- NumericalDerivatives::numJacob(function(param)
+        -GSLabMLE:::logLik(model, param, data_rep, nodes, weights),
+        param, estopts$hesstol)
+    return (Jacob)
 }

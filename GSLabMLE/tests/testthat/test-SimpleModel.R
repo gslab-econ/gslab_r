@@ -1,4 +1,3 @@
-source("SimpleModel.R")
 set.seed(1)
 n       <- 10000
 mu      <- 1

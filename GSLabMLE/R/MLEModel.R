@@ -12,7 +12,7 @@
 #' @field ndparam The number of derived parameters in \code{dparamlist}.
 #' @field dindices A list that gives the index of each derived parameter.
 #' @field numerical_integral An indicator of whether the model requires numerical integration.
-#' @import methods GSLabModel
+#' @import methods GSLabModel NumericalDerivatives KnitroR SparseGrid
 #' @importClassesFrom GSLabModel Model
 #' @inheritSection GSLabModel::Model Fields
 #' @inheritSection GSLabModel::Model Methods

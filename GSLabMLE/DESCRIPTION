@@ -1,5 +1,5 @@
 Package: GSLabMLE
-Title: GSLab Maximum Likelihood Estimation Models.
+Title: GSLab Maximum Likelihood Estimation Models
 Version: 0.1.0
 Authors@R: c(
   person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre")), 
@@ -13,8 +13,11 @@ LazyData: true
 RoxygenNote: 6.0.1
 Imports:
   GSLabModel,
+  NumericalDerivatives,
   methods,
-  utils
+  utils,
+  KnitroR,
+  SparseGrid
 Suggests: 
   testthat, 
   devtools

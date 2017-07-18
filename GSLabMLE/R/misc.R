@@ -6,6 +6,7 @@
 #' @param group A matrix or a vector. The number of rows is the same as \code{value}.
 #' @return A list with two fields: \code{group}, a matrix that contains the unique groups,
 #' and \code{value}, a matrix that contains the summation by group.
+#' @importFrom "stats" "aggregate"
 #' @export
 sumWithin <- function(value, group) {
     group <- as.matrix(group)
@@ -27,6 +28,7 @@ sumWithin <- function(value, group) {
 #' @param group A matrix or a vector. The number of rows is the same as \code{value}.
 #' @return A list with two fields: \code{group}, a matrix that contains the unique groups,
 #' and \code{value}, a matrix that contains the products by group.
+#' @importFrom "stats" "aggregate"
 #' @export
 prodWithin <- function(value, group) {
     group <- as.matrix(group)
@@ -48,6 +50,7 @@ prodWithin <- function(value, group) {
 #' @param group A matrix or a vector. The number of rows is the same as \code{value}.
 #' @return A list with two fields: \code{group}, a matrix that contains the unique groups, 
 #' and \code{value}, a matrix that contains the averages by group.
+#' @importFrom "stats" "aggregate"
 #' @export
 avgWithin <- function(value, group) {
     group <- as.matrix(group)
