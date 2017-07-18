@@ -1,4 +1,4 @@
-#' A Reference Class that Defines Options for the \code{estimate} Method of \code{MLEModel} Class.
+#' A Reference Class that Defines Options for the \code{estimate} Method of \code{MLEModel} Class
 #' @description This class is based on the \code{optim} optimization method.
 #' @field startparam Starting paramter vector.
 #' @field hesstol Numerical step for computing the Hessian.
@@ -10,9 +10,11 @@
 #' @field first_step_param A vector with the values of the first step parameters.
 #' @field compute_hessian Compute Hessian at the estimated parameters.
 #' @field compute_jacobian Compute Jacobian of likelihood vector at the estimated parameters.
-#' @export MLESimulationOptions
-#' @exportClass MLESimulationOptions
-#' 
+#' @import methods GSLabModel
+#' @importClassesFrom GSLabModel ModelEstimationOptions
+#' @inheritSection GSLabModel::ModelEstimationOptions Fields
+#' @export MLEEstimationOptions
+#' @exportClass MLEEstimationOptions
 MLEEstimationOptions <- setRefClass(Class    = "MLEEstimationOptions",
                                     contains = "ModelEstimationOptions",
                                     fields   = list(quadacc              = "numeric",

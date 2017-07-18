@@ -4,16 +4,16 @@
 \name{MLESimulationOptions-class}
 \alias{MLESimulationOptions-class}
 \alias{MLESimulationOptions}
-\title{A Reference Class that Defines Options for the \code{simulate} Method of \code{MLEModel} Class.}
+\title{A Reference Class that Defines Options for the \code{simulate} Method of \code{MLEModel} Class}
 \description{
-A Reference Class that Defines Options for the \code{simulate} Method of \code{MLEModel} Class.
+A Reference Class that Defines Options for the \code{simulate} Method of \code{MLEModel} Class
 }
 \section{Fields}{
 
 \describe{
-\item{\code{seed}}{The seed for the random number generator of the first simulation}
+\item{\code{seed}}{The seed of the random number generator for the first simulation.}
 
-\item{\code{replications}}{The number of simulation replications to produce}
+\item{\code{replications}}{The number of simulation replications to produce.}
 }}
 
 

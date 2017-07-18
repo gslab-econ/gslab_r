@@ -4,41 +4,53 @@
 \name{MLESetOfDatasets-class}
 \alias{MLESetOfDatasets-class}
 \alias{MLESetOfDatasets}
-\title{A Reference Class that Holds a Vector of \code{MLEData} Objects.}
+\title{A Reference Class that Holds a List of Datasets}
 \description{
-A Reference Class that Holds a Vector of \code{MLEData} Objects.
+A Reference Class that Holds a List of Datasets
 }
 \section{Fields}{
 
 \describe{
-\item{\code{datasets}}{A list of MLEData objects}
+\item{\code{datasets}}{A list of \code{MLEData} objects.}
 
-\item{\code{ndatasets}}{The number of MLEData objects}
+\item{\code{ndatasets}}{The number of \code{MLEData} objects.}
 }}
 
 \section{Methods}{
 
 \describe{
-\item{\code{addDataset(dataset)}}{Add a new MLEData object in the list of datasets.
+\item{\code{addDataset(dataset)}}{\subsection{Description}{
+        Add a new \code{MLEData} object in the list of datasets.}
 
-         \code{dataset}: An MLEData object to be added.}
+        \subsection{Parameters}{
+        \code{dataset}: An MLEData object to be added.}}
 
-\item{\code{loadDatasetsFromDisk(directory, name, indices, collapseArrayVars = 1)}}{Loops over stored data and create an \code{MLESetOfDatasets} object according to
-         the \code{loadFromDisk} method of \code{MLEData}.
+\item{\code{loadDatasetsFromDisk(directory, name, indices, collapseArrayVars = 1)}}{\subsection{Description}{
+        Loops over saved datasets and create an \code{MLESetOfDatasets} object according to
+        the \code{loadFromDisk} method of \code{MLEData}.}
 
-         \code{directory}: The location of files to be loaded.
-         \code{name}: The name of files to be saved.
-         \code{precision}: The number of decimal to store for all inputs. Default is 8.
-         \code{indices}: Positional indices of the datasets to save.
-         \code{collapseArrayVars}: Whether array variables are collapsed. Default is collapse.}
+        \subsection{Parameters}{
+        \code{directory}: The location where files will be loaded. 
 
-\item{\code{saveDatasetsToDisk(directory, name, precision = 8,
-  indices = 1:.self$ndatasets)}}{Loops over and store data in an \code{MleSetOfDatasets} object according to
-         the \code{saveToDisk} method of \code{MLEData}.
+        \code{name}: The name of the files to be loaded.
 
-         \code{directory}: The location of files to be saved.
-         \code{name}: The name of files to be saved.
-         \code{precision}: The number of decimal to store for all inputs. Default is 8.
-         \code{indices}: Positional indices of the datasets to save.}
+        \code{indices}: The positional indices of the datasets to load.
+
+        \code{collapseArrayVars}: Whether array variables are collapsed. Default is collapse.}}
+
+\item{\code{saveDatasetsToDisk(directory, name, precision = 8, indices = NULL)}}{\subsection{Description}{
+        Loops over and save datasets in an \code{MLESetOfDatasets} object according to
+        the \code{saveToDisk} method of \code{MLEData}.}
+
+        \subsection{Parameters}{
+        \code{directory}: The location where files will be saved. 
+
+        \code{name}: The name of the files to be saved.
+
+        \code{precision}: The number of decimal places to save. Default is 8.
+
+        \code{indices}: The positional indices of the datasets to save. If not specified,
+        all datasets wil be saved.
+}}
 }}
 

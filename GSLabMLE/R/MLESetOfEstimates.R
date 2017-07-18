@@ -5,9 +5,9 @@
 #' @field dparam_list A list of of derived parameter estimates.
 #' @field startparam_list A list of starting parameters.
 #' @field dstartparam_list A list of derived parameters implied by starting parameters.
+#' @import methods
 #' @export MLESetOfEstimates
 #' @exportClass MLESetOfEstimates
-#' 
 MLESetOfEstimates <- setRefClass(Class   = "MLESetOfEstimates",
                                  fields  = list(estimates        = "list",
                                                 nest             = "numeric",

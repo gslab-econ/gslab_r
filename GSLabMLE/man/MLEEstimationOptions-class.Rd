@@ -4,7 +4,7 @@
 \name{MLEEstimationOptions-class}
 \alias{MLEEstimationOptions-class}
 \alias{MLEEstimationOptions}
-\title{A Reference Class that Defines Options for the \code{estimate} Method of \code{MLEModel} Class.}
+\title{A Reference Class that Defines Options for the \code{estimate} Method of \code{MLEModel} Class}
 \description{
 This class is based on the \code{optim} optimization method.
 }
@@ -13,17 +13,13 @@ This class is based on the \code{optim} optimization method.
 \describe{
 \item{\code{startparam}}{Starting paramter vector.}
 
-\item{\code{method}}{The optimization method to be used. Default is L-BFGS-B.}
-
-\item{\code{maxit}}{The maximum number of iterations. Default is 10,000.}
-
-\item{\code{constr}}{An \code{MLEConstraints} object.}
-
 \item{\code{hesstol}}{Numerical step for computing the Hessian.}
 
 \item{\code{quadacc}}{Accuracy of quadrature nodes for numerical integration in estimation.}
 
 \item{\code{quadacc_deriv}}{Accuracy of quadrature nodes for numerical integration in computing Hessians, gradients, etc.}
+
+\item{\code{constr}}{An \code{MLEConstraints} object.}
 
 \item{\code{first_step_vcov}}{Variance-Covariance matrix for first estimation step}
 
@@ -36,4 +32,19 @@ This class is based on the \code{optim} optimization method.
 \item{\code{compute_jacobian}}{Compute Jacobian of likelihood vector at the estimated parameters.}
 }}
 
+
+\section{Fields}{
+
+
+\describe{
+\item{\code{outlev}}{The output level of the Knitro optimization. A larger value indicates more verbose
+output. The default 0 suppresses all output information.}
+
+\item{\code{startparam}}{Starting paramter vector.}
+
+\item{\code{hesstol}}{Numerical step for computing the Hessian.}
+
+\item{\code{knitrotxt}}{A list of additional options to be passed to Knitro. See more at "help knitro".}
+}
+}
 

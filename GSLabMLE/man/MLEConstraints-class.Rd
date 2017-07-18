@@ -4,16 +4,100 @@
 \name{MLEConstraints-class}
 \alias{MLEConstraints-class}
 \alias{MLEConstraints}
-\title{A Reference Class that Defines Constraints of Parameters for a Maximum Likelihood Model.}
+\title{A Reference Class that Defines Constraints for a Maximum Likelihood Model.}
 \description{
-A Reference Class that Defines Constraints of Parameters for a Maximum Likelihood Model.
+The format of the constraints follows the format expected by the R interface to
+Knitro. See \code{\link[KnitroR]{knitro}} for details.
+
+The general optimization problem solved is:
+\deqn{min f(x), s.t.	cL<=g(x)<=cU, xL<=x<=xU}
+where \eqn{g(x)} can be linear or non-linear. When \eqn{cL=cU} or \eqn{xL=xU}, the constraint
+becomes an euqality constraint. This class defines these constraints. Note that Knitro solver
+does not accept \eqn{-Inf} or \eqn{Inf} as a constraint. Instead, set a small or large enough
+constraint, say, 1e20.
 }
 \section{Fields}{
 
 \describe{
-\item{\code{lower}}{The lower limit of the parameters.}
+\item{\code{xL}}{The lower bounds on the parameters.}
 
-\item{\code{upper}}{The upper limit of the parameters.}
+\item{\code{xU}}{The upper bounds on the parameters.}
+
+\item{\code{con}}{The constraints function.}
+
+\item{\code{cL}}{The lower bounds on the constraint functions.}
+
+\item{\code{cU}}{The upper bounds on the constraint functions.}
+
+\item{\code{paramlist}}{A vector of parameter names.}
+
+\item{\code{nparam}}{The number of parameters.}
+
+\item{\code{indices}}{A list giving the index of each parameter.}
+
+\item{\code{jacob_tol}}{Default numerical precision for evaluating Jacobian.}
 }}
 
+\section{Methods}{
+
+\describe{
+\item{\code{isConsistent(param, tolerance = 1e-04)}}{\subsection{Description}{
+        Determines whether parameters satisfy constraints.}
+
+        \subsection{Parameters}{
+        \code{param}: The parameter vector at which to check against constraints.
+
+        \code{xtol}: A scalar controlling the tolerance of tests. Default is 1e-4.}
+
+        \subsection{Return}{
+        A logical scalar indicating whether or not parameters satisfy constraints.}}
+
+\item{\code{jacobianOfConstraints(param, xtol = .self$jacob_tol)}}{\subsection{Description}{
+        Returns the jacobian of constraints.}
+
+        \subsection{Parameters}{
+        \code{param}: The parameter vector at which to evaluate Jacobian matrix.
+
+        \code{xtol}: A scalar controlling the step size of numerical derivatives.}
+
+        \subsection{Return}{
+        A list that contains the Jacobians of different constraints.}}
+
+\item{\code{removeBound(constr_paramlist)}}{\subsection{Description}{
+        Remove upper and lower bound constraints of parameters.}
+
+        \subsection{Parameters}{
+        \code{constr_paramlist}: A subset of \code{paramlist} containing the parameters whose
+        upper and lower bounds are to be removed.}}
+
+\item{\code{setFixedBound(constr_paramlist, bounds)}}{\subsection{Description}{
+        Update the fixed value constraints of parameters.}
+
+        \subsection{Parameters}{
+        \code{constr_paramlist}: A subset of \code{paramlist} containing the parameters to be constrained.
+
+        \code{bounds}: A vector with the same length as \code{constr_paramlist} that defines
+        the fixed constraints for all parameters in \code{constr_paramlist}.
+}}
+
+\item{\code{setLowerBound(constr_paramlist, bounds)}}{\subsection{Description}{
+        Update the lower bound constraints of parameters.}
+
+        \subsection{Parameters}{
+        \code{constr_paramlist}: A subset of \code{paramlist} containing the parameters to be constrained.
+
+        \code{bounds}: A vector with the same length as \code{constr_paramlist} that defines
+        the lower bounds for all parameters in \code{constr_paramlist}.
+}}
+
+\item{\code{setUpperBound(constr_paramlist, bounds)}}{\subsection{Description}{
+        Update the upper bound constraints of parameters.}
+
+        \subsection{Parameters}{
+        \code{constr_paramlist}: A subset of \code{paramlist} containing the parameters to be constrained.
+
+        \code{bounds}: A vector with the same length as \code{constr_paramlist} that defines
+        the upper bounds for all parameters in \code{constr_paramlist}.
+}}
+}}
 

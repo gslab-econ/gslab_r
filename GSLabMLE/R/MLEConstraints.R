@@ -1,21 +1,26 @@
-#' A Reference Class that Defines Constraints of Parameters for a Maximum Likelihood Model.
-#' @description The 
-#' min f(x)
-#' s.t.	cL	<=	g(x)	<=	cU
-#'      xL	<=	x	    <=	xU
+#' A Reference Class that Defines Constraints for a Maximum Likelihood Model.
+#' @description The format of the constraints follows the format expected by the R interface to
+#' Knitro. See \code{\link[KnitroR]{knitro}} for details.
+#' 
+#' The general optimization problem solved is:
+#' \deqn{min f(x), s.t.	cL<=g(x)<=cU, xL<=x<=xU}
+#' where \eqn{g(x)} can be linear or non-linear. When \eqn{cL=cU} or \eqn{xL=xU}, the constraint
+#' becomes an euqality constraint. This class defines these constraints. Note that Knitro solver
+#' does not accept \eqn{-Inf} or \eqn{Inf} as a constraint. Instead, set a small or large enough
+#' constraint, say, 1e20.
 #' @field xL The lower bounds on the parameters.
 #' @field xU The upper bounds on the parameters.
-#' @filed con The constraints function.
-#' @field cL The lower bounds on the constraints function.
-#' @field cU The upper bounds on the constraints function.
+#' @field con The constraints function.
+#' @field cL The lower bounds on the constraint functions.
+#' @field cU The upper bounds on the constraint functions.
 #' @field paramlist A vector of parameter names.
 #' @field nparam The number of parameters.
 #' @field indices A list giving the index of each parameter.
 #' @field jacob_tol Default numerical precision for evaluating Jacobian.
+#' @import methods
 #' @export MLEConstraints
 #' @exportClass MLEConstraints
-#' 
-MLEConstraints <- setRefClass(Class   = "MLEConstraints",
+MLEConstraints <- setRefClass("MLEConstraints",
                               fields  = list(xL        = "numeric",
                                              xU        = "numeric",
                                              con       = "function",
@@ -47,13 +52,3 @@ MLEConstraints <- setRefClass(Class   = "MLEConstraints",
                                   }
                               )
 )
-
-MLEConstraints$methods(
-    setUpperBound = setUpperBound,
-    setLowerBound = setLowerBound,
-    setFixedBound = setFixedBound,
-    removeBound   = removeBound,
-    isConsistent  = isConsistent,
-    JacobianOfConstraints = JacobianOfConstraints
-)
-

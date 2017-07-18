@@ -37,7 +37,7 @@ test_that("removeBound", {
     expect_error(constr$removeBound("g"), "Names not in the list of parameters")
 })
 
-test_that("isConsistent_JacobianOfConstraints",{
+test_that("isConsistent_jacobianOfConstraints",{
     lin <- function(param) {
         a1 <- param[1]
         a2 <- 2 * param[1] + param[2] + 3 * param[3]
@@ -51,20 +51,20 @@ test_that("isConsistent_JacobianOfConstraints",{
     constr1 <- MLEConstraints(xL = c(-1, 2, -5, -inf), xU = c(-1, 4, 5, inf))
     expect_true(constr1$isConsistent(c(-1, 2, 0, 0)))
     expect_false(constr1$isConsistent(c(-2, 5, 6, 0)))
-    expect_equal(constr1$JacobianOfConstraints(c(-1, 2, 0, 0))$xL, diag(4))
+    expect_equal(constr1$jacobianOfConstraints(c(-1, 2, 0, 0))$xL, diag(4))
     
     constr2 <- MLEConstraints(con = lin, cL = c(-1, 3), cU = c(-1, 3))
     expect_true(constr2$isConsistent(c(-1, 2, 1, 4)))
     expect_false(constr2$isConsistent(c(2, 1, 0, 0)))
-    expect_equal(constr2$JacobianOfConstraints(c(-1, 2, 1, 4))$cU[2,], c(2, 1, 3, 0), tolerance = 1e-3)
+    expect_equal(constr2$jacobianOfConstraints(c(-1, 2, 1, 4))$cU[2,], c(2, 1, 3, 0), tolerance = 1e-3)
     
     constr3 <- MLEConstraints(con = lin, cU = c(-1, 3))
     expect_true(constr3$isConsistent(c(-5, 0, 1, 0)))
     expect_false(constr3$isConsistent(c(-1, 2, 4, 4)))
-    expect_equal(constr3$JacobianOfConstraints(c(-5, 0, 1, 0))$cL, NULL)
+    expect_equal(constr3$jacobianOfConstraints(c(-5, 0, 1, 0))$cL, NULL)
     
     constr4 <- MLEConstraints(con = nonlin, cL = c(6, 1), cU = c(6, 1))
     expect_true(constr4$isConsistent(c(1, 2, 1, 2)))
     expect_false(constr4$isConsistent(c(1, 2, 1, 4)))
-    expect_equal(constr4$JacobianOfConstraints(c(1, 2, 1, 2))$cL[1,], c(-2, 1, 4, 4), tolerance = 1e-3)
+    expect_equal(constr4$jacobianOfConstraints(c(1, 2, 1, 2))$cL[1,], c(-2, 1, 4, 4), tolerance = 1e-3)
 })

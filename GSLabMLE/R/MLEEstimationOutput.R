@@ -1,12 +1,15 @@
-#' A Reference Class that Defines Options for the \code{simulate} Method of \code{MLEModel} Class.
-#' @field hessian Numerical Hessian matrix at estimated parameters.
-#' @field jacobian Numerical Jacobian matrix at estimated parameters.
+#' A Reference Class that Holds Estimates of the Maximum Likelihood Estimation model
+#' @include MLEConstraints.R
+#' @field hessian The numerical Hessian matrix evaluated at estimated parameters.
+#' @field jacobian The numerical Jacobian matrix evaluated at estimated parameters.
 #' @field constr An \code{MLEConstaints} object.
 #' @field dparam A vector of derived parameters.
 #' @field const A list of constants used in estimation.
-#' @export MLESimulationOptions
-#' @exportClass MLESimulationOptions
-#' 
+#' @import methods GSLabModel
+#' @importClassesFrom GSLabModel ModelEstimationOutput
+#' @inheritSection GSLabModel::ModelEstimationOutput Fields
+#' @export MLEEstimationOutput
+#' @exportClass MLEEstimationOutput
 MLEEstimationOutput <- setRefClass(Class    = "MLEEstimationOutput",
                                    contains = "ModelEstimationOutput",
                                    fields   = list(hessian  = "matrix",

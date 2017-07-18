@@ -4,18 +4,46 @@
 \name{MLEEstimationOutput-class}
 \alias{MLEEstimationOutput-class}
 \alias{MLEEstimationOutput}
-\title{A Reference Class that Defines Options for the \code{simulate} Method of \code{MLEModel} Class.}
+\title{A Reference Class that Holds Estimates of the Maximum Likelihood Estimation model}
 \description{
-A Reference Class that Defines Options for the \code{simulate} Method of \code{MLEModel} Class.
+A Reference Class that Holds Estimates of the Maximum Likelihood Estimation model
 }
 \section{Fields}{
 
 \describe{
+\item{\code{hessian}}{The numerical Hessian matrix evaluated at estimated parameters.}
+
+\item{\code{jacobian}}{The numerical Jacobian matrix evaluated at estimated parameters.}
+
 \item{\code{constr}}{An \code{MLEConstaints} object.}
 
 \item{\code{dparam}}{A vector of derived parameters.}
 
-\item{\code{const}}{A list of constants.}
+\item{\code{const}}{A list of constants used in estimation.}
 }}
 
+
+\section{Fields}{
+
+
+\describe{
+\item{\code{param}}{Locally optimal primal solution.}
+
+\item{\code{fval}}{The value of objective function at the optimal solution.}
+
+\item{\code{exitflag}}{Knitro’s status message.}
+
+\item{\code{lambda}}{Locally optimal dual solution.}
+
+\item{\code{estopts}}{A \code{ModelEstimationOptions} object.}
+
+\item{\code{model}}{A \code{Model} object used for estimation.}
+
+\item{\code{nobs}}{The number of observations in the data used for estimation.}
+
+\item{\code{vcov}}{Variance-covariance matrix of parameters.}
+
+\item{\code{se}}{Standard errors of parameters.}
+}
+}
 
