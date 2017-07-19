@@ -24,4 +24,13 @@ A Reference Class that Holds a List of Estimation Results
 \item{\code{dstartparam_list}}{A list of derived parameters implied by starting parameters.}
 }}
 
+\section{Methods}{
+
+\describe{
+\item{\code{addEstimate(estimate)}}{\subsection{Description}{
+        Add a new \code{MLEEstimationOutput} object in the list of estimates.}
+
+        \subsection{Parameters}{
+        \code{estimate}: An \code{MLEEstimationOutput} object to be added.}}
+}}
 

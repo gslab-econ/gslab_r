@@ -1,5 +1,8 @@
 set.seed(1)
 test_that("MLESetOfEstimates", {
+    est <- MLESetOfEstimates()
+    expect_equal(est$nest, 0)
+    
     data1     <- MLEData(y = rnorm(10000, 1, 2))
     data2     <- MLEData(y = rnorm(10000, 1, 2))
     model     <- SimpleModel("y")
@@ -19,4 +22,12 @@ test_that("MLESetOfEstimates", {
     expect_equal(length(estimates$dparam_list), 2)
     expect_equal(estimates$startparam_list[[1]], c(0, 2))
     expect_equal(estimates$dstartparam_list[[2]], c(0, Inf))
+    
+    estimates$addEstimate(est1)
+    expect_equal(estimates$nest, 3)
+    expect_identical(estimates$estimates[[1]], estimates$estimates[[3]])
+    expect_equal(length(estimates$param_list), 3)
+    expect_equal(length(estimates$dparam_list), 3)
+    expect_equal(estimates$startparam_list[[3]], c(0, 2))
+    expect_equal(estimates$dstartparam_list[[3]], c(log(2), Inf))
 })

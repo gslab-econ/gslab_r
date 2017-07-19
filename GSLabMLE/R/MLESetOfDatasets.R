@@ -13,7 +13,7 @@ MLESetOfDatasets <- setRefClass(Class   = "MLESetOfDatasets",
                                         .self$datasets <- list()
                                         if (!is.null(datasets)) {
                                             for (i in 1:length(datasets)) {
-                                                .self$datasets[[i]] <- datasets[i]
+                                                .self$datasets[[i]] <- datasets[[i]]
                                             }
                                         }
                                         .self$ndatasets <- length(.self$datasets)
@@ -26,7 +26,7 @@ MLESetOfDatasets$methods(
         "\\subsection{Description}{
         Add a new \\code{MLEData} object in the list of datasets.}\n
         \\subsection{Parameters}{
-        \\code{dataset}: An MLEData object to be added.}"
+        \\code{dataset}: An \\code{MLEData} object to be added.}"
         .self$datasets[[.self$ndatasets + 1]] <- dataset
         .self$ndatasets <- length(.self$datasets)
     },

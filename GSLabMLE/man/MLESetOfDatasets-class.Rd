@@ -23,7 +23,7 @@ A Reference Class that Holds a List of Datasets
         Add a new \code{MLEData} object in the list of datasets.}
 
         \subsection{Parameters}{
-        \code{dataset}: An MLEData object to be added.}}
+        \code{dataset}: An \code{MLEData} object to be added.}}
 
 \item{\code{loadDatasetsFromDisk(directory, name, indices, collapseArrayVars = 1)}}{\subsection{Description}{
         Loops over saved datasets and create an \code{MLESetOfDatasets} object according to

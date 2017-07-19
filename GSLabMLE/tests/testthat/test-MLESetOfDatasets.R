@@ -7,6 +7,9 @@ replications <- 10
 simopts <- MLESimulationOptions(replications = replications)
 
 test_that("initialize", {
+    data <- MLESetOfDatasets()
+    expect_equal(data$ndatasets, 0)
+    
     a <- MLEData(x1 = rnorm(n))
     b <- MLEData(x2 = rnorm(n))
     datasets <- MLESetOfDatasets(c(a, b))

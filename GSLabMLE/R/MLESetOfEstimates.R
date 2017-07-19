@@ -17,16 +17,35 @@ MLESetOfEstimates <- setRefClass(Class   = "MLESetOfEstimates",
                                                 dstartparam_list = "list"
                                  ),
                                  methods = list(
-                                     initialize = function(estimates) {
-                                         .self$estimates <- estimates
-                                         .self$nest      <- length(.self$estimates)
-                                         for (i in 1:.self$nest) {
-                                             .self$param_list[[i]]       <- .self$estimates[[i]]$param
-                                             .self$dparam_list[[i]]      <- .self$estimates[[i]]$dparam
-                                             .self$startparam_list[[i]]  <- .self$estimates[[i]]$estopts$startparam
-                                             .self$dstartparam_list[[i]] <- .self$estimates[[i]]$model$getDerivedParam(
-                                                 .self$startparam_list[[i]], .self$estimates[[i]]$const)
+                                     initialize = function(estimates = NULL) {
+                                         .self$estimates <- list()
+                                         if (!is.null(estimates)) {
+                                             for (i in 1:length(estimates)) {
+                                                 .self$estimates[[i]]        <- estimates[[i]]
+                                                 .self$param_list[[i]]       <- .self$estimates[[i]]$param
+                                                 .self$dparam_list[[i]]      <- .self$estimates[[i]]$dparam
+                                                 .self$startparam_list[[i]]  <- .self$estimates[[i]]$estopts$startparam
+                                                 .self$dstartparam_list[[i]] <- .self$estimates[[i]]$model$getDerivedParam(
+                                                     .self$startparam_list[[i]], .self$estimates[[i]]$const)
+                                             }
                                          }
+                                         .self$nest <- length(.self$estimates)
                                      }
                                  )
+)
+
+MLESetOfEstimates$methods(
+    addEstimate = function(estimate) {
+        "\\subsection{Description}{
+        Add a new \\code{MLEEstimationOutput} object in the list of estimates.}\n
+        \\subsection{Parameters}{
+        \\code{estimate}: An \\code{MLEEstimationOutput} object to be added.}"
+        .self$nest <- .self$nest + 1
+        .self$estimates[[.self$nest]] <- estimate
+        .self$param_list[[.self$nest]]       <- estimate$param
+        .self$dparam_list[[.self$nest]]      <- estimate$dparam
+        .self$startparam_list[[.self$nest]]  <- estimate$estopts$startparam
+        .self$dstartparam_list[[.self$nest]] <- estimate$model$getDerivedParam(
+            .self$startparam_list[[.self$nest]], estimate$const)
+    }
 )
