@@ -1,7 +1,7 @@
 #' Numerically Calculate Jacobian Matrix
 #' @description The function numerically calculates the Jacobian matrix of a given function 
 #' evaluated at given values of arguments.
-#' @param func The function on which Jacobian matrix is calculated.
+#' @param func A scalar- or vector-valued function on which Jacobian matrix is calculated.
 #' @param x0 A vector or a matrix of argument values at which the Jacobian matrix is evaluated.
 #' @param xTol The tolerance, where a smaller \code{xTol} corresponds to increased accuracy
 #' of the numerical procedure.

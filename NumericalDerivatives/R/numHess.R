@@ -1,7 +1,7 @@
 #' Numerically Calculate Hessian matrix
-#' @description This function numerically calculates the Hessian matrix of a given function
-#' evaluated at given values of arguments.
-#' @param func The function on which Hessian matrix is calculated.
+#' @description This function numerically calculates the Hessian matrix of a given scalar-valued
+#' function evaluated at given values of arguments.
+#' @param func A scalar-valued function on which Hessian matrix is calculated.
 #' @param x0 A vector of argument values of at which the Hessian matrix is evaluated.
 #' @param xTol The tolerance, where a smaller \code{xTol} corresponds to increased accuracy
 #' of the numerical procedure.
@@ -18,6 +18,9 @@ numHess <- function(func, x0, xTol, ind_rowvar = 1:length(x0), ind_colvar = 1:le
     f0 <- func(x0)
     if (any(is.na(f0))) {
         stop("Invalid function or argument input")
+    }
+    if (length(f0) > 1) {
+        stop("Only a scalar-valued function is allowed")
     }
     n  <- length(x0)
     if (any(ind_rowvar > n) | any(ind_colvar > n)) {

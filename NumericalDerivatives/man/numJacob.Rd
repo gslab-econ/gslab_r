@@ -7,7 +7,7 @@
 numJacob(func, x0, xTol)
 }
 \arguments{
-\item{func}{The function on which Jacobian matrix is calculated.}
+\item{func}{A scalar- or vector-valued function on which Jacobian matrix is calculated.}
 
 \item{x0}{A vector or a matrix of argument values at which the Jacobian matrix is evaluated.}
 

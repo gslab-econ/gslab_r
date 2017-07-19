@@ -8,7 +8,7 @@ numHess(func, x0, xTol, ind_rowvar = 1:length(x0),
   ind_colvar = 1:length(x0))
 }
 \arguments{
-\item{func}{The function on which Hessian matrix is calculated.}
+\item{func}{A scalar-valued function on which Hessian matrix is calculated.}
 
 \item{x0}{A vector of argument values of at which the Hessian matrix is evaluated.}
 
@@ -24,8 +24,8 @@ A matrix with the number of rows equal to the length of \code{ind_rowvar}, and t
 number of columns equal to the length of \code{ind_colvar}.
 }
 \description{
-This function numerically calculates the Hessian matrix of a given function
-evaluated at given values of arguments.
+This function numerically calculates the Hessian matrix of a given scalar-valued
+function evaluated at given values of arguments.
 }
 \examples{
 example <- function(x) sqrt(prod(x))
