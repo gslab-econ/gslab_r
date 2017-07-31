@@ -71,8 +71,9 @@ ModelData$methods(
             stop("The group variable is not sorted")
         }
         .self$groupvar           <- value
-        .self$ngroup             <- length(unique(.self$groupvar))
-        .self$group_size         <- as.numeric(table(.self$groupvar))
+        temp                     <- rle(value)
+        .self$ngroup             <- length(temp$values)
+        .self$group_size         <- temp$lengths
         .self$unique_group_sizes <- unique(.self$group_size)
     },
     
@@ -124,13 +125,16 @@ ModelData$methods(
         \\code{col}: Index or variable names for selecting columns. Default is all columns."
         
         data <- data.frame(.self$var[row, col])
-        if (is.character(col))
+        if (is.character(col)) {
             colnames(data) <- col
+        }
+        group <- .self$groupvar[row]
         .self$var      <- data
         .self$varnames <- colnames(.self$var)
         .self$nvars    <- ncol(.self$var)
         .self$nobs     <- nrow(.self$var)
         .self$addData(1:.self$nobs, names = "obsindex", replace = TRUE)
+        .self$setGroup(group)
     },
     
     isVariable = function(varname) {

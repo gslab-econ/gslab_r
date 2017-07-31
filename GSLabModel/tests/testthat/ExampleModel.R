@@ -48,7 +48,7 @@ ExampleModel$methods(
             L2 <- sum((data$var[[.self$lhslist]] - xbeta)^2)
             return (L2)
         }
-        slvr <- knitro(x0        = estopts$startparam,
+        slvr <- KnitroR::knitro(x0        = estopts$startparam,
                        objective = f,
                        options   = append(list(outlev = estopts$outlev),
                                           estopts$knitrotxt))

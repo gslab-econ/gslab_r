@@ -58,10 +58,12 @@ test_that("removeData", {
 
 test_that("selectData", {
     a <- ExampleData(x, y, z, rhs, varnames = c("x", "y", "z", "x1", "y1"))
+    a$setGroup(group1)
     a$selectData(col = c(1, 2, 4))
     expect_equal(c(a$varnames, a$nvars), c(c("x", "y", "x1", "obsindex"), 4))
-    a$selectData(c(1:2, 5:8), col = c("x"))
-    expect_equal(c(a$varnames, a$nobs, a$nvars), c(c("x", "obsindex"), 6, 2))
+    a$selectData(c(1:20, 51:80), col = c("x"))
+    expect_equal(c(a$varnames, a$nobs, a$nvars, length(a$groupvar), a$ngroup),
+                 c(c("x", "obsindex"), 50, 2, 50, length(unique(a$groupvar))))
     a$selectData(a$var$x > 0)
     expect_equal(a$nobs, nrow(a$var))
 })
@@ -87,7 +89,7 @@ test_that("SaveLoad", {
     a$addArrayVars(arrayVar1, "array1")
     a$addArrayVars(arrayVar2, "array2")
     saveToDisk(a, ".", "myObj", 12)
-    expect_error(saveToDisk(a, "non-existent", "myObj"), "cannot open the connection")
+    suppressWarnings(expect_error(saveToDisk(a, "non-existent", "myObj"), "cannot open the connection"))
 
     b <- loadFromDisk(".", "myObj")
     expect_equal(class(a), class(b))
@@ -95,7 +97,7 @@ test_that("SaveLoad", {
                  c(b$var, b$varnames, b$groupvar, b$ngroup, b$group_size),
                  tolerance = 1e-12)
     file.remove(c("myObj.rds", "myObj.csv"))
-    expect_error(loadFromDisk(".", "myObj"), "cannot open the connection")
+    suppressWarnings(expect_error(loadFromDisk(".", "myObj"), "cannot open the connection"))
 })
 
 test_that("misc", {
@@ -104,7 +106,6 @@ test_that("misc", {
     expect_equal(a, b)
     a$removeData("y")
     expect_lt(a$nvars, b$nvars)
-    
     expect_true(a$isVariable("x"))
     expect_false(a$isVariable("w"))
 })
