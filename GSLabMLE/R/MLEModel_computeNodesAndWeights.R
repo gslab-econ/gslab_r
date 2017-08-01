@@ -54,7 +54,7 @@ MLEModel$methods(
             nodes     <- GSLabMLE:::arrangeNodes(.self, data, gnodes, inodes, numnodes, nodeindex, group_mapping)
             data_rep  <- data$copy()
             data_rep$selectData(nodes$obs)
-            data_rep$setGroup(groups(cbind(nodes$group, nodes$nodenum)))
+            data_rep$setGroup(GSLabMLE:::groups(cbind(nodes$group, nodes$nodenum)))
         } else {
             nodes    <- list()
             weights  <- list()

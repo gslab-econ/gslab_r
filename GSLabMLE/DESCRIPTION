@@ -16,7 +16,8 @@ Imports:
   NumericalDerivatives,
   methods,
   utils,
-  SparseGrid
+  SparseGrid,
+  dplyr
 Suggests: 
   testthat, 
   devtools

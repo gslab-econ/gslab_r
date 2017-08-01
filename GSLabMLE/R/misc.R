@@ -28,7 +28,7 @@ sumWithin <- function(value, group) {
 #' @param group A matrix or a vector. The number of rows is the same as \code{value}.
 #' @return A list with two fields: \code{group}, a matrix that contains the unique groups,
 #' and \code{value}, a matrix that contains the products by group.
-#' @importFrom "stats" "aggregate"
+#' @import dplyr
 #' @export
 prodWithin <- function(value, group) {
     group <- as.matrix(group)
@@ -36,7 +36,8 @@ prodWithin <- function(value, group) {
     ncol1 <- ncol(group)
     ncol2 <- ncol(value)
     data  <- data.frame(group, value)
-    data  <- aggregate(data[(ncol1 + 1) : (ncol1 + ncol2)], by = data[1 : ncol1], FUN = prod)
+    columns <- names(data)[1 : ncol1]
+    data  <- data %>% group_by_at(columns) %>% summarise_all(funs(prod))
     group <- unname(as.matrix(data[1 : ncol1]))
     value <- unname(as.matrix(data[(ncol1 + 1) : (ncol1 + ncol2)]))
     return (list(group = group, value = value))
