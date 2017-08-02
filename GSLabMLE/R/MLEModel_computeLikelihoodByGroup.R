@@ -17,13 +17,13 @@ MLEModel$methods(
         condlik <- .self$computeConditionalLikelihoodVector(param, data)
         if (length(data$groupvar) & all(data$ngroup < data$nobs)) {
             grouplik <- data.table::data.table(group = data$groupvar,
-                                               value = condlik)[, prod(value),by = group][, 2][[1]]
+                                               value = condlik)[, prod(value), by = group][, 2][[1]]
         } else {
             grouplik <- condlik
         }
         if (.self$numerical_integral) {
             grouplik <- data.table::data.table(group = weights$group[, 1],
-                                               value = grouplik*weights$wgt[[1]])[, sum(value),
+                                               value = grouplik*weights$wgt[, 1])[, sum(value),
                                                                                     by = group][, 2][[1]]
         }
         grouplik[grouplik <= 0] <- 1e-300
