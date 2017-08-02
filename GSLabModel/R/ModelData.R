@@ -97,7 +97,7 @@ ModelData$methods(
                 .self$removeData(dup)
             }
         }
-        .self$var      <- data.frame(.self$var, newdata, check.names = TRUE)
+        .self$var      <- cbind(.self$var, newdata)
         .self$varnames <- colnames(.self$var)
         .self$nvars    <- ncol(.self$var)
     },
