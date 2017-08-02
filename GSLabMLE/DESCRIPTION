@@ -12,12 +12,12 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
 Imports:
+  methods,
   GSLabModel,
   NumericalDerivatives,
-  methods,
-  utils,
   SparseGrid,
-  dplyr
+  dplyr,
+  data.table
 Suggests: 
   testthat, 
   devtools
