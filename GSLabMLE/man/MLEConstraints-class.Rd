@@ -6,36 +6,22 @@
 \alias{MLEConstraints}
 \title{A Reference Class that Defines Constraints for a Maximum Likelihood Model.}
 \description{
-The format of the constraints follows the format expected by the R interface to
-Knitro. See \code{\link[KnitroR]{knitro}} for details.
-
-The general optimization problem solved is:
-\deqn{min f(x), s.t.	cL<=g(x)<=cU, xL<=x<=xU}
-where \eqn{g(x)} can be linear or non-linear. When \eqn{cL=cU} or \eqn{xL=xU}, the constraint
-becomes an euqality constraint. This class defines these constraints. Note that Knitro solver
-does not accept \eqn{-Inf} or \eqn{Inf} as a constraint. Instead, set a small or large enough
-constraint, say, 1e20.
+The general optimization problem solved by optim:L-BFGS-B is:
+\deqn{min f(x), s.t.	lower<=x<=upper}
+When \eqn{lower=upper} the constraint becomes an euqality constraint. This class defines these constraints.
 }
 \section{Fields}{
 
 \describe{
-\item{\code{xL}}{The lower bounds on the parameters.}
+\item{\code{lower}}{The lower bounds on the parameters.}
 
-\item{\code{xU}}{The upper bounds on the parameters.}
-
-\item{\code{con}}{The constraints function.}
-
-\item{\code{cL}}{The lower bounds on the constraint functions.}
-
-\item{\code{cU}}{The upper bounds on the constraint functions.}
+\item{\code{upper}}{The upper bounds on the parameters.}
 
 \item{\code{paramlist}}{A vector of parameter names.}
 
 \item{\code{nparam}}{The number of parameters.}
 
 \item{\code{indices}}{A list giving the index of each parameter.}
-
-\item{\code{jacob_tol}}{Default numerical precision for evaluating Jacobian.}
 }}
 
 \section{Methods}{
@@ -52,7 +38,7 @@ constraint, say, 1e20.
         \subsection{Return}{
         A logical scalar indicating whether or not parameters satisfy constraints.}}
 
-\item{\code{jacobianOfConstraints(param, xtol = .self$jacob_tol)}}{\subsection{Description}{
+\item{\code{jacobianOfConstraints(param)}}{\subsection{Description}{
         Returns the jacobian of constraints.}
 
         \subsection{Parameters}{

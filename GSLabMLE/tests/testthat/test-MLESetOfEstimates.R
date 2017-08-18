@@ -6,7 +6,7 @@ test_that("MLESetOfEstimates", {
     data1     <- MLEData(y = rnorm(10000, 1, 2))
     data2     <- MLEData(y = rnorm(10000, 1, 2))
     model     <- SimpleModel("y")
-    constr    <- MLEConstraints(xL = c(-1e20, 0))
+    constr    <- MLEConstraints(lower = c(-Inf, 0))
     estopt1   <- MLEEstimationOptions(constr = constr, startparam = c(0, 2))
     est1      <- model$estimate(data1, estopt1)
     est2      <- model$estimate(data2)

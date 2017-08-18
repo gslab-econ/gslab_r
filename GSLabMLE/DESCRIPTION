@@ -1,6 +1,6 @@
 Package: GSLabMLE
 Title: GSLab Maximum Likelihood Estimation Models
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
   person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre")), 
   person("Jesse", "Shapiro", email = "jesse_shapiro_1@brown.edu", role = c("aut"))

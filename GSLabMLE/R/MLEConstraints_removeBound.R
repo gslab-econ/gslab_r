@@ -7,8 +7,7 @@ MLEConstraints$methods(
         \\code{constr_paramlist}: A subset of \\code{paramlist} containing the parameters whose
         upper and lower bounds are to be removed.}"
         ncparam <- length(constr_paramlist)
-        inf     <- 1e20
-        .self$setUpperBound(constr_paramlist, rep(inf, ncparam))
-        .self$setLowerBound(constr_paramlist, rep(-inf, ncparam))
+        .self$setUpperBound(constr_paramlist, rep(Inf, ncparam))
+        .self$setLowerBound(constr_paramlist, rep(-Inf, ncparam))
     }
 )

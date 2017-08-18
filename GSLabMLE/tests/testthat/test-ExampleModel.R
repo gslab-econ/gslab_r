@@ -39,7 +39,7 @@ test_that("estimate", {
     data    <- MLEData(simdata$var$group, simdata$var$y, varnames = c("group", "y"))
     data$setGroup(data$var$group)
     
-    constr  <- MLEConstraints(xL = c(-1e20, 0))
+    constr  <- MLEConstraints(lower = c(-Inf, 0))
     estopts <- MLEEstimationOptions(constr = constr, quadacc = 9)
     result  <- model$computeNodesAndWeights(data, estopts$quadacc)
     expect_is(result, "list")

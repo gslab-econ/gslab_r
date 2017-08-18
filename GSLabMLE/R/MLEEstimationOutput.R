@@ -15,8 +15,8 @@ MLEEstimationOutput <- setRefClass(Class    = "MLEEstimationOutput",
                                    fields   = list(hessian  = "matrix",
                                                    jacobian = "matrix",
                                                    const    = "list",
-                                                   dparam   = "numeric",
-                                                   constr   = "MLEConstraints"
+                                                   constr   = "MLEConstraints",
+                                                   dparam   = "numeric"
                                    ),
                                    methods = list(
                                        initialize = function(slvr, model, data, estopts) {

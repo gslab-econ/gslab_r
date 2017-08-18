@@ -9,17 +9,11 @@ MLEConstraints$methods(
         \\subsection{Return}{
         A logical scalar indicating whether or not parameters satisfy constraints.}"
         is_consistent <- 1
-        if (length(.self$xL)) {
-            is_consistent <- is_consistent & all(param >= .self$xL - tolerance)
+        if (length(.self$lower)) {
+            is_consistent <- is_consistent & all(param >= .self$lower - tolerance)
         }
-        if (length(.self$xU)) {
-            is_consistent <- is_consistent & all(param <= .self$xU + tolerance)
-        }
-        if (length(.self$cL)) {
-            is_consistent <- is_consistent & all(.self$con(param) >= .self$cL - tolerance)
-        }
-        if (length(.self$cU)) {
-            is_consistent <- is_consistent & all(.self$con(param) <= .self$cU + tolerance)
+        if (length(.self$upper)) {
+            is_consistent <- is_consistent & all(param <= .self$upper + tolerance)
         }
         return (is_consistent)
     }

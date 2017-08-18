@@ -27,10 +27,8 @@ MLEEstimationOptions <- setRefClass(Class    = "MLEEstimationOptions",
                                                     compute_jacobian     = "numeric"
                                     ),
                                     methods = list(
-                                        initialize = function(outlev               = 0,
-                                                              startparam           = numeric(0),
+                                        initialize = function(startparam           = numeric(0),
                                                               hesstol              = 1e-4,
-                                                              knitrotxt            = list(),
                                                               constr               = MLEConstraints(),
                                                               quadacc              = 3,
                                                               quadacc_deriv        = 4,
@@ -39,10 +37,8 @@ MLEEstimationOptions <- setRefClass(Class    = "MLEEstimationOptions",
                                                               first_step_param     = as.numeric(NULL),
                                                               compute_hessian      = 1, 
                                                               compute_jacobian     = 1) {
-                                            .self$outlev               <- outlev
                                             .self$startparam           <- startparam
                                             .self$hesstol              <- hesstol
-                                            .self$knitrotxt            <- knitrotxt
                                             .self$constr               <- constr
                                             .self$quadacc              <- quadacc
                                             .self$quadacc_deriv        <- quadacc_deriv

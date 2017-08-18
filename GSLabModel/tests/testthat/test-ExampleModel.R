@@ -37,6 +37,4 @@ test_that("estimate", {
     expect_equal(lm(y~x1+x2)$coeff[["x1"]], est$param[1], tolerance = 1e-3)
     expect_equal(lm(y~x1+x2)$coeff[["x2"]], est$param[2], tolerance = 1e-3)
     expect_equal(lm(y~x1+x2)$coeff[["(Intercept)"]], est$param[3], tolerance = 1e-3)
-    estopts <- ModelEstimationOptions(outlev = 3)
-    est     <- model$estimate(data, estopts)
 })

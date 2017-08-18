@@ -8,18 +8,17 @@ MLEConstraints$methods(
         \\code{bounds}: A vector with the same length as \\code{constr_paramlist} that defines
         the lower bounds for all parameters in \\code{constr_paramlist}.\n}"
         ncparam <- length(constr_paramlist)
-        inf     <- 1e20
         if (ncparam != length(bounds)) {
             stop("The dimension of the bounds does not match the dimension of the parameters")
         }
         if (any(!constr_paramlist %in% .self$paramlist)) {
             stop("Names not in the list of parameters")
         }
-        if (!length(.self$xL)) {
-            .self$xL <- rep(-inf, .self$nparam)
+        if (!length(.self$lower)) {
+            .self$lower <- rep(-Inf, .self$nparam)
         }
         for (i in 1:ncparam) {
-            .self$xL[.self$indices[[constr_paramlist[i]]]] <- bounds[i]
+            .self$lower[.self$indices[[constr_paramlist[i]]]] <- bounds[i]
         }
     }
 )

@@ -22,22 +22,18 @@ MLEModel$methods(
         f <- function(param) {
             GSLabMLE:::sumLogLik(.self, param, data_rep, nodes, weights)
         }
-        slvr <- KnitroR::knitro(x0          = estopts$startparam,
-                                objective   = f,
-                                constraints = estopts$constr$con,
-                                xL          = estopts$constr$xL,
-                                xU          = estopts$constr$xU,
-                                cL          = estopts$constr$cL,
-                                cU          = estopts$constr$cU,
-                                options     = append(list(outlev = estopts$outlev),
-                                                     estopts$knitrotxt))
+        slvr <- optim(par    = estopts$startparam,
+                      fn     = f,
+                      method = "L-BFGS-B",
+                      lower  = estopts$constr$lower,
+                      upper  = estopts$constr$upper)
         if (estopts$compute_hessian) {
-            slvr$hessian <- GSLabMLE:::computeHessian(.self, slvr$x, data, estopts)
+            slvr$hessian <- GSLabMLE:::computeHessian(.self, slvr$par, data, estopts)
         } else {
             slvr$hessian <- matrix(0, 0, 0)
         }
         if (estopts$compute_jacobian) {
-            slvr$jacobian <- GSLabMLE:::computeJacobian(.self, slvr$x, data, estopts)
+            slvr$jacobian <- GSLabMLE:::computeJacobian(.self, slvr$par, data, estopts)
         } else {
             slvr$jacobian <- matrix(0, 0, 0)
         }

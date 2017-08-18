@@ -66,7 +66,7 @@ Model$methods(
             if (!coeffname %in% names(.self$indices)) {
                 stop(sprintf("%s is not in the model", coeffname))         
             }
-            xbeta = xbeta + param[.self$indices[[coeffname]]]
+            xbeta <- xbeta + param[.self$indices[[coeffname]]]
         }
         return (xbeta)
     }

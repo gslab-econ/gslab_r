@@ -48,10 +48,7 @@ ExampleModel$methods(
             L2 <- sum((data$var[[.self$lhslist]] - xbeta)^2)
             return (L2)
         }
-        slvr <- KnitroR::knitro(x0        = estopts$startparam,
-                       objective = f,
-                       options   = append(list(outlev = estopts$outlev),
-                                          estopts$knitrotxt))
+        slvr <- optim(.self$startparam, f, method = "L-BFGS-B")
         est  <- ExampleEstimationOutput(slvr, .self, data, estopts)
         return (est)
     }

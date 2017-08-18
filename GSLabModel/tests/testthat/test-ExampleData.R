@@ -109,4 +109,3 @@ test_that("misc", {
     expect_true(a$isVariable("x"))
     expect_false(a$isVariable("w"))
 })
-

@@ -31,9 +31,9 @@ A Reference Class that Holds Estimates of the Maximum Likelihood Estimation mode
 
 \item{\code{fval}}{The value of objective function at the optimal solution.}
 
-\item{\code{exitflag}}{Knitro’s status message.}
+\item{\code{convergence}}{An integer indicating convergence of estimation. 0 indicates successful completion.}
 
-\item{\code{lambda}}{Locally optimal dual solution.}
+\item{\code{message}}{A character string giving any additional information returned by the optimizer.}
 
 \item{\code{estopts}}{A \code{ModelEstimationOptions} object.}
 

@@ -20,7 +20,7 @@ test_that("simulate", {
 })
 
 test_that("estimate", {
-    constr  <- MLEConstraints(xL = c(-1e20, 0))
+    constr  <- MLEConstraints(lower = c(-Inf, 0))
     estopts <- MLEEstimationOptions(constr = constr)
     result  <- model$computeNodesAndWeights(data, estopts$quadacc)
     expect_equal(names(result), c("nodes", "weights", "data_rep"))

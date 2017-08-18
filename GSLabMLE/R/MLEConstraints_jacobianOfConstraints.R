@@ -1,6 +1,6 @@
 #' @include MLEConstraints.R
 MLEConstraints$methods(
-    jacobianOfConstraints = function(param, xtol = .self$jacob_tol) {
+    jacobianOfConstraints = function(param) {
         "\\subsection{Description}{
         Returns the jacobian of constraints.}\n
         \\subsection{Parameters}{
@@ -9,17 +9,11 @@ MLEConstraints$methods(
         \\subsection{Return}{
         A list that contains the Jacobians of different constraints.}"
         J <- list()
-        if (length(.self$xL)) {
-            J[["xL"]] <- diag(length(.self$xL)) 
+        if (length(.self$lower)) {
+            J[["lower"]] <- diag(length(.self$lower))
         }
-        if (length(.self$xU)) {
-            J[["xU"]] <- diag(length(.self$xU)) 
-        }
-        if (length(.self$cL)) {
-            J[["cL"]] <- NumericalDerivatives::numJacob(.self$con, param, xtol)
-        }
-        if (length(.self$cU)) {
-            J[["cU"]] <- NumericalDerivatives::numJacob(.self$con, param, xtol)
+        if (length(.self$upper)) {
+            J[["upper"]] <- diag(length(.self$lower)) 
         }
         return (J)
     }
