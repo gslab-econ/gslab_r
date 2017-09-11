@@ -2,7 +2,7 @@
 #' @description
 #' The general optimization problem solved by optim:L-BFGS-B is:
 #' \deqn{min f(x), s.t.	lower<=x<=upper}
-#' When \eqn{lower=upper} the constraint becomes an euqality constraint. This class defines these constraints.
+#' When \eqn{lower=upper} the constraint becomes an equality constraint. This class defines these constraints.
 #' @field lower The lower bounds on the parameters.
 #' @field upper The upper bounds on the parameters.
 #' @field paramlist A vector of parameter names.

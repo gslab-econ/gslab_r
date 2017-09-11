@@ -27,7 +27,7 @@ A Reference Class that Holds Estimates of the Maximum Likelihood Estimation mode
 
 
 \describe{
-\item{\code{param}}{Locally optimal primal solution.}
+\item{\code{param}}{Locally optimal solution.}
 
 \item{\code{fval}}{The value of objective function at the optimal solution.}
 
@@ -41,9 +41,9 @@ A Reference Class that Holds Estimates of the Maximum Likelihood Estimation mode
 
 \item{\code{nobs}}{The number of observations in the data used for estimation.}
 
-\item{\code{vcov}}{Variance-covariance matrix of parameters.}
+\item{\code{vcov}}{Variance-covariance matrix of estimated parameters.}
 
-\item{\code{se}}{Standard errors of parameters.}
+\item{\code{se}}{Standard errors of estimated parameters.}
 }
 }
 
