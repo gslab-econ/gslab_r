@@ -46,7 +46,9 @@ constants characterizing the data.
 
         \code{...}: The same as the constructor of data.frame.
 
-        \code{names}: Variable names}
+        \code{names}: Variable names.
+
+        \code{replace}: Whether to replace existing variables when they are already in the dataset.}
 
 \item{\code{collapseArrayVars()}}{Collapse all variables with the name \code{varname_array_d1_d2} to an array variable 
          \code{varname} with dimensions \code{R} = \code{max(d1)} by \code{C = max(d2)}.

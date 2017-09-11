@@ -67,20 +67,21 @@ ModelData$methods(
         if (length(value) != .self$nobs) {
             stop("The length of the group variable does not match the dataset")
         }
-        if (any(value[2:.self$nobs] - value[1:.self$nobs - 1] < 0)) {
+        if (any(value[2:.self$nobs] < value[1:.self$nobs - 1])) {
             stop("The group variable is not sorted")
         }
         .self$groupvar           <- value
-        temp                     <- rle(value)
-        .self$ngroup             <- length(temp$values)
-        .self$group_size         <- temp$lengths
+        collapse_by_group        <- rle(.self$groupvar)
+        .self$ngroup             <- length(collapse_by_group$values)
+        .self$group_size         <- collapse_by_group$lengths
         .self$unique_group_sizes <- unique(.self$group_size)
     },
     
     addData = function(..., names = NULL, replace = FALSE) {
         "Add variables to columns.\n
         \\code{...}: The same as the constructor of data.frame.\n
-        \\code{names}: Variable names"
+        \\code{names}: Variable names.\n
+        \\code{replace}: Whether to replace existing variables when they are already in the dataset."
         
         newdata <- data.frame(..., stringsAsFactors = FALSE)
         if (!is.null(names)) {
@@ -90,7 +91,7 @@ ModelData$methods(
             colnames(newdata) <- names
         }
         if (any(colnames(newdata) %in% .self$varnames)) {
-            if (replace == FALSE) {
+            if (!replace) {
                 stop("Duplicated variable names added")  
             } else {
                 dup <- colnames(newdata)[colnames(newdata) %in% .self$varnames]
@@ -159,7 +160,7 @@ ModelData$methods(
             data <- array(data, c(d[1], d[2], 1))
         }
         if (name %in% .self$varnames) {
-            if (replace == FALSE) {
+            if (!replace) {
                 stop("Duplicated array variable name added")  
             } else {
                 .self$removeData(name)

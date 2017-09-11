@@ -27,12 +27,12 @@ test_that("initialize", {
 test_that("setGroup", {
     a <- ExampleData(x, y)
     a$setGroup(group1)  # Add a new group variable
-    expect_equal(a$ngroup, length(unique(group1)))
-    a <- ExampleData(x, y, group1)
-    a$setGroup(a$var$group1)  # Add a group variable already in the dataset
-    expect_equal(a$var$group1, a$groupvar)
-    expect_error(a$setGroup(group2), "The length of the group variable does not match the dataset")
-    expect_error(a$setGroup(group3), "The group variable is not sorted")
+    expect_equal(c(a$ngroup, a$group_size), c(length(unique(group1)), as.numeric(table(a$groupvar))))
+    b <- ExampleData(x, y, group1)
+    b$setGroup(b$var$group1)  # Add a group variable already in the dataset
+    expect_equal(c(b$var$group1, unique(b$group_size)), c(b$groupvar, b$unique_group_sizes))
+    expect_error(b$setGroup(group2), "The length of the group variable does not match the dataset")
+    expect_error(b$setGroup(group3), "The group variable is not sorted")
 })
 
 test_that("addData", {
@@ -59,6 +59,7 @@ test_that("removeData", {
 test_that("selectData", {
     a <- ExampleData(x, y, z, rhs, varnames = c("x", "y", "z", "x1", "y1"))
     a$setGroup(group1)
+    a$selectData()
     a$selectData(col = c(1, 2, 4))
     expect_equal(c(a$varnames, a$nvars), c(c("x", "y", "x1", "obsindex"), 4))
     a$selectData(c(1:20, 51:80), col = c("x"))

@@ -12,7 +12,7 @@ Subclasses should be created according to different models.
 \section{Fields}{
 
 \describe{
-\item{\code{param}}{Locally optimal primal solution.}
+\item{\code{param}}{Locally optimal solution.}
 
 \item{\code{fval}}{The value of objective function at the optimal solution.}
 
@@ -26,9 +26,9 @@ Subclasses should be created according to different models.
 
 \item{\code{nobs}}{The number of observations in the data used for estimation.}
 
-\item{\code{vcov}}{Variance-covariance matrix of parameters.}
+\item{\code{vcov}}{Variance-covariance matrix of estimated parameters.}
 
-\item{\code{se}}{Standard errors of parameters.}
+\item{\code{se}}{Standard errors of estimated parameters.}
 }}
 
 
