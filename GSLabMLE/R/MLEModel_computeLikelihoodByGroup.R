@@ -1,6 +1,7 @@
 #' @include MLEModel.R
 MLEModel$methods(
     computeLikelihoodByGroup = function(param, data, nodes, weights) {
+        print(param)
         "\\subsection{Description}{
         Compute likelihood by group, integrating unobservables numerically.}\n
         \\subsection{Parameters}{
@@ -26,7 +27,7 @@ MLEModel$methods(
                                                value = grouplik*weights$wgt[, 1])[, sum(value),
                                                                                     by = group][, 2][[1]]
         }
-        grouplik[grouplik <= 0] <- 1e-300
+        grouplik[grouplik <= 0] <- .Machine$double.xmin
         return (grouplik)
     }
 )

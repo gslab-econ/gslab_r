@@ -106,7 +106,7 @@ ModelData$methods(
     removeData = function(col) {
         "Remove variables from columns.\n
         \\code{col}: Column index or variable names"
-
+        
         if (is.character(col)) {
             if (any(!isVariable(col))) {
                 stop(sprintf("%s not in the data", paste(c(col[!isVariable(col)]), 
@@ -129,13 +129,14 @@ ModelData$methods(
         if (is.character(col)) {
             colnames(data) <- col
         }
-        group <- .self$groupvar[row]
         .self$var      <- data
         .self$varnames <- colnames(.self$var)
         .self$nvars    <- ncol(.self$var)
         .self$nobs     <- nrow(.self$var)
         .self$addData(1:.self$nobs, names = "obsindex", replace = TRUE)
-        .self$setGroup(group)
+        if (length(.self$groupvar)) {
+            .self$setGroup(.self$groupvar[row])   
+        }
     },
     
     isVariable = function(varname) {

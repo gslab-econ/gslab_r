@@ -25,7 +25,7 @@ MLEModel$methods(
         are added in the data. The number of groups is also multiplied by the number of nodes.}"
         if (.self$numerical_integral) {
             if (!length(data$groupvar)) {
-                data$setGroup(data$var$obsindex)   
+                data$setGroup(data$var$obsindex)  
             }
             result <- sumWithin(rep(1, data$nobs), data$groupvar)
             nobs_by_group <- result$value
