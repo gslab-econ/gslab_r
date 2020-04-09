@@ -12,17 +12,17 @@ created to accommodate different situations and goals.
 \section{Fields}{
 
 \describe{
-\item{\code{paramlist}}{A vector of parameter names}
+\item{\code{paramlist}}{A vector of parameter names.}
 
-\item{\code{nparam}}{The number of parameters}
+\item{\code{nparam}}{The number of parameters.}
 
-\item{\code{startparam}}{A vector of starting parameter values for estimation}
+\item{\code{startparam}}{A vector of starting parameter values for estimation.}
 
-\item{\code{indices}}{A list giving the index of each parameter}
+\item{\code{indices}}{A list giving the index of each parameter.}
 
-\item{\code{lhslist}}{The names of dependent (i.e., stochastic) variables}
+\item{\code{lhslist}}{The names of dependent (i.e., stochastic) variables.}
 
-\item{\code{rhslist}}{The names of independent (i.e., non-stochastic) variables}
+\item{\code{rhslist}}{The names of independent (i.e., non-stochastic) variables.}
 }}
 
 \section{Methods}{
@@ -30,15 +30,19 @@ created to accommodate different situations and goals.
 \describe{
 \item{\code{isValidModel()}}{A method to determine if it's a valid instantiation and should be overridden in subclasses.}
 
+\item{\code{isValidParameterVector(param)}}{A method to determine if the parameters are valid for the model.
+
+        \code{param}: A vector of parameters.}
+
 \item{\code{XBeta(varlist, data, param, constant = 0, constname = "constant",
   coeff_prefix = "", coeff_suffix = "_coeff", datavar_prefix = "",
   datavar_suffix = "")}}{Return the product of data and coefficients.
 
-        \code{varlist}: A list of variables names.
+        \code{varlist}: A vector of variables names.
 
         \code{data}: A ModelData object.
 
-        \code{param}: A list of coefficients. The order of the coefficients should be the same as 
+        \code{param}: A vector of coefficients. The order of the coefficients should be the same as 
         the field \code{varnames} of the \code{Model} object.
 
         \code{constant}: Whether the calculation includes constant or not.

@@ -1,0 +1,54 @@
+[1] "Tests begin at 2017-09-11 16:56:21"
+............................................................................................................................................................................................................................................................................................
+DONE =================================================================================================================
+                          file context                               test nb failed skipped error warning  user
+1          test-ExampleModel.R                                       misc  1      0   FALSE FALSE       0 0.002
+2          test-ExampleModel.R                                   simulate 10      0   FALSE FALSE       0 0.021
+3          test-ExampleModel.R                                   estimate 13      0   FALSE FALSE       0 1.936
+4          test-ExampleModel.R                            getDerivedParam  5      0   FALSE FALSE       0 0.753
+5                  test-misc.R                                  sumWithin 22      0   FALSE FALSE       0 0.057
+6                  test-misc.R                                 prodWithin 22      0   FALSE FALSE       0 0.097
+7                  test-misc.R                                  avgWithin 22      0   FALSE FALSE       0 0.062
+8                  test-misc.R                                  seqWithin 20      0   FALSE FALSE       0 0.025
+9                  test-misc.R                                expandArray  6      0   FALSE FALSE       0 0.440
+10                 test-misc.R                                     groups  4      0   FALSE FALSE       0 0.004
+11       test-MLEConstraints.R                              setUpperBound  4      0   FALSE FALSE       0 0.009
+12       test-MLEConstraints.R                              setLowerBound  4      0   FALSE FALSE       0 0.005
+13       test-MLEConstraints.R                              setFixedBound  4      0   FALSE FALSE       0 0.005
+14       test-MLEConstraints.R                                removeBound  5      0   FALSE FALSE       0 0.007
+15       test-MLEConstraints.R         isConsistent_jacobianOfConstraints  3      0   FALSE FALSE       0 0.004
+16 test-MLEEstimationOptions.R                       MLEEstimationOptions  4      0   FALSE FALSE       0 0.262
+17     test-MLESetOfDatasets.R                                 initialize  3      0   FALSE FALSE       0 0.008
+18     test-MLESetOfDatasets.R                                   simulate  3      0   FALSE FALSE       0 0.061
+19     test-MLESetOfDatasets.R                                   saveload 22      0   FALSE FALSE       0 0.562
+20    test-MLESetOfEstimates.R                          MLESetOfEstimates 17      0   FALSE FALSE       0 0.156
+21          test-SimpleModel.R                                   simulate  5      0   FALSE FALSE       0 0.011
+22          test-SimpleModel.R                                   estimate  2      0   FALSE FALSE       0 0.065
+23          test-SimpleModel.R                            getDerivedParam  5      0   FALSE FALSE       0 0.069
+24           test-simulation.R                                 simulation 78      0   FALSE FALSE       0 0.271
+   system  real
+1   0.000 0.002
+2   0.001 0.024
+3   0.167 2.239
+4   0.054 0.853
+5   0.003 0.061
+6   0.001 0.101
+7   0.005 0.067
+8   0.001 0.026
+9   0.036 0.546
+10  0.000 0.004
+11  0.000 0.009
+12  0.000 0.005
+13  0.001 0.005
+14  0.000 0.007
+15  0.000 0.004
+16  0.017 0.282
+17  0.001 0.009
+18  0.001 0.064
+19  0.019 0.601
+20  0.008 0.170
+21  0.001 0.012
+22  0.005 0.072
+23  0.009 0.083
+24  0.010 0.338
+[1] "Tests end at 2017-09-11 16:56:27"

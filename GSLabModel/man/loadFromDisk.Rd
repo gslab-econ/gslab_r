@@ -7,11 +7,11 @@
 loadFromDisk(directory, name, collapseArrayVars = 1)
 }
 \arguments{
-\item{directory}{location of files to be loaded.}
+\item{directory}{The location of files to be loaded.}
 
-\item{name}{name of files to be loaded.}
+\item{name}{The name of files to be loaded.}
 
-\item{collapseArrayVars}{whether array variables are collapsed. Default is collapse.}
+\item{collapseArrayVars}{Whether array variables are collapsed. Default is collapse.}
 }
 \description{
 Data are read from a \code{.csv} file and other fields are read from a \code{.rds}

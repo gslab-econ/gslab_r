@@ -1,4 +1,16 @@
-[1] "Tests begin at 2017-06-26 16:51:55"
-testthat results ================================================================
-OK: 41 SKIPPED: 0 FAILED: 0
-[1] "Tests end at 2017-06-26 16:51:56"
+[1] "Tests begin at 2017-09-11 16:26:46"
+..........................................
+DONE =================================================================================================================
+                  file context       test nb failed skipped error warning  user system  real
+1   test-ExampleData.R         initialize  4      0   FALSE FALSE       0 0.017  0.002 0.030
+2   test-ExampleData.R           setGroup  4      0   FALSE FALSE       0 0.012  0.001 0.016
+3   test-ExampleData.R            addData  6      0   FALSE FALSE       0 0.021  0.003 0.034
+4   test-ExampleData.R         removeData  3      0   FALSE FALSE       0 0.009  0.000 0.012
+5   test-ExampleData.R         selectData  3      0   FALSE FALSE       0 0.021  0.002 0.035
+6   test-ExampleData.R              array  4      0   FALSE FALSE       0 0.033  0.004 0.061
+7   test-ExampleData.R           SaveLoad  4      0   FALSE FALSE       0 0.075  0.007 0.168
+8   test-ExampleData.R               misc  4      0   FALSE FALSE       0 0.012  0.001 0.019
+9  test-ExampleModel.R         initialize  3      0   FALSE FALSE       0 0.009  0.000 0.010
+10 test-ExampleModel.R              XBeta  3      0   FALSE FALSE       0 0.009  0.000 0.011
+11 test-ExampleModel.R           estimate  4      0   FALSE FALSE       0 0.058  0.004 0.065
+[1] "Tests end at 2017-09-11 16:26:47"

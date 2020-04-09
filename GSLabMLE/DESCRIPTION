@@ -1,0 +1,49 @@
+Package: GSLabMLE
+Title: GSLab Maximum Likelihood Estimation Models
+Version: 0.2.0
+Authors@R: c(
+  person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre")), 
+  person("Jesse", "Shapiro", email = "jesse_shapiro_1@brown.edu", role = c("aut"))
+  )
+Description: A general framework for working with data, models, and estimation of Maximum Likelihood Estimation Models.
+Depends: R (>= 3.3.2)
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Imports:
+  methods,
+  GSLabModel,
+  NumericalDerivatives,
+  SparseGrid,
+  dplyr,
+  data.table
+Suggests: 
+  testthat, 
+  devtools
+Collate: 
+    'MLEConstraints.R'
+    'MLEConstraints_isConsistent.R'
+    'MLEConstraints_jacobianOfConstraints.R'
+    'MLEConstraints_removeBound.R'
+    'MLEConstraints_setFixedBound.R'
+    'MLEConstraints_setLowerBound.R'
+    'MLEConstraints_setUpperBound.R'
+    'MLEData.R'
+    'MLEEstimationOptions.R'
+    'MLEEstimationOutput.R'
+    'MLEModel.R'
+    'MLEModel_computeLikelihoodByGroup.R'
+    'MLEModel_computeNodesAndWeights.R'
+    'MLEModel_derivedParam.R'
+    'MLEModel_drawErrors.R'
+    'MLEModel_drawUnobservables.R'
+    'MLEModel_estimate.R'
+    'MLEModel_getDerivedParam.R'
+    'MLEModel_simulate.R'
+    'MLEModel_transformErrors.R'
+    'MLEModel_transformUnobservables.R'
+    'MLESetOfDatasets.R'
+    'MLESetOfEstimates.R'
+    'MLESimulationOptions.R'
+    'misc.R'

@@ -10,15 +10,15 @@
 #' strvar <- c("f", "m", "m", "f", "m")
 #' ModelData(x, y, const = list(mu = 0, sigma = 1))
 #' ModelData(rhs, strvar, varnames = c("rhs1", "rhs2", "gender"))
-#' @field var A data.frame object to hold dataset
-#' @field varnames A vector of variable names in the dataset
-#' @field nvars The number of variables in the dataset
-#' @field nobs The number of observations in the dataset
-#' @field const A list to hold constants characterizing the dataset
-#' @field groupvar A vector identifying groups in the panel
-#' @field ngroup The number of groups in the panel
-#' @field group_size A vector of size ngroups giving the number of observations in each group
-#' @field unique_group_sizes Unique group sizes that appear in the dataset
+#' @field var A data.frame object to hold dataset.
+#' @field varnames A vector of variable names in the dataset.
+#' @field nvars The number of variables in the dataset.
+#' @field nobs The number of observations in the dataset.
+#' @field const A list to hold constants characterizing the dataset.
+#' @field groupvar A vector identifying groups in the panel.
+#' @field ngroup The number of groups in the panel.
+#' @field group_size A vector of size ngroups giving the number of observations in each group.
+#' @field unique_group_sizes Unique group sizes that appear in the dataset.
 #' @export ModelData
 #' @exportClass ModelData
 #' @import stringr methods utils
@@ -67,19 +67,21 @@ ModelData$methods(
         if (length(value) != .self$nobs) {
             stop("The length of the group variable does not match the dataset")
         }
-        if (any(value[2:.self$nobs] - value[1:.self$nobs - 1] < 0)) {
+        if (any(value[2:.self$nobs] < value[1:.self$nobs - 1])) {
             stop("The group variable is not sorted")
         }
         .self$groupvar           <- value
-        .self$ngroup             <- length(unique(.self$groupvar))
-        .self$group_size         <- as.numeric(table(.self$groupvar))
+        collapse_by_group        <- rle(.self$groupvar)
+        .self$ngroup             <- length(collapse_by_group$values)
+        .self$group_size         <- collapse_by_group$lengths
         .self$unique_group_sizes <- unique(.self$group_size)
     },
     
-    addData = function(..., names = NULL) {
+    addData = function(..., names = NULL, replace = FALSE) {
         "Add variables to columns.\n
         \\code{...}: The same as the constructor of data.frame.\n
-        \\code{names}: Variable names"
+        \\code{names}: Variable names.\n
+        \\code{replace}: Whether to replace existing variables when they are already in the dataset."
         
         newdata <- data.frame(..., stringsAsFactors = FALSE)
         if (!is.null(names)) {
@@ -89,9 +91,14 @@ ModelData$methods(
             colnames(newdata) <- names
         }
         if (any(colnames(newdata) %in% .self$varnames)) {
-            stop("Duplicated variable names added")
+            if (!replace) {
+                stop("Duplicated variable names added")  
+            } else {
+                dup <- colnames(newdata)[colnames(newdata) %in% .self$varnames]
+                .self$removeData(dup)
+            }
         }
-        .self$var      <- data.frame(.self$var, newdata, check.names = TRUE)
+        .self$var      <- cbind(.self$var, newdata)
         .self$varnames <- colnames(.self$var)
         .self$nvars    <- ncol(.self$var)
     },
@@ -99,7 +106,7 @@ ModelData$methods(
     removeData = function(col) {
         "Remove variables from columns.\n
         \\code{col}: Column index or variable names"
-
+        
         if (is.character(col)) {
             if (any(!isVariable(col))) {
                 stop(sprintf("%s not in the data", paste(c(col[!isVariable(col)]), 
@@ -119,12 +126,17 @@ ModelData$methods(
         \\code{col}: Index or variable names for selecting columns. Default is all columns."
         
         data <- data.frame(.self$var[row, col])
-        if (is.character(col))
+        if (is.character(col)) {
             colnames(data) <- col
+        }
         .self$var      <- data
         .self$varnames <- colnames(.self$var)
         .self$nvars    <- ncol(.self$var)
         .self$nobs     <- nrow(.self$var)
+        .self$addData(1:.self$nobs, names = "obsindex", replace = TRUE)
+        if (length(.self$groupvar)) {
+            .self$setGroup(.self$groupvar[row])   
+        }
     },
     
     isVariable = function(varname) {
@@ -133,7 +145,7 @@ ModelData$methods(
         varname %in% .self$varnames
     },
     
-    addArrayVars = function(data, name = "arrayvar") {
+    addArrayVars = function(data, name = "arrayvar", replace = FALSE) {
         "Add a matrix or 3-dimension variable in the field \\code{var}.\n
         \\code{data}: A matrix or a 3-dimension array.\n
         \\code{name}: The name of the array variable added."
@@ -147,6 +159,13 @@ ModelData$methods(
             stop("Array structure is too complicated")
         } else if (length(d) == 2) {
             data <- array(data, c(d[1], d[2], 1))
+        }
+        if (name %in% .self$varnames) {
+            if (!replace) {
+                stop("Duplicated array variable name added")  
+            } else {
+                .self$removeData(name)
+            }
         }
         .self$var[[name]] <- data
         .self$varnames    <- colnames(.self$var)

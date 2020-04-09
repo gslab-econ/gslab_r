@@ -1,5 +1,7 @@
 library(testthat)
-library(GSLabModel)
+library(GSLabMLE)
+source("testthat/SimpleModel.R")
+source("testthat/ExampleModel.R")
 
 sink("tests.log")
 sprintf("Tests begin at %s", Sys.time())
