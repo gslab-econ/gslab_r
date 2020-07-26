@@ -2,13 +2,13 @@
 Main <- function(){
     library(devtools)
     # Update all currently installed packages
-    update.packages(ask = FALSE, checkBuilt = TRUE, repos = "http://cran.cnr.Berkeley.edu/")
+    update.packages(ask = FALSE, checkBuilt = TRUE, repos = "http://cran.wustl.edu/")
     
     # Install packages from CRAN
     CRAN_packages   <- c("data.table", "devtools",   "foreign",   "ggplot2", 
                          "Matrix",     "parallel",   "plyr",      "readstata13",
                          "reshape2",   "roxygen2",   "RUnit",     "testthat")  
-    CRAN_result     <- lapply(CRAN_packages, install_CRAN, repo = "http://cran.cnr.Berkeley.edu/", 
+    CRAN_result     <- lapply(CRAN_packages, install_CRAN, repo = "http://cran.wustl.edu/", 
                               dependency = TRUE, quiet = TRUE)
     
     # Install packages from GitHub
