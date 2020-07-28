@@ -1,0 +1,10 @@
+id,partid1,partid2,name,num
+1,a,1,aa,10
+2,a,2,bb,9
+3,a,3,cc,8
+4,b,1,aa,9
+5,b,2,bb,8
+6,b,3,cc,7
+7,c,1,aa,8
+8,c,2,bb,7
+9,c,3,cc,6

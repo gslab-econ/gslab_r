@@ -98,5 +98,5 @@ The `README.md` should give a brief description of the user called functions in 
 
 ## Third Party Pacakges
 
-We maintain an R scipt in the root of this driectory named `Rpackage_build.R`. This script contains a list of all third party packages used across multiple repositories and code to install them, if necessary. The [shell script](https://github.com/gslab-econ/admin/tree/master/computer-build-sheet) GSLab uses to set up machins calls `Rpackage_build.R`.
+We maintain an R scipt in the root of this directory named `Rpackage_build.R`. This script contains a list of all third party packages used across multiple repositories and code to install them, if necessary. The [shell script](https://github.com/gslab-econ/admin/tree/master/computer-build-sheet) GSLab uses to set up machins calls `Rpackage_build.R`.
 
