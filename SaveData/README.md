@@ -1,7 +1,7 @@
 
 # Overview
 
-The SaveData pacakge provides a functions to save and summarize data. The functions in this package were originally created for use in the [Protests project](https://github.com/JMSLab/Protests).
+The SaveData pacakge provides a functions to save and summarize data.
 
 
 ## SaveData
