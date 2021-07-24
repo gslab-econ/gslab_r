@@ -75,6 +75,17 @@ test_that("correctly saves data with different key", {
     expect_identical(output, intended_output)
 })
 
+test_that("correctly saves data without sorting", {
+    test_data <- read.csv("./data/data.csv", header = TRUE)
+
+    output <- SaveData(test_data,c("partid1","partid2"),"./output/data", "./output/logfile.log",
+                        sortbykey = FALSE)
+
+    intended_output <- "File './output/data.RDS' saved successfully."
+
+    expect_identical(output, intended_output)
+})
+
 test_that("correctly gives error for nonexistent key", {
     test_data <- read.csv("./data/data.csv", header = TRUE)
 
@@ -104,5 +115,4 @@ test_that("correctly gives error for wrong filename", {
     expect_error(SaveData(test_data,"id","./output/data.1.RDS", "./output/logfile.log"),
                  NULL)
 })
-
 
