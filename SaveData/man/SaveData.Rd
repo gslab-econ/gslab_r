@@ -4,7 +4,7 @@
 \alias{SaveData}
 \title{Save and summarize data}
 \usage{
-SaveData(df, key, outfile, logfile = NULL, appendlog = TRUE, sortbykey = TRUE)
+SaveData(df, key, outfile, logfile = NULL, appendlog = FALSE, sortbykey = TRUE)
 }
 \arguments{
 \item{df}{Data to be saved}
@@ -15,9 +15,9 @@ SaveData(df, key, outfile, logfile = NULL, appendlog = TRUE, sortbykey = TRUE)
 
 \item{logfile}{Path to logfile. File contains standard summary statistics for numerical variables and displays variable types for all variables. If no path is specified, the log file is saved to the same directory as the output file. Type logfile = FALSE to not output a logfile.}
 
-\item{appendlog}{If TRUE, an existing log file of the same name will not be overwritten but the information appended. Default is TRUE.}
+\item{appendlog}{If TRUE, an existing log file of the same name will not be overwritten but the information appended. Default is FALSE.}
 
-\item{sortbykey}{If TRUE, the data will be sorted based on the keys provided.}
+\item{sortbykey}{If TRUE, the data will be sorted based on the keys provided. Default is TRUE.}
 }
 \description{
 Save and summarize data
