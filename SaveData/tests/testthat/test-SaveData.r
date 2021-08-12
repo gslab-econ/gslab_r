@@ -50,27 +50,20 @@ test_that("correctly saves data without logfile", {
   expect_identical(output, intended_output)
 })
 
-test_that("appends to logfile", {
+test_that("appends and does not append to logfile", {
 
   test_data <- read.csv("./data/data.csv", header = TRUE)
-  
-  output <- SaveData(test_data,"id","./output/data", appendlog = TRUE)
 
-  intended_output <- "File './output/data.RDS' saved successfully."
+  output <- SaveData(test_data,"id","./output/data")
+  output <- SaveData(test_data,"id","./output/data")
 
-  expect_identical(output, intended_output)
-})
-
-test_that("does not append to logfile", {
-
-  test_data <- read.csv("./data/data.csv", header = TRUE)
-  
   output <- SaveData(test_data,"id","./output/data", appendlog = FALSE)
 
   intended_output <- "File './output/data.RDS' saved successfully."
 
   expect_identical(output, intended_output)
 })
+
 
 test_that("correctly saves data with different key", {
     test_data <- read.csv("./data/data.csv", header = TRUE)

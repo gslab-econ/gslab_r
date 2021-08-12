@@ -4,8 +4,8 @@
 #' @param key Defines key to dataset. Must be non-missing and jointly unique.
 #' @param outfile Path to saved data file. Possible file extensions are .csv, .dta, RData, and .RDS. If no file extension is provided, the data is saved as .RDS.
 #' @param logfile Path to logfile. File contains standard summary statistics for numerical variables and displays variable types for all variables. If no path is specified, the log file is saved to the same directory as the output file. Type logfile = FALSE to not output a logfile.
-#' @param appendlog If TRUE, an existing log file of the same name will not be overwritten but the information appended. Default is FALSE.
-#' @param sortbykey If TRUE, the data will be sorted based on the keys provided. Default is TRUE.
+#' @param appendlog If TRUE, an existing log file of the same name will not be overwritten but the information appended. Default is TRUE.
+#' @param sortbykey If TRUE, the data will be sorted based on the keys provided.
 #'
 #' @seealso \link[data.table]{fwrite}, \link[base]{save}, \link[base]{saveRDS}, and \link[haven]{write_dta},
 #'
@@ -32,7 +32,7 @@
 #' @importFrom stargazer  stargazer
 #' @export
 
-SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortbykey = TRUE) {
+SaveData <- function(df, key, outfile, logfile = NULL, appendlog = TRUE, sortbykey = TRUE) {
   colSD  <- function(data) sapply(data, sd, na.rm = TRUE)
   colMin <- function(data) sapply(data, min, na.rm = TRUE)
   colMax <- function(data) sapply(data, max, na.rm = TRUE)
