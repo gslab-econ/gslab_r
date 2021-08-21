@@ -75,6 +75,10 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
   }
 
   CheckKey <- function(df, key) {
+  
+    if (nrow(df %>% filter_at(vars(all_of(keys)), any_vars(is.na))) > 0) {
+      stop("KeyError: There are rows with missing keys.")
+    }
 
     if (!all(key %in% colnames(df))) {
 
