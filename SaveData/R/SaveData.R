@@ -27,6 +27,7 @@
 #' @importFrom data.table fwrite
 #' @importFrom digest     digest
 #' @importFrom dplyr      arrange
+#' @importFrom dplyr      filter_at
 #' @importFrom hash       keys hash
 #' @importFrom haven      write_dta
 #' @importFrom stargazer  stargazer
@@ -76,7 +77,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
 
   CheckKey <- function(df, key) {
   
-    if (nrow(df %>% filter_at(vars(all_of(keys)), any_vars(is.na(.)))) > 0) {
+    if (nrow(filter_at(df, vars(all_of(keys)), any_vars(is.na(.)))) > 0) {
       stop("KeyError: There are rows with missing keys.")
     }
 
