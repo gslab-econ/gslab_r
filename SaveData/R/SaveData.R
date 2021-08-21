@@ -76,7 +76,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
 
   CheckKey <- function(df, key) {
     
-    missings <- sapply(df[keys], function(x) sum(is.na(x)))
+    missings <- sapply(df[key], function(x) sum(is.na(x)))
     
     if (sum(missings) > 0) {
       stop("KeyError: There are rows with missing keys.")
