@@ -108,6 +108,13 @@ test_that("correctly gives error for nonunique key", {
                  NULL)
 })
 
+test_that("correctly gives error for missing key", {
+    test_data <- read.csv("./data/data.csv", header = TRUE)
+
+    expect_error(SaveData(test_data,"num","./output/data", "./output/logfile.log"),
+                 NULL)
+})
+
 test_that("correctly gives error for wrong data format", {
     test_data <- read.csv("./data/data.csv", header = TRUE)
 
