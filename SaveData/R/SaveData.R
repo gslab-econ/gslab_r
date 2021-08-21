@@ -74,17 +74,17 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     return(list("outfile" = outfile, "logfile" = logfile, "filetype" = filetype))
   }
 
-  CheckKey <- function(df, key) {
+  CheckKey <- function(df, key) {        
+
+    if (!all(key %in% colnames(df))) {
+
+      stop("KeyError: One or more key variables are not in df.")
+    }
     
     missings <- sapply(df[key], function(x) sum(is.na(x)))
     
     if (sum(missings) > 0) {
       stop("KeyError: There are rows with missing keys.")
-    }
-
-    if (!all(key %in% colnames(df))) {
-
-      stop("KeyError: One or more key variables are not in df.")
     }
 
     nunique <- nrow(unique(df[key]))
