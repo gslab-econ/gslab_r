@@ -84,7 +84,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     missings <- sapply(df[key], function(x) sum(is.na(x)))
     
     if (sum(missings) > 0) {
-      stop(sprintf("KeyError: There are rows with missing keys (%s).", key[which(missings > 0)]))
+      stop(paste("KeyError: There are rows with missing keys. Check the following keys:", paste(key[which(missings > 0), collapse = ", ")))
     }
 
     nunique <- nrow(unique(df[key]))
