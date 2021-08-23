@@ -50,13 +50,21 @@ test_that("correctly saves data without logfile", {
   expect_identical(output, intended_output)
 })
 
-test_that("appends and does not append to logfile", {
+test_that("appends to logfile", {
 
   test_data <- read.csv("./data/data.csv", header = TRUE)
+  
+  output <- SaveData(test_data,"id","./output/data", appendlog = TRUE)
 
-  output <- SaveData(test_data,"id","./output/data")
-  output <- SaveData(test_data,"id","./output/data")
+  intended_output <- "File './output/data.RDS' saved successfully."
 
+  expect_identical(output, intended_output)
+})
+
+test_that("does not append to logfile", {
+
+  test_data <- read.csv("./data/data.csv", header = TRUE)
+  
   output <- SaveData(test_data,"id","./output/data", appendlog = FALSE)
 
   intended_output <- "File './output/data.RDS' saved successfully."
@@ -64,11 +72,21 @@ test_that("appends and does not append to logfile", {
   expect_identical(output, intended_output)
 })
 
-
 test_that("correctly saves data with different key", {
     test_data <- read.csv("./data/data.csv", header = TRUE)
 
     output <- SaveData(test_data,c("partid1","partid2"),"./output/data", "./output/logfile.log")
+
+    intended_output <- "File './output/data.RDS' saved successfully."
+
+    expect_identical(output, intended_output)
+})
+
+test_that("correctly saves data without sorting", {
+    test_data <- read.csv("./data/data.csv", header = TRUE)
+
+    output <- SaveData(test_data,c("partid1","partid2"),"./output/data", "./output/logfile.log",
+                        sortbykey = FALSE)
 
     intended_output <- "File './output/data.RDS' saved successfully."
 
@@ -90,6 +108,13 @@ test_that("correctly gives error for nonunique key", {
                  NULL)
 })
 
+test_that("correctly gives error for missing key", {
+    test_data <- read.csv("./data/data.csv", header = TRUE)
+
+    expect_error(SaveData(test_data,"num","./output/data", "./output/logfile.log"),
+                 NULL)
+})
+
 test_that("correctly gives error for wrong data format", {
     test_data <- read.csv("./data/data.csv", header = TRUE)
 
@@ -104,5 +129,4 @@ test_that("correctly gives error for wrong filename", {
     expect_error(SaveData(test_data,"id","./output/data.1.RDS", "./output/logfile.log"),
                  NULL)
 })
-
 

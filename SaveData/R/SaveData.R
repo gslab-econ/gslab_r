@@ -4,7 +4,8 @@
 #' @param key Defines key to dataset. Must be non-missing and jointly unique.
 #' @param outfile Path to saved data file. Possible file extensions are .csv, .dta, RData, and .RDS. If no file extension is provided, the data is saved as .RDS.
 #' @param logfile Path to logfile. File contains standard summary statistics for numerical variables and displays variable types for all variables. If no path is specified, the log file is saved to the same directory as the output file. Type logfile = FALSE to not output a logfile.
-#' @param appendlog If TRUE, an existing log file of the same name will not be overwritten but the information appended. Default is TRUE.
+#' @param appendlog If TRUE, an existing log file of the same name will not be overwritten but the information appended. Default is FALSE.
+#' @param sortbykey If TRUE, the data will be sorted based on the keys provided. Default is TRUE.
 #'
 #' @seealso \link[data.table]{fwrite}, \link[base]{save}, \link[base]{saveRDS}, and \link[haven]{write_dta},
 #'
@@ -31,7 +32,7 @@
 #' @importFrom stargazer  stargazer
 #' @export
 
-SaveData <- function(df, key, outfile, logfile = NULL, appendlog = TRUE) {
+SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortbykey = TRUE) {
   colSD  <- function(data) sapply(data, sd, na.rm = TRUE)
   colMin <- function(data) sapply(data, min, na.rm = TRUE)
   colMax <- function(data) sapply(data, max, na.rm = TRUE)
@@ -73,11 +74,17 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = TRUE) {
     return(list("outfile" = outfile, "logfile" = logfile, "filetype" = filetype))
   }
 
-  CheckKey <- function(df, key) {
+  CheckKey <- function(df, key) {        
 
     if (!all(key %in% colnames(df))) {
 
       stop("KeyError: One or more key variables are not in df.")
+    }
+        
+    missings <- sapply(df[key], function(x) sum(is.na(x)))
+    
+    if (sum(missings) > 0) {
+      stop(paste("KeyError: There are rows with missing keys. Check the following keys:", paste(key[which(missings > 0)], collapse = ", ")))
     }
 
     nunique <- nrow(unique(df[key]))
@@ -97,8 +104,10 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = TRUE) {
         args[[i]] <- df[[(key[[i-1]])]]
         i <- i + 1
       }
-
-      df <- do.call(arrange, args)  # sort by key values
+      
+      if (sortbykey) {
+        df <- do.call(arrange, args)  # sort by key values
+      }           
 
       df <- df[reordered_colnames]
 
@@ -111,7 +120,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = TRUE) {
 
     if (logfile == FALSE) return(NULL)
 
-    numeric_sum <- as.data.frame(cbind(colMeans(df[sapply(df, is.numeric)]),
+    numeric_sum <- as.data.frame(cbind(colMeans(df[sapply(df, is.numeric)], na.rm = T),
                                        colSD(df[sapply(df, is.numeric)]),
                                        colMin(df[sapply(df, is.numeric)]),
                                        colMax(df[sapply(df, is.numeric)])))
