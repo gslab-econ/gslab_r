@@ -18,5 +18,25 @@ SaveData(df_1, key = "id", outfile = "issue15/df_1.RDS",
 SaveData(df_1, key = "id", outfile = "issue15/df_1.dta",
          logfile = "issue15/df1_manifest.log", appendlog = T)
 
-SaveData(df_1, key = "id", outfile = "issue15/df_1.RData",
-         logfile = "issue15/df1_manifest.log", appendlog = T)
+df_soc <- read.csv('issue15/soc_scores.csv')
+
+SaveData(df_soc, key = "soc", outfile = "issue15/df_soc.csv",
+         logfile = "issue15/df_soc_manifest.log")
+
+SaveData(df_soc, key = "soc", outfile = "issue15/df_soc.RDS",
+         logfile = "issue15/df_soc_manifest.log", appendlog = T)
+
+SaveData(df_soc, key = "soc", outfile = "issue15/df_soc.dta",
+         logfile = "issue15/df_soc_manifest.log", appendlog = T)
+
+df_scatters <- read.csv('issue15/scatters_data.csv')
+
+SaveData(df_scatters, key = "ssyk96", outfile = "issue15/df_scatters.csv",
+         logfile = "issue15/df_scatters_manifest.log")
+
+SaveData(df_scatters, key = "ssyk96", outfile = "issue15/df_scatters.RDS",
+         logfile = "issue15/df_scatters_manifest.log", appendlog = T)
+
+SaveData(df_scatters, key = "ssyk96", outfile = "issue15/df_scatters.dta",
+         logfile = "issue15/df_scatters_manifest.log", appendlog = T)
+

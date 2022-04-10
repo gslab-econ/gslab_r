@@ -1,5 +1,5 @@
-*.csv
-*.dta
-*.RDS
+!*.csv
+!*.dta
+!*.RDS
 *.RData
 
