@@ -4,7 +4,7 @@ library(SaveData)
 set.seed(0)
 
 n <- 10000
-df_1 <- data.frame("a" = round(runif(n, 0, 1), 2), 
+df_1 <- data.frame("a" = round(runif(n, 0, 1), 2),
                    "b" = round(rnorm(n, 5, 2), 2),
                    "c" = sample(c("x", "y", "z"), n, replace = T),
                    id = 1:n)
