@@ -25,6 +25,7 @@
 #' }
 #'
 #' @importFrom data.table fwrite
+#' @importFrom data.table setorderv
 #' @importFrom digest     digest
 #' @importFrom dplyr      arrange
 #' @importFrom hash       keys hash
@@ -97,16 +98,9 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
 
       reordered_colnames <- c(key,
                               colnames(df[!colnames(df) %in% key]))
-
-      args <- list(df)
-      i <- 2
-      while(i<length(key)+2) {
-        args[[i]] <- df[[(key[[i-1]])]]
-        i <- i + 1
-      }
       
       if (sortbykey) {
-        df <- do.call(arrange, args)  # sort by key values
+        df <- setorderv(arrange, key)  # sort by key values
       }           
 
       df <- df[reordered_colnames]
