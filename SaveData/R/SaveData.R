@@ -100,7 +100,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
                               colnames(df[!colnames(df) %in% key]))
       
       if (sortbykey) {
-        df <- setorderv(arrange, key)  # sort by key values
+        df <- setorderv(df, key)  # sort by key values
       }           
 
       df <- df[reordered_colnames]
