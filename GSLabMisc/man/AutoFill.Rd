@@ -20,3 +20,9 @@ AutoFill(commandname, content, outfile, mode = "math", appendmode = FALSE)
 \description{
 Export content as TeX macro.
 }
+\examples{
+AutoFill(commandname = "pValue", content = "0.0003", "pvalue.tex", mode = "math")
+
+#If you would like to export in text mode:
+AutoFill(commandname = "SampleStart", content = "January 2010", "samplestart.tex", mode = "text")
+}
