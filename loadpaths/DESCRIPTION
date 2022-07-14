@@ -3,7 +3,7 @@ Title: Load Paths and Sumamrize Text Files
 Version: 1.0.1
 Authors@R: c(
   person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre")), 
-  person("Jesse", "Shapiro", email = "jesse_shapiro_1@brown.edu", role = c("aut"))
+  person("Jesse", "Shapiro", email = "jesse_shapiro@fas.harvard.edu", role = c("aut"))
   )
 Description: Contains two functions for loading paths. Use loadPaths to add the contents from all instances containing "^PATHS", from Sys.getenv(). Use loadPathsDirect to ad contents from specified paths.txt files. Use checksum to summarize datasets stored in pipe-delimited text files.
 Depends: 

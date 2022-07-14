@@ -3,7 +3,7 @@ Title: Numerical Derivatives Calculation
 Version: 0.1.0
 Authors@R: c(
   person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre")), 
-  person("Jesse", "Shapiro", email = "jesse_shapiro_1@brown.edu", role = c("aut"))
+  person("Jesse", "Shapiro", email = "jesse_shapiro@fas.harvard.edu", role = c("aut"))
   )
 Description: Functions to numerically calculate Jacobian and Hessian matrices.
 Depends: R (>= 3.3.2)

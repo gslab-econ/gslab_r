@@ -1,0 +1,15 @@
+Package: GSLabMisc
+Title: GSLab Helper Functions
+Version: 0.0.0.9000
+Authors@R: c(
+  person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre")), 
+  person("Jesse", "Shapiro", email = "jesse_shapiro@fas.harvard.edu", role = c("aut"))
+  )
+Description: Contains GSLab Helper Functions: AutoFill.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Suggests: 
+    testthat
