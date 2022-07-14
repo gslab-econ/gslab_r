@@ -36,6 +36,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
   colSD  <- function(data) sapply(data, sd, na.rm = TRUE)
   colMin <- function(data) sapply(data, min, na.rm = TRUE)
   colMax <- function(data) sapply(data, max, na.rm = TRUE)
+  reordered_colnames <- c(key, colnames(df[!colnames(df) %in% key]))
 
 
   DataDictionary <- function() {
@@ -74,7 +75,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     return(list("outfile" = outfile, "logfile" = logfile, "filetype" = filetype))
   }
 
-  CheckKey <- function(df, key) {        
+  CheckKey <- function(df, key, colname_order = reordered_colnames) {        
 
     if (!all(key %in% colnames(df))) {
 
@@ -95,9 +96,6 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
 
     } else {
 
-      reordered_colnames <- c(key,
-                              colnames(df[!colnames(df) %in% key]))
-
       args <- list(df)
       i <- 2
       while(i<length(key)+2) {
@@ -109,14 +107,15 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
         df <- do.call(arrange, args)  # sort by key values
       }           
 
-      df <- df[reordered_colnames]
+      df <- df[colname_order]
 
       return(df)
     }
   }
 
 
-  WriteLog <- function(df, key, outfile, logfile = NULL, appendlog = TRUE) {
+  WriteLog <- function(df, key, outfile, logfile = NULL, appendlog = TRUE,
+                       colname_order = reordered_colnames) {
 
     if (logfile == FALSE) return(NULL)
 
@@ -128,6 +127,8 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     all_sum <- as.data.frame(cbind(colSums(!is.na(df)), sapply(df, class)))
 
     sum <- merge(numeric_sum, all_sum, by="row.names", all = T)
+    
+    sum <- sum[match(colname_order, sum$Row.names),]
 
     names(sum) <- c("variable", "mean", "sd", "min", "max", "N", "type")
 
