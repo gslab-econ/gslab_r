@@ -3,7 +3,7 @@ Title: Save and Summarize Data
 Version: 0.0.0.9000
 Authors@R: c(
   person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre")), 
-  person("Jesse", "Shapiro", email = "jesse_shapiro_1@brown.edu", role = c("aut"))
+  person("Jesse", "Shapiro", email = "jesse_shapiro@fas.harvard.edu", role = c("aut"))
   )
 Description: Contains one function to save and summarize data. Use SaveData to save to standard formats and create a log file that summarizes the saved data. The log file gives standard summary statistics for numerical variables and displays variable types for all variables.
 Depends: 
