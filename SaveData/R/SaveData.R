@@ -26,6 +26,7 @@
 #'
 #' @importFrom data.table fwrite
 #' @importFrom data.table setorderv
+#' @importFrom data.table setDT
 #' @importFrom digest     digest
 #' @importFrom dplyr      arrange
 #' @importFrom hash       keys hash
@@ -98,7 +99,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     } else {
       
       if (sortbykey) {
-        df <- setorderv(df, key)  # sort by key values
+        setorderv(df, key)  # sort by key values
       }           
 
       df <- df[colname_order]
@@ -126,6 +127,8 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
 
     names(sum) <- c("variable", "mean", "sd", "min", "max", "N", "type")
 
+    row.names(sum) <- NULL
+
     hash <- digest(df, algo="md5")
 
     if (file.exists(logfile) & appendlog) cat('\n', file = logfile, append=T)
@@ -140,6 +143,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
   }
 
   WriteData <- function(df, outfile, filetype, h) {
+    data.table::setDT(df)
 
     do.call(h[[filetype]][1], list(df, eval(parse(text=h[[filetype]][2]))))
 

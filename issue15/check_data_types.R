@@ -1,5 +1,6 @@
 remove(list=ls())
-library(SaveData)
+#library(SaveData)
+
 
 set.seed(0)
 
