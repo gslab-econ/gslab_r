@@ -143,7 +143,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
   }
 
   WriteData <- function(df, outfile, filetype, h) {
-    data.table::setDT(df)
+    setDT(df)
 
     do.call(h[[filetype]][1], list(df, eval(parse(text=h[[filetype]][2]))))
 

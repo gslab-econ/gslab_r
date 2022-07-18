@@ -1,7 +1,8 @@
 remove(list=ls())
 #library(SaveData)
-
-
+#devtools::load_all()
+#devtools::test()
+#devtools::document()
 set.seed(0)
 
 n <- 10000
