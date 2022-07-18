@@ -154,7 +154,6 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
   h <- DataDictionary()
   files <- CheckExtension(outfile, h, logfile)
 
-  df <- as.data.frame(df)
   df <- CheckKey(df, key)
   WriteLog(df, key, files$outfile, files$logfile, appendlog)
   WriteData(df, files$outfile, files$filetype, h)
