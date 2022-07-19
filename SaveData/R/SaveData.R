@@ -25,6 +25,8 @@
 #' }
 #'
 #' @importFrom data.table fwrite
+#' @importFrom data.table setorderv
+#' @importFrom data.table setDT
 #' @importFrom digest     digest
 #' @importFrom dplyr      arrange
 #' @importFrom hash       keys hash
@@ -95,16 +97,9 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
       stop("KeyError: Key variables do not uniquely identify observations.")
 
     } else {
-
-      args <- list(df)
-      i <- 2
-      while(i<length(key)+2) {
-        args[[i]] <- df[[(key[[i-1]])]]
-        i <- i + 1
-      }
       
       if (sortbykey) {
-        df <- do.call(arrange, args)  # sort by key values
+        setorderv(df, key)  # sort by key values
       }           
 
       df <- df[colname_order]
@@ -132,6 +127,8 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
 
     names(sum) <- c("variable", "mean", "sd", "min", "max", "N", "type")
 
+    row.names(sum) <- NULL
+
     hash <- digest(df, algo="md5")
 
     if (file.exists(logfile) & appendlog) cat('\n', file = logfile, append=T)
@@ -146,6 +143,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
   }
 
   WriteData <- function(df, outfile, filetype, h) {
+    setDT(df)
 
     do.call(h[[filetype]][1], list(df, eval(parse(text=h[[filetype]][2]))))
 
@@ -156,7 +154,6 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
   h <- DataDictionary()
   files <- CheckExtension(outfile, h, logfile)
 
-  df <- as.data.frame(df)
   df <- CheckKey(df, key)
   WriteLog(df, key, files$outfile, files$logfile, appendlog)
   WriteData(df, files$outfile, files$filetype, h)
