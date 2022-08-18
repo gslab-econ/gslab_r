@@ -25,8 +25,8 @@
 #' @param scale_yvar Whether to recenter partialed means of `y_var` (boolean).
 #' @param tab_path Path to output the regression table (string).
 #' @param plot_path Path to save the binned scatter plot (string).
-#' @param plot_xlab X-axis title for the binned scatter plot (string, default it `x_var`).
-#' @param plot_ylab Y-axis title for the binned scatter plot (string, default it `y_var`).
+#' @param plot_xlab X-axis title for the binned scatter plot (string, default is `x_var`).
+#' @param plot_ylab Y-axis title for the binned scatter plot (string, default is `y_var`).
 #' @param plot_xlim Range of x-axis for the binned scatter plot (Null or c(`min`,`max`), default is 
 #' ggplot default).
 #' @param plot_ylim Range of y-axis for the binned scatter plot (Null or c(`min`,`max`), default is 
