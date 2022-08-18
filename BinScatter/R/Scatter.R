@@ -55,8 +55,22 @@ Scatter <- function(data, y_var, x_var, linpartial_var = NULL, binpartial_var = 
                        plot_xlab = NULL, plot_ylab = NULL, plot_xlim = NULL, plot_ylim = NULL,
                        axis_title_x_size = 20, axis_title_y_size = 20, axis_text_size = 15) {
   
-  ## Clean data
-  data   <- data %>% clean_data(y_var, x_var, linpartial_var, binpartial_var, factor_var, dropNA)
+  
+  ## Drop NAs in `y_var`, `x_var`, `linpartial_var`, and ` binpartial_var`
+  data <- data %>% as.data.frame()
+  data <- data[, all_of(c(y_var, x_var, linpartial_var, binpartial_var, factor_var))]
+  nRaw <- nrow(data)
+  data <- data %>% drop_na() 
+  nNA  <- nRaw - nrow(data)
+  
+  if (nNA > 0) {
+    if (dropNA) { 
+      warning(sprintf("%s observations dropped due to missing value.", nNA)) 
+    } else {
+      stop("Missing values present. Set dropNA == TRUE to overide")
+    }
+  }
+  data <- data
   df_reg <- data %>% select(eval(y_var))
   
   ## Create bin indicators and bin centers for `x_var`
@@ -99,86 +113,6 @@ Scatter <- function(data, y_var, x_var, linpartial_var = NULL, binpartial_var = 
   return(df_plot)
 }
 
-
-
-## Drop NAs in `y_var`, `x_var`, `linpartial_var`, and ` binpartial_var`
-clean_data <- function(data, y_var, x_var, linpartial_var, binpartial_var, factor_var, dropNA) {
-  
-  data <- data %>% as.data.frame()
-  data <- data[, all_of(c(y_var, x_var, linpartial_var, binpartial_var, factor_var))]
-  nRaw <- nrow(data)
-  data <- data %>% drop_na() 
-  nNA  <- nRaw - nrow(data)
-  
-  if (nNA > 0) {
-    if (dropNA) { 
-      warning(sprintf("%s observations dropped due to missing value.", nNA)) 
-    } else {
-      stop("Missing values present. Set dropNA == TRUE to overide")
-    }
-  }
-  
-  return(data)
-}
-
-
-## Generate bin indicators for arbitrary RHS varaible
-make_bin_indicator <- function(var, data, nBins, binType, intercept, is_xvar = FALSE) {
-  
-  if (binType == "uniform") {
-    tempBinType <- "explicit"
-  } else if (binType == "quantile") {
-    tempBinType <- "quantile"
-  } else {
-    stop(sprintf("binType for %s must be uniform or quantile", var))
-  }
-  
-  # Create a data frame of bin indicators
-  vals           <- data[, eval(var)] %>% as.numeric()
-  bins           <- bin_data(vals, bins = nBins, binType = tempBinType) %>% factor(order = FALSE)
-  df_bins        <- data.table(bins) %>% one_hot()
-  names(df_bins) <- paste0(var, "_bin_", c(1:nBins))
-  
-  if (intercept) {
-    df_bins        <- df_bins[, 2:nBins]
-    names(df_bins) <- paste0(var, "_bin_", c(2:nBins))
-  }
-  
-  # Return additionally bin centers for the `x_var`
-  if (is_xvar) {
-    if (binType == "uniform") {
-      bin_center <- sapply(unique(bins), midpoint) %>% sort()
-    } else if (binType == "quantile") {
-      bin_center <- sapply(unique(bins), meanval, vals) %>% sort()
-    }
-    return(list(indicator = df_bins, center = bin_center))
-  } else {
-    return(df_bins)
-  }
-  
-}
-
-# Get midpoint of an interval (bin center for `binType` == "uniform")
-midpoint <- function(interval) {
-  
-  interval <- as.character(interval) %>% str_sub(2,-2)
-  start    <- str_split(interval, ", ")[[1]][1] %>% as.numeric()
-  end      <- str_split(interval, ", ")[[1]][2] %>% as.numeric()
-  midpoint <- 0.5 * ( start + end )
-  
-  return(midpoint)
-}
-
-# Get mean of `x_var` in an interval (bin center for `binType` == "quantile")
-meanval <- function(interval, vals) {
-  
-  interval <- as.character(interval) %>% str_sub(2,-2)
-  start    <- str_split(interval, ", ")[[1]][1] %>% as.numeric()
-  end      <- str_split(interval, ", ")[[1]][2] %>% as.numeric()
-  meanval  <- vals[start <= vals & vals < end] %>% mean()
-  
-  return(meanval)
-}
 
 
 ## Calculate partialed means (and std. err.) of `y_var` on bins of `x_var`
