@@ -177,7 +177,7 @@ BinScatter <- function(data, y_var, x_var, linpartial_var = NULL, binpartial_var
   if (!is.null(binpartial_var)) {
     
     if (is.null(nPartialBins))   { nPartialBins <- nBins }
-    if (is.null(partialBinType)) { partialBinType <- binType}
+    if (is.null(partialBinType)) { partialBinType <- binType }
     
     df_reg <- cbind(df_reg, lapply(c(binpartial_var), make_bin_indicator, data, nPartialBins, 
                                    partialBinType, intercept) %>% reduce(cbind))
