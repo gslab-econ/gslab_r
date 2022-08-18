@@ -14,7 +14,7 @@
 #' observations in each bin.
 #' @param nPartialBins Number of bins for variables in `binpartial_var` (integer, default is `nBins`).
 #' @param partialBinType Method to create bins for variables in `binpartial_var` ("uniform" or 
-#' "quantile", defualt is `binType`).
+#' "quantile", default is `binType`).
 #' @param intercept Whether an intercept is included in the regression (boolean).
 #' @param ci Whether to include confidence intervals and confidence level (NULL or numeric in (0,1)). 
 #' If not NULL, std. err. of the partialed means of `y_var` will be returned in the output dataframe. 
