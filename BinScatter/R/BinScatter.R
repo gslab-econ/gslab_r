@@ -166,7 +166,7 @@ BinScatter <- function(data, y_var, x_var, linpartial_var = NULL, binpartial_var
     }
   }
   
-  df_reg <- data %>% select(eval(y_var))
+  df_reg <- data %>% dplyr::select(eval(y_var))
   
   ## Create bin indicators for `x_var`
   xbins  <- make_bin_indicator(x_var, data, nBins, binType, intercept, is_xvar = TRUE)
