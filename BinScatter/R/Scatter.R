@@ -91,7 +91,6 @@ Scatter <- function(data, y_var, x_var, linpartial_var = NULL, binpartial_var = 
   
   ## Calculate partialed means (and std. err.) for `y_var` (and recenter)
   df_reg         <- data[, all_of(c(linpartial_var, factor_var))] %>% cbind(df_reg, .)
-    
   df_reg   <- df_reg %>% drop_na()
   model    <- sprintf("%s ~ %s - 1", y_var, paste0(names(df_reg)[-1], collapse = " + "))
   coef     <- names(df_reg)[2:(1+nBins)]
@@ -115,12 +114,8 @@ Scatter <- function(data, y_var, x_var, linpartial_var = NULL, binpartial_var = 
     print(reg_sum)
     cat("Observations:", nobs(reg))
     sink()
-    
   }
-  
   partialed_mean <- list(mean = y_mean, se = y_se)
-  
-  
   y_vals         <- partialed_mean[["mean"]]
   
   if (scale_yvar) { y_vals <- y_vals + ( mean( data[,eval(y_var)] ) - mean( y_vals ) ) }
@@ -137,32 +132,25 @@ Scatter <- function(data, y_var, x_var, linpartial_var = NULL, binpartial_var = 
   }
   
   # Make and save plot
-  if (plot) { df_plot %>% make_plot(ci, plot_name, plot_path, plot_xlab, plot_ylab, x_var, y_var, plot_xlim, plot_ylim, axis_title_x_size, axis_title_y_size, axis_text_size, color, shape, fill) }
+  if (plot) {
+    
+    if (is.null(plot_name) | is.null(plot_path)) { stop("Name/path of plot unspecified.") }
+    if (is.null(plot_xlab)) { plot_xlab <- x_var}
+    if (is.null(plot_xlab)) { plot_ylab <- y_var}
+    
+    plot <- ggplot(df_plot, aes(x = x_vals, y = y_vals)) +
+      geom_point(size = 5, color = color, shape = shape, fill = fill) + 
+      labs(x = plot_xlab, y = plot_ylab) +
+      theme_bw() +
+      {if (!is.null(ci)) geom_errorbar(aes(ymin = y_low, ymax = y_up))} +
+      {if (!is.null(plot_xlim)) scale_x_continuous(limits = plot_xlim) } +
+      {if (!is.null(plot_ylim)) scale_y_continuous(limits = plot_ylim) } + 
+      theme(axis.title.x = element_text(size = axis_title_x_size),
+            axis.title.y = element_text(size = axis_title_y_size),
+            axis.text = element_text(size = axis_text_size))
+    
+    ggsave(sprintf('%s/%s.pdf', plot_path, plot_name), width = 7.2, height = 7, units = "in")    
+  }
   
   return(df_plot)
 }
-
-## Make biined scatter plot
-make_plot <- function(df_plot, ci, plot_name, plot_path, plot_xlab, plot_ylab, x_var, y_var, plot_xlim, plot_ylim, 
-                      axis_title_x_size, axis_title_y_size, axis_text_size, color, shape, fill) {
-  
-  if (is.null(plot_name) | is.null(plot_path)) { stop("Name/path of plot unspecified.") }
-  if (is.null(plot_xlab)) { plot_xlab <- x_var}
-  if (is.null(plot_xlab)) { plot_ylab <- y_var}
-  
-  plot <- ggplot(df_plot, aes(x = x_vals, y = y_vals)) +
-    geom_point(size = 5, color = color, shape = shape, fill = fill) + 
-    labs(x = plot_xlab, y = plot_ylab) +
-    theme_bw() +
-    {if (!is.null(ci)) geom_errorbar(aes(ymin = y_low, ymax = y_up))} +
-    {if (!is.null(plot_xlim)) scale_x_continuous(limits = plot_xlim) } +
-    {if (!is.null(plot_ylim)) scale_y_continuous(limits = plot_ylim) } + 
-    theme(axis.title.x = element_text(size = axis_title_x_size),
-          axis.title.y = element_text(size = axis_title_y_size),
-          axis.text = element_text(size = axis_text_size))
-  
-  ggsave(sprintf('%s/%s.pdf', plot_path, plot_name), width = 7.2, height = 7, units = "in")
-  
-  return(NULL)
-}
-
