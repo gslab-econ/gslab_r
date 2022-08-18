@@ -91,33 +91,7 @@ Scatter <- function(data, y_var, x_var, linpartial_var = NULL, binpartial_var = 
   
   ## Calculate partialed means (and std. err.) for `y_var` (and recenter)
   df_reg         <- data[, all_of(c(linpartial_var, factor_var))] %>% cbind(df_reg, .)
-  partialed_mean <- calc_partialed_mean(df_reg, y_var, nBins, intercept, reg_tab, tab_name, tab_path)
-  y_vals         <- partialed_mean[["mean"]]
-  
-  if (scale_yvar) { y_vals <- y_vals + ( mean( data[,eval(y_var)] ) - mean( y_vals ) ) }
-  
-  ## Make output data frame for plot
-  df_plot <- cbind(y_vals, x_vals) %>% as.data.frame()
-  if (!is.null(ci)) {
-    if (!is.numeric(ci) | ci <= 0 | ci >= 1) {
-      ci <- 0.95
-      warning("ci is not numeric or outside (0,1), set to 0.95")
-    }
-    df_plot$y_low <- y_vals + qnorm( (1-ci)/2 ) * partialed_mean[["se"]]
-    df_plot$y_up  <- y_vals - qnorm( (1-ci)/2 ) * partialed_mean[["se"]]
-  }
-  
-  # Make and save plot
-  if (plot) { df_plot %>% make_plot(ci, plot_name, plot_path, plot_xlab, plot_ylab, x_var, y_var, plot_xlim, plot_ylim, axis_title_x_size, axis_title_y_size, axis_text_size, color, shape, fill) }
-  
-  return(df_plot)
-}
-
-
-
-## Calculate partialed means (and std. err.) of `y_var` on bins of `x_var`
-calc_partialed_mean <- function(df_reg, y_var, nBins, intercept, reg_tab, tab_name, tab_path) {
-  
+    
   df_reg   <- df_reg %>% drop_na()
   model    <- sprintf("%s ~ %s - 1", y_var, paste0(names(df_reg)[-1], collapse = " + "))
   coef     <- names(df_reg)[2:(1+nBins)]
@@ -144,7 +118,28 @@ calc_partialed_mean <- function(df_reg, y_var, nBins, intercept, reg_tab, tab_na
     
   }
   
-  return(list(mean = y_mean, se = y_se))
+  partialed_mean <- list(mean = y_mean, se = y_se)
+  
+  
+  y_vals         <- partialed_mean[["mean"]]
+  
+  if (scale_yvar) { y_vals <- y_vals + ( mean( data[,eval(y_var)] ) - mean( y_vals ) ) }
+  
+  ## Make output data frame for plot
+  df_plot <- cbind(y_vals, x_vals) %>% as.data.frame()
+  if (!is.null(ci)) {
+    if (!is.numeric(ci) | ci <= 0 | ci >= 1) {
+      ci <- 0.95
+      warning("ci is not numeric or outside (0,1), set to 0.95")
+    }
+    df_plot$y_low <- y_vals + qnorm( (1-ci)/2 ) * partialed_mean[["se"]]
+    df_plot$y_up  <- y_vals - qnorm( (1-ci)/2 ) * partialed_mean[["se"]]
+  }
+  
+  # Make and save plot
+  if (plot) { df_plot %>% make_plot(ci, plot_name, plot_path, plot_xlab, plot_ylab, x_var, y_var, plot_xlim, plot_ylim, axis_title_x_size, axis_title_y_size, axis_text_size, color, shape, fill) }
+  
+  return(df_plot)
 }
 
 ## Make biined scatter plot
