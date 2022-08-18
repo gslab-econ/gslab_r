@@ -14,7 +14,7 @@
 #' observations in each bin.
 #' @param nPartialBins Number of bins for variables in `binpartial_var` (integer, default is `nBins`).
 #' @param partialBinType Method to create bins for variables in `binpartial_var` ("uniform" or 
-#' "quantile", defualt is `binType`).
+#' "quantile", default is `binType`).
 #' @param intercept Whether an intercept is included in the regression (boolean).
 #' @param ci Whether to include confidence intervals and confidence level (NULL or numeric in (0,1)). 
 #' If not NULL, std. err. of the partialed means of `y_var` will be returned in the output dataframe. 
@@ -25,8 +25,8 @@
 #' @param scale_yvar Whether to recenter partialed means of `y_var` (boolean).
 #' @param tab_path Path to output the regression table (string).
 #' @param plot_path Path to save the binned scatter plot (string).
-#' @param plot_xlab X-axis title for the binned scatter plot (string, default it `x_var`).
-#' @param plot_ylab Y-axis title for the binned scatter plot (string, default it `y_var`).
+#' @param plot_xlab X-axis title for the binned scatter plot (string, default is `x_var`).
+#' @param plot_ylab Y-axis title for the binned scatter plot (string, default is `y_var`).
 #' @param plot_xlim Range of x-axis for the binned scatter plot (Null or c(`min`,`max`), default is 
 #' ggplot default).
 #' @param plot_ylim Range of y-axis for the binned scatter plot (Null or c(`min`,`max`), default is 
@@ -166,7 +166,7 @@ BinScatter <- function(data, y_var, x_var, linpartial_var = NULL, binpartial_var
     }
   }
   
-  df_reg <- data %>% select(eval(y_var))
+  df_reg <- data %>% dplyr::select(eval(y_var))
   
   ## Create bin indicators for `x_var`
   xbins  <- make_bin_indicator(x_var, data, nBins, binType, intercept, is_xvar = TRUE)
@@ -177,7 +177,7 @@ BinScatter <- function(data, y_var, x_var, linpartial_var = NULL, binpartial_var
   if (!is.null(binpartial_var)) {
     
     if (is.null(nPartialBins))   { nPartialBins <- nBins }
-    if (is.null(partialBinType)) { partialBinType <- binType}
+    if (is.null(partialBinType)) { partialBinType <- binType }
     
     df_reg <- cbind(df_reg, lapply(c(binpartial_var), make_bin_indicator, data, nPartialBins, 
                                    partialBinType, intercept) %>% reduce(cbind))
@@ -235,8 +235,8 @@ BinScatter <- function(data, y_var, x_var, linpartial_var = NULL, binpartial_var
     df_plot$y_up  <- y_vals - qnorm( (1-ci)/2 ) * partialed_mean[["se"]]
   }
  
-  if (is.null(plot_xlab)) { plot_xlab <- x_var}
-  if (is.null(plot_ylab)) { plot_ylab <- y_var}
+  if (is.null(plot_xlab)) { plot_xlab <- x_var }
+  if (is.null(plot_ylab)) { plot_ylab <- y_var }
   
   plot <- ggplot(df_plot, aes(x = x_vals, y = y_vals)) +
     geom_point(size = point_size, color = point_color, shape = point_shape, fill = point_fill) + 
