@@ -37,7 +37,8 @@
 #' ggplot default)
 #' @param plot_ylim Range of y-axis for the binned scatter plot (Null or c(`min`,`max`), default is 
 #' ggplot default)
-#' 
+#' @param min_obs Minimum number of observations per bin for `x_var`
+#' @param partial_min_obs Minimum number of observations per bin for variables in `binpartial_var`
 #' @import dplyr
 #' @import tidyverse
 #' @import ggplot2
@@ -53,7 +54,7 @@ Scatter <- function(data, y_var, x_var, linpartial_var = NULL, binpartial_var = 
                        plot = TRUE, plot_name = NULL, plot_path = NULL, 
                        color = "black", shape = 16, fill = "black",
                        plot_xlab = NULL, plot_ylab = NULL, plot_xlim = NULL, plot_ylim = NULL,
-                       axis_title_x_size = 20, axis_title_y_size = 20, axis_text_size = 15) {
+                       axis_title_x_size = 20, axis_title_y_size = 20, axis_text_size = 15, min_obs = 10, partial_min_obs = NULL) {
   
   
   ## Drop NAs in `y_var`, `x_var`, `linpartial_var`, and ` binpartial_var`
@@ -74,7 +75,7 @@ Scatter <- function(data, y_var, x_var, linpartial_var = NULL, binpartial_var = 
   df_reg <- data %>% select(eval(y_var))
   
   ## Create bin indicators and bin centers for `x_var`
-  xbins  <- make_bin_indicator(x_var, data, nBins, binType, intercept, is_xvar = TRUE)
+  xbins  <- MakeBinIndicator(x_var, data, nBins, binType, intercept, min_obs, is_xvar = TRUE)
   x_vals <- xbins[["center"]]
   df_reg <- xbins[["indicator"]] %>% cbind(df_reg, .)
   
@@ -83,8 +84,9 @@ Scatter <- function(data, y_var, x_var, linpartial_var = NULL, binpartial_var = 
     
     if (is.null(nPartialBins))   { nPartialBins <- nBins }
     if (is.null(partialBinType)) { partialBinType <- binType}
+    if (is.null(partial_min_obs)) { partial_min_obs <- min_obs }
     
-    df_reg <- lapply(c(binpartial_var), make_bin_indicator, data, nPartialBins, partialBinType, intercept) %>% 
+    df_reg <- lapply(c(binpartial_var), MakeBinIndicator, data, nPartialBins, partialBinType, partial_min_obs, intercept) %>% 
       reduce(cbind) %>%
       cbind(df_reg, .)
   }
