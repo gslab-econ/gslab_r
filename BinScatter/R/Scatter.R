@@ -142,8 +142,8 @@ Scatter <- function(data, y_var, x_var, linpartial_var = NULL, binpartial_var = 
   # Make and save plot
   if (!is.null(plot_path)) {
     
-    if (is.null(plot_xlab)) { plot_xlab <- x_var}
-    if (is.null(plot_xlab)) { plot_ylab <- y_var}
+    if (is.null(plot_xlab)) { plot_xlab <- x_var }
+    if (is.null(plot_ylab)) { plot_ylab <- y_var }
     
     plot <- ggplot(df_plot, aes(x = x_vals, y = y_vals)) +
       geom_point(size = point_size, color = point_color, shape = point_shape, fill = point_fill) + 

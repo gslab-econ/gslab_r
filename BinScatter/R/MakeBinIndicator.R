@@ -37,9 +37,9 @@ MakeBinIndicator <- function(var, data, nBins, binType, intercept, min_obs, is_x
   # Return additionally bin centers for the `x_var`
   if (is_xvar) {
     if (binType == "uniform") {
-      bin_center <- sapply(unique(bins), getMidpoint) %>% sort()
+      bin_center <- sapply(unique(bins), GetMidpoint) %>% sort()
     } else if (binType == "quantile") {
-      bin_center <- sapply(unique(bins), getMeanval, vals) %>% sort()
+      bin_center <- sapply(unique(bins), GetMeanVal, vals) %>% sort()
     }
     return(list(indicator = df_bins, center = bin_center))
   } else {

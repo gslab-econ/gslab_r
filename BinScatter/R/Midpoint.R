@@ -1,16 +1,15 @@
-#' Get mean of `x_var` in an interval 
+#' Get midpoint of an interval
 #' 
 #' @param interval Interval
-#' @param vals Values
 #' @import tidyr
 
 
-getMeanval <- function(interval, vals) {
+GetMidpoint <- function(interval) {
   
   interval <- as.character(interval) %>% str_sub(2,-2)
   start    <- str_split(interval, ", ")[[1]][1] %>% as.numeric()
   end      <- str_split(interval, ", ")[[1]][2] %>% as.numeric()
-  meanval  <- vals[start <= vals & vals < end] %>% mean()
+  midpoint <- 0.5 * ( start + end )
   
-  return(meanval)
+  return(midpoint)
 }
