@@ -10,14 +10,16 @@ BinScatter(
   x_var,
   linpartial_var = NULL,
   binpartial_var = NULL,
-  nBins = 20,
-  binType = "quantile",
-  nPartialBins = NULL,
-  partialBinType = NULL,
+  n_bins = 20,
+  bin_type = "quantile",
+  n_partial_bins = NULL,
+  partial_bin_type = NULL,
+  min_obs = 10,
+  min_partial_obs = NULL,
   intercept = FALSE,
   ci = NULL,
-  dropNA = TRUE,
-  scale_yvar = TRUE,
+  drop_na = TRUE,
+  recenter = TRUE,
   tab_path = NULL,
   plot_path = NULL,
   plot_xlab = NULL,
@@ -25,16 +27,16 @@ BinScatter(
   plot_xlim = NULL,
   plot_ylim = NULL,
   point_color = "black",
-  point_shape = 16,
-  point_fill = "black",
-  point_size = 1,
-  bar_width = 0.1,
-  bar_size = 0.1,
+  point_fill = NA,
+  point_shape = 19,
+  point_size = 1.5,
+  bar_width = 0.5,
+  bar_size = 0.5,
   fig_width = 7,
   fig_height = 7,
-  axis_title_x_size = 20,
-  axis_title_y_size = 20,
-  axis_text_size = 15
+  axis_title_x_size = NULL,
+  axis_title_y_size = NULL,
+  axis_text_size = NULL
 )
 }
 \arguments{
@@ -45,54 +47,68 @@ BinScatter(
 \item{x_var}{Name of RHS variable to appear on the x-axis (string).}
 
 \item{linpartial_var}{Name(s) of RHS variable(s) to partial \code{x_var} on linearly (NULL, string, or
-list of strings). Note: categorical variables need to be one-hot coded, and are otherwise assumed
-continuous.}
+list of strings).
+\itemize{
+\item Note: categorical variables need to be one-hot coded, and are otherwise assumed continuous.
+}}
 
 \item{binpartial_var}{Name(s) of RHS variable(s) to partial \code{x_var} on with bins (NULL, string, or
 list of strings).}
 
-\item{nBins}{Number of bins for \code{x_var} (integer).}
+\item{n_bins}{Number of bins for \code{x_var} (integer).}
 
-\item{binType}{Method to create bins for \code{x_var} ("uniform" or "quantile"). "uniform" bins are
-equally spaced over the support of \code{x_var}. "quantile" bins have approximately the same number of
-observations in each bin.}
+\item{bin_type}{Method to create bins for \code{x_var} ("uniform" or "quantile")
+\itemize{
+\item "uniform" bins are equally spaced over the support of \code{x_var}.
+\item "quantile" bins have approximately the same number of observations in each bin.
+}}
 
-\item{nPartialBins}{Number of bins for variables in \code{binpartial_var} (integer, default is \code{nBins}).}
+\item{n_partial_bins}{Number of bins for variables in \code{binpartial_var} (integer, default is \code{n_bins}).}
 
-\item{partialBinType}{Method to create bins for variables in \code{binpartial_var} ("uniform" or
-"quantile", defualt is \code{binType}).}
+\item{partial_bin_type}{Method to create bins for variables in \code{binpartial_var} ("uniform" or
+"quantile", default is \code{bin_type}).}
+
+\item{min_obs}{Minimum number of observations per bin for \code{x_var} (integer, default is 10).}
+
+\item{min_partial_obs}{Minimum number of observations per bin for variables in \code{binpartial_var}
+(integer, default is \code{min_obs}).}
 
 \item{intercept}{Whether an intercept is included in the regression (boolean).}
 
 \item{ci}{Whether to include confidence intervals and confidence level (NULL or numeric in (0,1)).
-If not NULL, std. err. of the partialed means of \code{y_var} will be returned in the output dataframe.
-If specified but non-numeric or out of range, the default confidence level is 95\%.}
+\itemize{
+\item If not NULL, std. err. of the partialed means of \code{y_var} will be returned in the output dataframe.
+\item If specified but non-numeric or out of range, the default confidence level is 0.95.
+}}
 
-\item{dropNA}{Whether to drop observations with NA in \code{x_var}, \code{y_var}, \code{linpartial_var}, and
-\code{binpartial_var} (boolean). If TRUE, NA will be dropped automatically with a warning message. If
-FALSE, returns an error if NA is detected.}
+\item{drop_na}{Whether to drop observations with NA in \code{x_var}, \code{y_var}, \code{linpartial_var}, and
+\code{binpartial_var} (boolean).
+\itemize{
+\item If \code{TRUE}, \code{NA} will be dropped automatically with a warning message.
+\item If \code{FALSE}, returns an error if \code{NA} is detected.
+}}
 
-\item{scale_yvar}{Whether to recenter partialed means of \code{y_var} (boolean).}
+\item{recenter}{Whether to recenter partialed means of \code{y_var} (boolean).}
 
 \item{tab_path}{Path to output the regression table (string).}
 
 \item{plot_path}{Path to save the binned scatter plot (string).}
 
-\item{plot_xlab}{X-axis title for the binned scatter plot (string, default it \code{x_var}).}
+\item{plot_xlab}{X-axis title for the binned scatter plot (string, default is \code{x_var}).}
 
-\item{plot_ylab}{Y-axis title for the binned scatter plot (string, default it \code{y_var}).}
+\item{plot_ylab}{Y-axis title for the binned scatter plot (string, default is \code{y_var}).}
 
-\item{plot_xlim}{Range of x-axis for the binned scatter plot (Null or c(\code{min},\code{max}), default is
+\item{plot_xlim}{Range of x-axis for the binned scatter plot (\code{c(min, max)}, default is
 ggplot default).}
 
-\item{plot_ylim}{Range of y-axis for the binned scatter plot (Null or c(\code{min},\code{max}), default is
+\item{plot_ylim}{Range of y-axis for the binned scatter plot (\code{c(min, max)}, default is
 ggplot default).}
 
 \item{point_color}{Color aesthetic to be used with \code{geom_point()}.}
 
-\item{point_shape}{Shape aesthetic to be used with \code{geom_point()}.}
-
 \item{point_fill}{Fill aesthetic to be used with \code{geom_point()}.}
+
+\item{point_shape}{Shape aesthetic to be used with \code{geom_point()}.}
 
 \item{point_size}{Size aesthetic to be used with \code{geom_point()}.}
 
@@ -100,9 +116,9 @@ ggplot default).}
 
 \item{bar_size}{Size aesthetic to be used with \code{geom_errorbar()}.}
 
-\item{fig_width}{Plot width.}
+\item{fig_width}{Plot width in inches (numeric).}
 
-\item{fig_height}{Plot height.}
+\item{fig_height}{Plot height in inches (numeric).}
 
 \item{axis_title_x_size}{Text size for x-axis labels.}
 
@@ -110,28 +126,6 @@ ggplot default).}
 
 \item{axis_text_size}{Text size for tick labels along axes.}
 }
-\value{
-A list containing the regression summary in the first position and the \code{ggplot} scatter
-plot in the second position.
-}
 \description{
 Make data for a binned scatter plot and produce it.
-}
-\examples{
-library(MASS)
-library(magrittr)
-library(dplyr)
-
-n <- 10000
-R <- matrix(c(1, 0.9,
-              0.9, 1),
-            nrow = 2, ncol = 2, byrow = TRUE)
-mu <- c(X = 0, Z = 0)
-data <- MASS::mvrnorm(n, mu = mu, Sigma = R) \%>\%
-  as.data.frame() \%>\%
-  mutate(Y_l = X + Z) \%>\%
-  mutate(Y_nl = sin(2 * X) + Z)
-  
-BinScatter(data = data, x_var = "X", y_var = "Y_nl", binpartial_var = "Z", ci = 0.95)
-
 }

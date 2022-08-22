@@ -1,7 +1,7 @@
 #' Get midpoint of an interval
 #' 
 #' @param interval Interval
-#' @import tidyr
+#' @importFrom stringr str_split str_sub
 
 
 GetMidpoint <- function(interval) {

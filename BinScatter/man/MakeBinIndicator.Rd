@@ -7,10 +7,10 @@
 MakeBinIndicator(
   var,
   data,
-  nBins,
-  binType,
-  intercept,
+  n_bins,
+  bin_type,
   min_obs,
+  intercept,
   is_xvar = FALSE
 )
 }
@@ -19,13 +19,13 @@ MakeBinIndicator(
 
 \item{data}{Data}
 
-\item{nBins}{Number of bins}
+\item{n_bins}{Number of bins}
 
-\item{binType}{Type of bin}
-
-\item{intercept}{Boolean for intercept}
+\item{bin_type}{Type of bin}
 
 \item{min_obs}{Minimum number of observations per bin}
+
+\item{intercept}{Boolean for intercept}
 
 \item{is_xvar}{Boolean for whether \code{var} is \code{x_var}}
 }

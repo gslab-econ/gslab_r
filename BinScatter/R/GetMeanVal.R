@@ -2,7 +2,7 @@
 #' 
 #' @param interval Interval
 #' @param vals Values
-#' @import tidyr
+#' @importFrom stringr str_split
 
 
 GetMeanVal <- function(interval, vals) {
