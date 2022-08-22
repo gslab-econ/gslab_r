@@ -21,7 +21,8 @@ test_that("saves files", {
 
   BinScatter(data = test_data,
           x_var = "X",
-          y_var = "Y_nl")
+          y_var = "Y_nl",
+          linpartial_var = "Y_l")
   expect_false(file.exists("./non/existent/path.pdf"))
   expect_false(file.exists("./non/existent/path.txt"))
 
