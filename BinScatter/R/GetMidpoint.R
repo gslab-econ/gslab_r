@@ -1,6 +1,6 @@
 #' Get midpoint of an interval
 #' 
-#' @param interval Interval
+#' @param interval Interval to get the midpoint of (character).
 #' @importFrom stringr str_split str_sub
 
 

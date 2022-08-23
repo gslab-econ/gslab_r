@@ -2,15 +2,15 @@
 % Please edit documentation in R/GetMeanVal.R
 \name{GetMeanVal}
 \alias{GetMeanVal}
-\title{Get mean of \code{x_var} in an interval}
+\title{Get mean of \code{var} in an interval}
 \usage{
 GetMeanVal(interval, vals)
 }
 \arguments{
-\item{interval}{Interval}
+\item{interval}{Interval to get the mean of \code{var} on (character).}
 
-\item{vals}{Values}
+\item{vals}{Values of \code{var}.}
 }
 \description{
-Get mean of \code{x_var} in an interval
+Get mean of \code{var} in an interval
 }

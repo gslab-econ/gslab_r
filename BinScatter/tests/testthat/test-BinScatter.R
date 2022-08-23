@@ -1,7 +1,6 @@
 library(MASS)
 library(magrittr)
 library(dplyr)
-library(ggplot2)
 
 set.seed(123)
 n <- 10000
@@ -22,7 +21,7 @@ test_that("saves files", {
   BinScatter(data = test_data,
           x_var = "X",
           y_var = "Y_nl",
-          linpartial_var = "Y_l")
+          binpartial_var = c("Y_l", "X"))
   expect_false(file.exists("./non/existent/path.pdf"))
   expect_false(file.exists("./non/existent/path.txt"))
 
@@ -34,12 +33,6 @@ test_that("saves files", {
   expect_true(file.exists("./path.pdf"))
   expect_true(file.exists("./path.txt"))
 })
-
-
-test_that("accepts vector of variables", {
-  
-})
-
 
 test_that("enforces minimum observations per bin", {
   expect_error(
@@ -71,8 +64,8 @@ test_that("enforces minimum observations per bin", {
             min_obs = 5),
     NA
   )
-
 })
+
 test_that("sets correct level for confidence intervals", {
 
   code <- function(ci) {

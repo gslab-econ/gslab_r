@@ -7,7 +7,7 @@
 GetMidpoint(interval)
 }
 \arguments{
-\item{interval}{Interval}
+\item{interval}{Interval to get the midpoint of (character).}
 }
 \description{
 Get midpoint of an interval

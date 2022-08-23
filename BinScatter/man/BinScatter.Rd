@@ -30,30 +30,28 @@ BinScatter(
   point_fill = NA,
   point_shape = 19,
   point_size = 1.5,
-  bar_width = 0.5,
+  bar_width = 0.1,
   bar_size = 0.5,
-  fig_width = 7,
-  fig_height = 7,
   axis_title_x_size = NULL,
   axis_title_y_size = NULL,
-  axis_text_size = NULL
+  axis_text_size = NULL,
+  fig_width = 7,
+  fig_height = 7
 )
 }
 \arguments{
 \item{data}{Data frame for binned scatter plot.}
 
-\item{y_var}{Name of LHS variable to appear on the y-axis (string).}
+\item{y_var}{Name of LHS variable to appear on the y-axis (character).}
 
-\item{x_var}{Name of RHS variable to appear on the x-axis (string).}
+\item{x_var}{Name of RHS variable to appear on the x-axis (character).}
 
-\item{linpartial_var}{Name(s) of RHS variable(s) to partial \code{x_var} on linearly (NULL, string, or
-list of strings).
+\item{linpartial_var}{Names of RHS variables to partial \code{x_var} on linearly (character).
 \itemize{
 \item Note: categorical variables need to be one-hot coded, and are otherwise assumed continuous.
 }}
 
-\item{binpartial_var}{Name(s) of RHS variable(s) to partial \code{x_var} on with bins (NULL, string, or
-list of strings).}
+\item{binpartial_var}{Names of RHS variables to partial \code{x_var} on with bins (character).}
 
 \item{n_bins}{Number of bins for \code{x_var} (integer).}
 
@@ -63,7 +61,8 @@ list of strings).}
 \item "quantile" bins have approximately the same number of observations in each bin.
 }}
 
-\item{n_partial_bins}{Number of bins for variables in \code{binpartial_var} (integer, default is \code{n_bins}).}
+\item{n_partial_bins}{Number of bins for variables in \code{binpartial_var} (integer, default is
+\code{n_bins}).}
 
 \item{partial_bin_type}{Method to create bins for variables in \code{binpartial_var} ("uniform" or
 "quantile", default is \code{bin_type}).}
@@ -75,13 +74,14 @@ list of strings).}
 
 \item{intercept}{Whether an intercept is included in the regression (boolean).}
 
-\item{ci}{Whether to include confidence intervals and confidence level (NULL or numeric in (0,1)).
+\item{ci}{Whether to include confidence intervals (numeric in (0,1) specifying confidence level).
 \itemize{
-\item If not NULL, std. err. of the partialed means of \code{y_var} will be returned in the output dataframe.
+\item If not \code{NULL}, standard errors of the partialed means of \code{y_var} will be returned in the output
+dataframe.
 \item If specified but non-numeric or out of range, the default confidence level is 0.95.
 }}
 
-\item{drop_na}{Whether to drop observations with NA in \code{x_var}, \code{y_var}, \code{linpartial_var}, and
+\item{drop_na}{Whether to drop observations with \code{NA} in \code{x_var}, \code{y_var}, \code{linpartial_var}, and
 \code{binpartial_var} (boolean).
 \itemize{
 \item If \code{TRUE}, \code{NA} will be dropped automatically with a warning message.
@@ -90,13 +90,19 @@ list of strings).}
 
 \item{recenter}{Whether to recenter partialed means of \code{y_var} (boolean).}
 
-\item{tab_path}{Path to output the regression table (string).}
+\item{tab_path}{Whether to save the regression table output (character).
+\itemize{
+\item If not \code{NULL}, saves output to text file at \code{tab_path}.
+}}
 
-\item{plot_path}{Path to save the binned scatter plot (string).}
+\item{plot_path}{Whether to save the binned scatter plot (character).
+\itemize{
+\item If not \code{NULL}, saves plot to PDF file at \code{plot_path}.
+}}
 
-\item{plot_xlab}{X-axis title for the binned scatter plot (string, default is \code{x_var}).}
+\item{plot_xlab}{X-axis title for the binned scatter plot (character, default is \code{x_var}).}
 
-\item{plot_ylab}{Y-axis title for the binned scatter plot (string, default is \code{y_var}).}
+\item{plot_ylab}{Y-axis title for the binned scatter plot (character, default is \code{y_var}).}
 
 \item{plot_xlim}{Range of x-axis for the binned scatter plot (\code{c(min, max)}, default is
 ggplot default).}
@@ -116,15 +122,15 @@ ggplot default).}
 
 \item{bar_size}{Size aesthetic to be used with \code{geom_errorbar()}.}
 
-\item{fig_width}{Plot width in inches (numeric).}
-
-\item{fig_height}{Plot height in inches (numeric).}
-
 \item{axis_title_x_size}{Text size for x-axis labels.}
 
 \item{axis_title_y_size}{Text size for y-axis labels.}
 
 \item{axis_text_size}{Text size for tick labels along axes.}
+
+\item{fig_width}{Plot width in inches.}
+
+\item{fig_height}{Plot height in inches.}
 }
 \description{
 Make data for a binned scatter plot and produce it.

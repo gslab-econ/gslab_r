@@ -1,7 +1,7 @@
-#' Get mean of `x_var` in an interval 
+#' Get mean of `var` in an interval 
 #' 
-#' @param interval Interval
-#' @param vals Values
+#' @param interval Interval to get the mean of `var` on (character).
+#' @param vals Values of `var`.
 #' @importFrom stringr str_split
 
 

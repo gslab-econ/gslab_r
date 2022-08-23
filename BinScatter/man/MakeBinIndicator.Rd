@@ -2,7 +2,7 @@
 % Please edit documentation in R/MakeBinIndicator.R
 \name{MakeBinIndicator}
 \alias{MakeBinIndicator}
-\title{Create bin indicators and bin centers for \code{x_var}}
+\title{Create bin indicators and bin centers}
 \usage{
 MakeBinIndicator(
   var,
@@ -15,20 +15,27 @@ MakeBinIndicator(
 )
 }
 \arguments{
-\item{var}{Var}
+\item{var}{Name of variable to create bins for (character).}
 
-\item{data}{Data}
+\item{data}{Data frame with column \code{var}.}
 
-\item{n_bins}{Number of bins}
+\item{n_bins}{Number of bins for \code{var} (integer).}
 
-\item{bin_type}{Type of bin}
+\item{bin_type}{Method to create bins for \code{var} ("uniform" or "quantile")
+\itemize{
+\item "uniform" bins are equally spaced over the support of \code{var}.
+\item "quantile" bins have approximately the same number of observations in each bin.
+}}
 
-\item{min_obs}{Minimum number of observations per bin}
+\item{min_obs}{Minimum number of observations per bin for \code{var} (integer).}
 
-\item{intercept}{Boolean for intercept}
+\item{intercept}{Whether an intercept is included in the regression (boolean).
+\itemize{
+\item If \code{TRUE}, omits the indicator for the first bin of \code{var}.
+}}
 
-\item{is_xvar}{Boolean for whether \code{var} is \code{x_var}}
+\item{is_xvar}{Whether \code{var} is x-axis variable (boolean).}
 }
 \description{
-Create bin indicators and bin centers for \code{x_var}
+Create bin indicators and bin centers
 }
