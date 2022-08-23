@@ -1,0 +1,25 @@
+Package: BinScatter
+Title: Binned Scatterplots with Controls
+Version: 0.0.0.9000
+Authors@R: c(
+  person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre")), 
+  person("Jesse", "Shapiro", email = "jesse_shapiro@fas.harvard.edu", role = c("aut"))
+  )
+Description: Contains BinScatter function.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Imports:
+    tidyr,
+    dplyr,
+    ggplot2,
+    stats,
+    purrr,
+    stringr,
+    mltools,
+    data.table,
+    magrittr
+Suggests: 
+    testthat,
+    MASS
