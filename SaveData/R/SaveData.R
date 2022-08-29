@@ -43,10 +43,11 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
 
   DataDictionary <- function() {
     h <- hash()
-    h[["csv"]] <-   c("fwrite", "file = outfile")
-    h[["dta"]] <-   c("write_dta", "outfile")
-    h[["RData"]] <- c("save", "file = outfile")
-    h[["RDS"]] <-   c("saveRDS", "file = outfile")
+    h[["csv"]]   <-   c("fwrite", "file = outfile")
+    h[["dta"]]   <-   c("write_dta", "outfile")
+    h[["RData"]] <-   c("save", "file = outfile")
+    h[["RDS"]]   <-   c("saveRDS", "file = outfile")
+    h[["Rds"]]   <-   c("saveRDS", "file = outfile")
 
     return(h)
   }
