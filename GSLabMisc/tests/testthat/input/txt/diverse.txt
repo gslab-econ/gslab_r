@@ -1,0 +1,12 @@
+
+# hello
+x 4 5
+y this is a string without quotes
+
+z "this is a string in quotes"
+w "this is a string with 'nested' quotes"
+
+  # this is a comment
+* this is an invalid name
+u NaN
+v TRUE  FALSE
