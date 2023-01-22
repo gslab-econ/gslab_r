@@ -12,7 +12,7 @@
 
 LoadScalars <- function(input, where = 1, convert = TRUE, ...) {
   
-  stopifnot("input must be a `.txt` file" = grepl("\\.txt$", input))
+  stopifnot("input must be a `.txt` file" = grepl("\\.txt$", tolower(input)))
   con <- file(input, "r")
   
   while (TRUE) {
