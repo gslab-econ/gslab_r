@@ -6,7 +6,7 @@ test_that("breaks if invalid file type", {
 
 test_that("correctly loads numerals", {
     
-    filename     <- "input/txt/random.txt"
+    filename     <- "input/random.txt"
     expect_warning(LoadScalars(filename), "`f' already exists")
     
     expect_true(class(a) == "numeric")
@@ -19,9 +19,9 @@ test_that("correctly loads numerals", {
     expect_true(f == -0.8204684)
 })
 
-test_that("raises warnings", {
+test_that("correctly loads other data types", {
   
-  filename     <- "input/txt/diverse.txt"
+  filename     <- "input/diverse.txt"
   expect_warning(LoadScalars(filename), "`*' is an invalid name")
   
   expect_true(class(y) == "character")
