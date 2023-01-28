@@ -18,3 +18,9 @@ LoadScalars(input, where = 1, convert = TRUE, ...)
 \description{
 Load scalars from a text file into global environment.
 }
+\details{
+Each line of the input file is assumed to have the name of the global variable followed by
+a space followed by the value of the global variable. Lines beginning with # are treated as comments.
+Lines in the file that do not have at least two words (defined as blocks of text separated by a
+space) are ignored. Strings enclosed in double quotes count as one word.
+}

@@ -5,6 +5,11 @@
 #' @param convert whether to guess data type. Defaults to `TRUE`. If `FALSE`, stores values as strings.
 #' @param ... additional arguments to `utils::type.convert`.
 #' 
+#' @details Each line of the input file is assumed to have the name of the global variable followed by 
+#' a space followed by the value of the global variable. Lines beginning with # are treated as comments. 
+#' Lines in the file that do not have at least two words (defined as blocks of text separated by a 
+#' space) are ignored. Strings enclosed in double quotes count as one word.
+#' 
 #' @importFrom stringr str_split
 #' @importFrom utils type.convert
 #' @export
