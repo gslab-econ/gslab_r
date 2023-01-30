@@ -14,7 +14,7 @@
 #' @export
 #' 
 
-LoadScalars <- function(input, convert = TRUE, ...) {
+LoadGlobals <- function(input, convert = TRUE, ...) {
   
   stopifnot("input must be a `.txt` file" = grepl("\\.txt$", tolower(input)))
   con <- file(input, "r")

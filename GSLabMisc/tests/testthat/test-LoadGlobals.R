@@ -1,13 +1,13 @@
 test_that("breaks if invalid file type", {
   
     filename <- "output/example_scalar.tex"
-    expect_error(LoadScalars(filename))
+    expect_error(LoadGlobals(filename))
 })
 
 test_that("correctly loads numerals", {
     
     filename     <- "input/random.txt"
-    expect_warning(LoadScalars(filename), "`f' already exists")
+    expect_warning(LoadGlobals(filename), "`f' already exists")
     
     expect_true(class(a) == "numeric")
     expect_true(class(b) == "numeric")
@@ -22,7 +22,7 @@ test_that("correctly loads numerals", {
 test_that("correctly loads other data types", {
   
   filename     <- "input/diverse.txt"
-  expect_warning(LoadScalars(filename), "`*' is an invalid name")
+  expect_warning(LoadGlobals(filename), "`*' is an invalid name")
   
   expect_true(class(y) == "character")
   expect_true(class(v) == "logical")
