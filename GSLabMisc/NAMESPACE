@@ -3,4 +3,6 @@
 export(AutoFill)
 export(LoadScalars)
 importFrom(stringr,str_split)
+importFrom(utils,capture.output)
 importFrom(utils,type.convert)
+importFrom(utils,write.table)
