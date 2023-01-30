@@ -1,7 +1,6 @@
 #' Load scalars from a text file into global environment.
 #'
 #' @param input path to `.txt` file.
-#' @param where where to load the scalars. Defaults to 1 to load to the global environment.
 #' @param convert whether to guess data type. Defaults to `TRUE`. If `FALSE`, stores values as strings.
 #' @param ... additional arguments to `utils::type.convert`.
 #' 
@@ -15,10 +14,11 @@
 #' @export
 #' 
 
-LoadScalars <- function(input, where = 1, convert = TRUE, ...) {
+LoadScalars <- function(input, convert = TRUE, ...) {
   
   stopifnot("input must be a `.txt` file" = grepl("\\.txt$", tolower(input)))
   con <- file(input, "r")
+  where <- 1
   
   while (TRUE) {
     
@@ -35,7 +35,7 @@ LoadScalars <- function(input, where = 1, convert = TRUE, ...) {
         
         warning(sprintf("`%s' is an invalid name, skipping", line_vec[1]))
         
-      } else if (exists(name, where = .GlobalEnv)) {
+      } else if (exists(name, where = as.environment(where))) {
         
         warning(sprintf("`%s' already exists, skipping", line_vec[1]))
         

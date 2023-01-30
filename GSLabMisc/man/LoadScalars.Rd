@@ -4,12 +4,10 @@
 \alias{LoadScalars}
 \title{Load scalars from a text file into global environment.}
 \usage{
-LoadScalars(input, where = 1, convert = TRUE, ...)
+LoadScalars(input, convert = TRUE, ...)
 }
 \arguments{
 \item{input}{path to \code{.txt} file.}
-
-\item{where}{where to load the scalars. Defaults to 1 to load to the global environment.}
 
 \item{convert}{whether to guess data type. Defaults to \code{TRUE}. If \code{FALSE}, stores values as strings.}
 
