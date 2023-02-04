@@ -21,8 +21,10 @@ AutoFill(commandname, content, outfile, mode = "math", appendmode = FALSE)
 Export content as TeX macro.
 }
 \examples{
+\dontrun{
 AutoFill(commandname = "pValue", content = "0.0003", "pvalue.tex", mode = "math")
 
-#If you would like to export in text mode:
+# If you would like to export in text mode:
 AutoFill(commandname = "SampleStart", content = "January 2010", "samplestart.tex", mode = "text")
+}
 }

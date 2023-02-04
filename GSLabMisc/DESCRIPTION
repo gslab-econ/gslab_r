@@ -5,11 +5,13 @@ Authors@R: c(
   person("Matthew", "Gentzkow", email = "gentzkow@stanford.edu", role = c("aut", "cre")), 
   person("Jesse", "Shapiro", email = "jesse_shapiro@fas.harvard.edu", role = c("aut"))
   )
-Description: Contains GSLab Helper Functions: AutoFill.
+Description: Contains GSLab Helper Functions: AutoFill, LoadGlobals.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1
+Imports:
+    stringr
 Suggests: 
     testthat
