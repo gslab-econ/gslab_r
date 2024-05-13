@@ -33,7 +33,10 @@
 #' @export
 
 SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortbykey = TRUE) {
-  setDT(df)
+
+  if (!is.data.table(df)) {
+    setDT(df)
+  }
   
   reordered_colnames <- c(key, setdiff(colnames(df), key))
   
