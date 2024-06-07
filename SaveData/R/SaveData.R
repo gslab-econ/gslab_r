@@ -125,11 +125,14 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     
     all_sum <- df[, .(
       variable_name = colname_order,
+      type = sapply(.SD, class),
       N = lapply(.SD, function(x) sum(!is.na(x))),
-      type = sapply(.SD, class)
+      uniqueN = lapply(.SD, function(x) uniqueN(x))
     )]
     
-    sum <- merge(numeric_sum, all_sum, by = "variable_name", all = T)
+    sum <- merge(all_sum, numeric_sum, 
+                 by = "variable_name", 
+                 all.x = T)
     
     sum <- sum[match(colname_order, sum$variable_name),]
     
