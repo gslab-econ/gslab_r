@@ -114,6 +114,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     if (logfile == FALSE) return(NULL)
     
     numeric_cols <- reordered_colnames[sapply(df, is.numeric)]
+    non_numeric_cols <- setdiff(colname_order, numeric_cols)
     
     numeric_sum <- df[, .(
       variable_name = colname_order,
@@ -123,16 +124,21 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
       max = lapply(.SD, max, na.rm = TRUE)
     ), .SDcols = numeric_cols]
     
+    non_numeric_sum <- df[, .(
+      variable_name = colname_order,
+      uniqueN = lapply(.SD, function(x) uniqueN(x))
+    ), .SDcols = non_numeric_cols]
+    
     all_sum <- df[, .(
       variable_name = colname_order,
       type = sapply(.SD, class),
-      N = lapply(.SD, function(x) sum(!is.na(x))),
-      uniqueN = lapply(.SD, function(x) uniqueN(x))
+      N = lapply(.SD, function(x) sum(!is.na(x)))
     )]
     
-    sum <- merge(all_sum, numeric_sum, 
-                 by = "variable_name", 
-                 all.x = T)
+    sum <- all_sum |> 
+      merge(non_numeric_sum, by = "variable_name", all.x = T) |> 
+      merge(numeric_sum, by = "variable_name", all.x = T)
+      
     
     sum <- sum[match(colname_order, sum$variable_name),]
     
