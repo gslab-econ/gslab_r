@@ -24,9 +24,7 @@
 #' SaveData(data, "id", "path/output.csv", "path/custom_logfile.log")
 #' }
 #'
-#' @importFrom data.table fwrite
-#' @importFrom data.table setorderv
-#' @importFrom data.table setDT
+#' @import data.table
 #' @importFrom digest     digest
 #' @importFrom dplyr      arrange
 #' @importFrom hash       keys hash
@@ -35,12 +33,13 @@
 #' @export
 
 SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortbykey = TRUE) {
-  colSD  <- function(data) sapply(data, sd, na.rm = TRUE)
-  colMin <- function(data) sapply(data, min, na.rm = TRUE)
-  colMax <- function(data) sapply(data, max, na.rm = TRUE)
-  reordered_colnames <- c(key, colnames(df[!colnames(df) %in% key]))
 
-
+  if (!is.data.table(df)) {
+    setDT(df)
+  }
+  
+  reordered_colnames <- c(key, setdiff(colnames(df), key))
+  
   DataDictionary <- function() {
     h <- hash()
     h[["csv"]]   <-   c("fwrite", "file = outfile")
@@ -48,16 +47,16 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     h[["RData"]] <-   c("save", "file = outfile")
     h[["RDS"]]   <-   c("saveRDS", "file = outfile")
     h[["Rds"]]   <-   c("saveRDS", "file = outfile")
-
+    
     return(h)
   }
-
+  
   CheckExtension <- function(outfile, h, logfile = NULL) {
-
+    
     file <- basename(outfile)
     dir  <- dirname(outfile)
     extensions <- unlist(strsplit(file, "[.]"))
-
+    
     if (length(extensions)  > 2) {
       stop("FileNameError: Cannot have '.' in filename.")
     } else if (length(extensions) == 2) {
@@ -66,98 +65,110 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
       filetype = "RDS"
       outfile = paste(outfile, ".RDS", sep="")
     }
-
+    
     if (!any(filetype %in% keys(h))) {
       stop("FileType Error: Incorrect format. Only .csv, .dta, .RData, and .RDS are allowed.")
     }
-
+    
     if (is.null(logfile)) {
       logfile <- paste(dir, "/data_file_manifest.log", sep = "")
     }
-
+    
     return(list("outfile" = outfile, "logfile" = logfile, "filetype" = filetype))
   }
-
+  
   CheckKey <- function(df, key, colname_order = reordered_colnames) {        
-
+    
     if (!all(key %in% colnames(df))) {
-
+      
       stop("KeyError: One or more key variables are not in df.")
     }
-        
-    missings <- sapply(df[key], function(x) sum(is.na(x)))
+    
+    missings <- df[, lapply(.SD, function(x) sum(is.na(x))), .SDcols = key]
     
     if (sum(missings) > 0) {
-      stop(paste("KeyError: There are rows with missing keys. Check the following keys:", paste(key[which(missings > 0)], collapse = ", ")))
+      stop(paste("KeyError: There are rows with missing keys. Check the following keys:", 
+                 paste(key[which(missings > 0)], collapse = ", ")))
     }
-
-    nunique <- nrow(unique(df[key]))
-
+    
+    nunique <- uniqueN(df, key)
+    
     if (nrow(df) != nunique) {
-
+      
       stop("KeyError: Key variables do not uniquely identify observations.")
-
+      
     } else {
       
       if (sortbykey) {
         setorderv(df, key)  # sort by key values
       }           
-
-      df <- df[colname_order]
-
-      return(df)
+      
+      setcolorder(df, reordered_colnames)
     }
   }
-
-
+  
+  
   WriteLog <- function(df, key, outfile, logfile = NULL, appendlog = TRUE,
                        colname_order = reordered_colnames) {
-
-    if (logfile == FALSE) return(NULL)
-
-    numeric_sum <- as.data.frame(cbind(colMeans(df[sapply(df, is.numeric)], na.rm = T),
-                                       colSD(df[sapply(df, is.numeric)]),
-                                       colMin(df[sapply(df, is.numeric)]),
-                                       colMax(df[sapply(df, is.numeric)])))
-
-    all_sum <- as.data.frame(cbind(colSums(!is.na(df)), sapply(df, class)))
-
-    sum <- merge(numeric_sum, all_sum, by="row.names", all = T)
     
-    sum <- sum[match(colname_order, sum$Row.names),]
-
-    names(sum) <- c("variable", "mean", "sd", "min", "max", "N", "type")
-
-    row.names(sum) <- NULL
-
+    if (logfile == FALSE) return(NULL)
+    
+    numeric_cols <- reordered_colnames[sapply(df, is.numeric)]
+    non_numeric_cols <- setdiff(colname_order, numeric_cols)
+    
+    numeric_sum <- df[, .(
+      variable_name = colname_order,
+      mean = lapply(.SD, mean, na.rm = TRUE),
+      sd = lapply(.SD, sd, na.rm = TRUE),
+      min = lapply(.SD, min, na.rm = TRUE),
+      max = lapply(.SD, max, na.rm = TRUE)
+    ), .SDcols = numeric_cols]
+    
+    non_numeric_sum <- df[, .(
+      variable_name = colname_order,
+      uniqueN = lapply(.SD, function(x) uniqueN(x))
+    ), .SDcols = non_numeric_cols]
+    
+    all_sum <- df[, .(
+      variable_name = colname_order,
+      type = sapply(.SD, class),
+      N = lapply(.SD, function(x) sum(!is.na(x)))
+    )]
+    
+    sum <- all_sum |> 
+      merge(non_numeric_sum, by = "variable_name", all.x = T) |> 
+      merge(numeric_sum, by = "variable_name", all.x = T)
+      
+    
+    sum <- sum[match(colname_order, sum$variable_name),]
+    
     hash <- digest(df, algo="md5")
-
+    
     if (file.exists(logfile) & appendlog) cat('\n', file = logfile, append=T)
-
+    
     cat("File: ", outfile, '\n', file = logfile, append=appendlog)
     cat("MD5:  ", hash, '\n',    file = logfile, append=T)
     cat("Key:  ", key, '\n',     file = logfile, append=T)
-
+    
     s = capture.output(stargazer(sum, summary = F,type = 'text'))
     cat(paste(s,"\n"),file=logfile,append=T)
-
+    
   }
-
+  
   WriteData <- function(df, outfile, filetype, h) {
-    setDT(df)
-
+    
     do.call(h[[filetype]][1], list(df, eval(parse(text=h[[filetype]][2]))))
-
+    
     print(paste0("File '", outfile, "' saved successfully."))
-
+    
   }
-
+  
   h <- DataDictionary()
   files <- CheckExtension(outfile, h, logfile)
-
-  df <- CheckKey(df, key)
+  
+  CheckKey(df, key)
   WriteLog(df, key, files$outfile, files$logfile, appendlog)
   WriteData(df, files$outfile, files$filetype, h)
-
+  
 }
 
