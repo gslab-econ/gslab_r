@@ -127,11 +127,12 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     
     numeric_sum <- df[, .(
       variable_name = numeric_cols,
-      mean = lapply(.SD, mean, na.rm = T),
-      sd = lapply(.SD, sd, na.rm = T),
-      min = lapply(.SD, min, na.rm = T),
-      max = lapply(.SD, max, na.rm = T)
+      mean = lapply(.SD, function(x) round(mean(x, na.rm = TRUE), 3)),
+      sd = lapply(.SD, function(x) round(sd(x, na.rm = TRUE), 3)),
+      min = lapply(.SD, function(x) round(min(x, na.rm = TRUE), 3)),
+      max = lapply(.SD, function(x) round(max(x, na.rm = TRUE), 3))
     ), .SDcols = numeric_cols]
+    
     
     non_numeric_sum <- df[, .(
       variable_name = non_numeric_cols,
