@@ -24,7 +24,15 @@
 #' SaveData(data, "id", "path/output.csv", "path/custom_logfile.log")
 #' }
 #'
-#' @import data.table
+#' @importFrom data.table setDT
+#' @importFrom data.table setorderv
+#' @importFrom data.table setcolorder
+#' @importFrom data.table is.data.table
+#' @importFrom data.table :=
+#' @importFrom data.table .SD
+#' @importFrom data.table .SDcols
+#' @importFrom data.table uniqueN
+#' @importFrom data.table fwrite
 #' @importFrom digest     digest
 #' @importFrom dplyr      arrange
 #' @importFrom hash       keys hash
