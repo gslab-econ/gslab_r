@@ -28,6 +28,7 @@
 #' @importFrom data.table setorderv
 #' @importFrom data.table setcolorder
 #' @importFrom data.table as.data.table
+#' @importFrom data.table merge
 #' @importFrom data.table :=
 #' @importFrom data.table .SD
 #' @importFrom data.table .SDcols
@@ -127,27 +128,27 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     
     numeric_sum <- df[, .(
       variable_name = numeric_cols,
-      mean = lapply(.SD, function(x) round(mean(x, na.rm = TRUE), 3)),
-      sd = lapply(.SD, function(x) round(sd(x, na.rm = TRUE), 3)),
-      min = lapply(.SD, function(x) round(min(x, na.rm = TRUE), 3)),
-      max = lapply(.SD, function(x) round(max(x, na.rm = TRUE), 3))
+      mean = sapply(.SD, function(x) round(mean(x, na.rm = TRUE), 3)),
+      sd = sapply(.SD, function(x) round(sd(x, na.rm = TRUE), 3)),
+      min = sapply(.SD, function(x) round(min(x, na.rm = TRUE), 3)),
+      max = sapply(.SD, function(x) round(max(x, na.rm = TRUE), 3))
     ), .SDcols = numeric_cols]
     
     
     non_numeric_sum <- df[, .(
       variable_name = non_numeric_cols,
-      uniqueN = lapply(.SD, function(x) uniqueN(x))
+      uniqueN = sapply(.SD, function(x) uniqueN(x))
     ), .SDcols = non_numeric_cols]
     
     all_sum <- df[, .(
       variable_name = reordered_colnames,
       type = sapply(.SD, class),
-      N = lapply(.SD, function(x) sum(!is.na(x)))
+      N = sapply(.SD, function(x) sum(!is.na(x)))
     )]
     
     sum <- all_sum |> 
-      merge(non_numeric_sum, by = "variable_name", all.x = TRUE) |> 
-      merge(numeric_sum, by = "variable_name", all.x = TRUE) |> 
+      merge.data.table(non_numeric_sum, by = "variable_name", all.x = TRUE) |> 
+      merge.data.table(numeric_sum, by = "variable_name", all.x = TRUE) |> 
       arrange(match(variable_name, reordered_colnames))
     
     hash <- digest(df, algo="md5")
@@ -158,7 +159,9 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     cat("MD5:  ", hash, '\n',    file = logfile, append=T)
     cat("Key:  ", key, '\n',     file = logfile, append=T)
     
-    s = capture.output(stargazer(sum, summary = F,type = 'text'))
+    s = capture.output(stargazer(sum, summary = F,type = 'text',
+                       digit.separate = 3,
+                       digit.separator = ','))
     cat(paste(s,"\n"),file=logfile,append=T)
     
   }
