@@ -49,7 +49,6 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
   
   reordered_colnames <- c(key, setdiff(colnames(df), key))
   
-  # map file extension to export function 
   DataDictionary <- function() {
     h <- hash()
     h[["csv"]]   <-   c("fwrite", "file = outfile")
@@ -87,7 +86,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     return(list("outfile" = outfile, "logfile" = logfile, "filetype" = filetype))
   }
   
-  CheckKey <- function(df, key, colname_order) {        
+  CheckKey <- function(df, key, colname_order = reordered_colnames) {        
     
     if (!all(key %in% colnames(df))) {
       
