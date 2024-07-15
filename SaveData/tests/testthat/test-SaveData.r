@@ -1,4 +1,5 @@
 context("SaveData")
+library(data.table)
 
 test_that("correctly saves data", {
     test_data <- read.csv("./data/data.csv", header = TRUE)
@@ -9,6 +10,17 @@ test_that("correctly saves data", {
     intended_output <- "File './output/data.RDS' saved successfully."
 
     expect_identical(output, intended_output)
+})
+
+test_that("correctly saves data when working with data.table", {
+  test_data <- fread("./data/data.csv", header = TRUE)
+  
+  if (file.exists("./output/logfile.log")) file.remove("./output/logfile.log")
+  output <- SaveData(test_data,"id","./output/data", "./output/logfile.log")
+  
+  intended_output <- "File './output/data.RDS' saved successfully."
+  
+  expect_identical(output, intended_output)
 })
 
 test_that("correctly saves data to different format", {
