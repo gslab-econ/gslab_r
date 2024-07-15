@@ -23,17 +23,15 @@
 #' #Custom log file
 #' SaveData(data, "id", "path/output.csv", "path/custom_logfile.log")
 #' }
-#'
+#' 
 #' @importFrom data.table setDT
 #' @importFrom data.table setorderv
 #' @importFrom data.table setcolorder
-#' @importFrom data.table as.data.table
 #' @importFrom data.table is.data.table
-#' @importFrom data.table merge
+#' @importFrom data.table merge.data.table
 #' @importFrom data.table :=
 #' @importFrom data.table .SD
 #' @importFrom data.table .SDcols
-#' @importFrom data.table duplicated
 #' @importFrom data.table uniqueN
 #' @importFrom data.table fwrite
 #' @importFrom digest     digest

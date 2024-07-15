@@ -36,7 +36,7 @@ SaveData(data, "id", "path/output.csv")
 #Custom log file
 SaveData(data, "id", "path/output.csv", "path/custom_logfile.log")
 }
-
+as.data.table, duplicated
 }
 \seealso{
 \link[data.table]{fwrite}, \link[base]{save}, \link[base]{saveRDS}, and \link[haven]{write_dta},
