@@ -49,6 +49,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
   
   reordered_colnames <- c(key, setdiff(colnames(df), key))
   
+  # map file extension to export function 
   DataDictionary <- function() {
     h <- hash()
     h[["csv"]]   <-   c("fwrite", "file = outfile")
