@@ -23,8 +23,17 @@
 #' #Custom log file
 #' SaveData(data, "id", "path/output.csv", "path/custom_logfile.log")
 #' }
-#'
-#' @import data.table
+#' 
+#' @importFrom data.table setDT
+#' @importFrom data.table setorderv
+#' @importFrom data.table setcolorder
+#' @importFrom data.table is.data.table
+#' @importFrom data.table merge.data.table
+#' @importFrom data.table :=
+#' @importFrom data.table .SD
+#' @importFrom data.table .SDcols
+#' @importFrom data.table uniqueN
+#' @importFrom data.table fwrite
 #' @importFrom digest     digest
 #' @importFrom dplyr      arrange
 #' @importFrom hash       keys hash
@@ -40,6 +49,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
   
   reordered_colnames <- c(key, setdiff(colnames(df), key))
   
+  # map file extension to export function 
   DataDictionary <- function() {
     h <- hash()
     h[["csv"]]   <-   c("fwrite", "file = outfile")
@@ -101,46 +111,46 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
       
       if (sortbykey) {
         setorderv(df, key)  # sort by key values
-      }           
+      }
       
-      setcolorder(df, reordered_colnames)
+      setcolorder(df, colname_order)
     }
   }
   
   
-  WriteLog <- function(df, key, outfile, logfile = NULL, appendlog = TRUE,
-                       colname_order = reordered_colnames) {
+  WriteLog <- function(df, key, outfile, logfile = NULL, appendlog = TRUE) {
+    
+    reordered_colnames = names(df)
     
     if (logfile == FALSE) return(NULL)
     
-    numeric_cols <- reordered_colnames[sapply(df, is.numeric)]
-    non_numeric_cols <- setdiff(colname_order, numeric_cols)
+    numeric_cols <- reordered_colnames[sapply(df, FUN = is.numeric)]
+    non_numeric_cols <- setdiff(reordered_colnames, numeric_cols)
     
     numeric_sum <- df[, .(
-      variable_name = colname_order,
-      mean = lapply(.SD, mean, na.rm = TRUE),
-      sd = lapply(.SD, sd, na.rm = TRUE),
-      min = lapply(.SD, min, na.rm = TRUE),
-      max = lapply(.SD, max, na.rm = TRUE)
+      variable_name = numeric_cols,
+      mean = sapply(.SD, function(x) round(mean(x, na.rm = TRUE), 3)),
+      sd = sapply(.SD, function(x) round(sd(x, na.rm = TRUE), 3)),
+      min = sapply(.SD, function(x) round(min(x, na.rm = TRUE), 3)),
+      max = sapply(.SD, function(x) round(max(x, na.rm = TRUE), 3))
     ), .SDcols = numeric_cols]
     
+    
     non_numeric_sum <- df[, .(
-      variable_name = colname_order,
-      uniqueN = lapply(.SD, function(x) uniqueN(x))
+      variable_name = non_numeric_cols,
+      uniqueN = sapply(.SD, function(x) uniqueN(x))
     ), .SDcols = non_numeric_cols]
     
     all_sum <- df[, .(
-      variable_name = colname_order,
+      variable_name = reordered_colnames,
       type = sapply(.SD, class),
-      N = lapply(.SD, function(x) sum(!is.na(x)))
+      N = sapply(.SD, function(x) sum(!is.na(x)))
     )]
     
     sum <- all_sum |> 
-      merge(non_numeric_sum, by = "variable_name", all.x = T) |> 
-      merge(numeric_sum, by = "variable_name", all.x = T)
-      
-    
-    sum <- sum[match(colname_order, sum$variable_name),]
+      merge.data.table(non_numeric_sum, by = "variable_name", all.x = TRUE) |> 
+      merge.data.table(numeric_sum, by = "variable_name", all.x = TRUE) |> 
+      arrange(match(variable_name, reordered_colnames))
     
     hash <- digest(df, algo="md5")
     
@@ -150,7 +160,9 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     cat("MD5:  ", hash, '\n',    file = logfile, append=T)
     cat("Key:  ", key, '\n',     file = logfile, append=T)
     
-    s = capture.output(stargazer(sum, summary = F,type = 'text'))
+    s = capture.output(stargazer(sum, summary = F,type = 'text',
+                       digit.separate = 3,
+                       digit.separator = ','))
     cat(paste(s,"\n"),file=logfile,append=T)
     
   }
@@ -166,7 +178,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
   h <- DataDictionary()
   files <- CheckExtension(outfile, h, logfile)
   
-  CheckKey(df, key)
+  CheckKey(df, key, colname_order = reordered_colnames)
   WriteLog(df, key, files$outfile, files$logfile, appendlog)
   WriteData(df, files$outfile, files$filetype, h)
   
