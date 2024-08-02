@@ -125,6 +125,10 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     if (logfile == FALSE) return(NULL)
     
     numeric_cols <- reordered_colnames[sapply(df, FUN = is.numeric)]
+    # make everything numeric
+    df <- df %>%
+      mutate(across(where(is.numeric), as.numeric))
+    
     non_numeric_cols <- setdiff(reordered_colnames, numeric_cols)
     
     numeric_sum <- df[, .(
