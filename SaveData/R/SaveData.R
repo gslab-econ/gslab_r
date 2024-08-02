@@ -162,7 +162,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     
     s = capture.output(stargazer(sum, summary = F,type = 'text',
                        digit.separate = 3,
-                       digit.separator = ','))
+                       digit.separator = ','), rownames = FALSE)
     cat(paste(s,"\n"),file=logfile,append=T)
     
   }
