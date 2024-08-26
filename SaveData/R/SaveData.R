@@ -159,12 +159,16 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     cat("File: ", outfile, '\n', file = logfile, append=appendlog)
     cat("MD5:  ", hash, '\n',    file = logfile, append=T)
     cat("Key:  ", key, '\n',     file = logfile, append=T)
-    
-    s = capture.output(stargazer(sum, summary = F,type = 'text',
-                       digit.separate = 3,
-                       digit.separator = ','), rownames = FALSE)
-    cat(paste(s,"\n"),file=logfile,append=T)
-    
+
+    s = capture.output(
+      stargazer(sum,
+                summary = F,
+                type = 'text',
+                digit.separate = 3,
+                digit.separator = ',',
+                rownames = F))
+    cat(paste(s,"\n"), file = logfile, append=T)
+
   }
   
   WriteData <- function(df, outfile, filetype, h) {
