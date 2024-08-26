@@ -150,7 +150,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
       merge.data.table(numeric_sum, by = "variable_name", all.x = TRUE) |>
       arrange(match(variable_name, reordered_colnames))
 
-    hash <- digest(df, algo="md5")
+    hash <- digest::digest(df, algo="md5")
 
     if (file.exists(logfile) & appendlog) cat('\n', file = logfile, append=T)
 
@@ -159,12 +159,12 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     cat("Key:  ", key, '\n',     file = logfile, append=T)
 
     s = capture.output(
-      stargazer(sum,
-                summary = F,
-                type = 'text',
-                digit.separate = 3,
-                digit.separator = ',',
-                rownames = F))
+      stargazer::stargazer(sum,
+                           summary = F,
+                           type = 'text',
+                           digit.separate = 3,
+                           digit.separator = ',',
+                           rownames = F))
     cat(paste(s,"\n"), file = logfile, append=T)
 
   }
