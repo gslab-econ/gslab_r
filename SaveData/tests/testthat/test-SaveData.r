@@ -116,7 +116,7 @@ test_that("correctly gives error for column of type list", {
   test_data <- read.csv("./data/data.csv", header = TRUE)
   test_data$bad <- lapply(1:nrow(test_data), function (x) c(1, 2))
   expect_error(SaveData(test_data,c("partid1","partid2"),"./output/data", "./output/logfile.log"),
-               "TypeError: No column can contain entries of type list or vector.All columns should be in vector format.")
+               "TypeError: No column can contain entries of type list or vector. All columns should be in vector format.")
 })
 
 

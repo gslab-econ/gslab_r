@@ -91,8 +91,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     if (length(type_list_columns)>0) {
       print(paste("The following columns are of type list:",
                   paste(names(type_list_columns), collapse = ", ")))
-      stop("TypeError: No column can contain entries of type list or vector. 
-           All columns should be in vector format.")
+      stop("TypeError: No column can contain entries of type list or vector. All columns should be in vector format.")
     }
   }
   
