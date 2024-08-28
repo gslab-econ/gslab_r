@@ -2,12 +2,12 @@ File:  ./output/data.RDS
 MD5:   567b2201c4aeb75ef693ae99525fc896 
 Key:   partid1 partid2 
  
- ============================================================ 
- variable_name   type    N  uniqueN mean     sd     min  max  
- ------------------------------------------------------------ 
- partid1       character 10    4                              
- partid2        integer  10         1.900   0.876    1    3   
- id             integer  10         5.500   3.028    1   10   
- name          character 10    3                              
- num            integer  9           510  1,496.258  6  4,500 
- ------------------------------------------------------------ 
+ ============================================================== 
+   variable_name   type    N  uniqueN mean     sd     min  max  
+ -------------------------------------------------------------- 
+ 1    partid1    character 10    4                              
+ 2    partid2     integer  10         1.900   0.876    1    3   
+ 3      id        integer  10         5.500   3.028    1   10   
+ 4     name      character 10    3                              
+ 5      num       integer  9           510  1,496.258  6  4,500 
+ -------------------------------------------------------------- 
