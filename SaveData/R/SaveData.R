@@ -49,7 +49,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
 
   # map file extension to export function
   DataDictionary <- function() {
-    h <- hash()
+    h <- hash::hash()
     h[["csv"]]   <-   c("fwrite", "file = outfile")
     h[["dta"]]   <-   c("write_dta", "outfile")
     h[["RData"]] <-   c("save", "file = outfile")
@@ -74,7 +74,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
       outfile = paste(outfile, ".RDS", sep="")
     }
 
-    if (!any(filetype %in% keys(h))) {
+    if (!any(filetype %in% hash::keys(h))) {
       stop("FileType Error: Incorrect format. Only .csv, .dta, .RData, and .RDS are allowed.")
     }
 
@@ -99,7 +99,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
                  paste(key[which(missings > 0)], collapse = ", ")))
     }
 
-    nunique <- uniqueN(df, key)
+    nunique <- data.table::uniqueN(df, key)
 
     if (nrow(df) != nunique) {
 
@@ -108,10 +108,10 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     } else {
 
       if (sortbykey) {
-        setorderv(df, key)  # sort by key values
+        data.table::setorderv(df, key)  # sort by key values
       }
 
-      setcolorder(df, colname_order)
+      data.table::setcolorder(df, colname_order)
     }
   }
 
@@ -123,7 +123,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     if (logfile == FALSE) return(NULL)
 
     numeric_cols <- reordered_colnames[sapply(df, FUN = is.numeric)]
-    non_numeric_cols <- setdiff(reordered_colnames, numeric_cols)
+    non_numeric_cols <- base::setdiff(reordered_colnames, numeric_cols)
 
     numeric_sum <- df[, .(
       variable_name = numeric_cols,
@@ -179,7 +179,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
 
   h <- DataDictionary()
   files <- CheckExtension(outfile, h, logfile)
-  reordered_colnames <- c(key, setdiff(colnames(df), key))
+  reordered_colnames <- c(key, base::setdiff(colnames(df), key))
 
   CheckKey(df, key, colname_order = reordered_colnames)
   WriteLog(df, key, files$outfile, files$logfile, appendlog)
