@@ -93,12 +93,13 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
                  paste(names(type_list_columns), collapse = ", ")))
     }
   }
-  
+
   CheckKey <- function(df, key, colname_order = reordered_colnames) {
 
-    if (!all(key %in% colnames(df))) {
-
-      stop("KeyError: One or more key variables are not in df.")
+    missing_keys <- key[!key %in% colnames(df)]
+    if (length(missing_keys) > 0) {
+      stop(paste("KeyError: One or more key variables are not in df:",
+                 paste(missing_keys, collapse = ", ")))
     }
 
     missings <- df[, lapply(.SD, function(x) sum(is.na(x))), .SDcols = key]
