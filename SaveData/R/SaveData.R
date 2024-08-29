@@ -84,14 +84,13 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
 
     return(list("outfile" = outfile, "logfile" = logfile, "filetype" = filetype))
   }
-  
+
   CheckColumnsNotList <- function(df) {
     column_types <- sapply(df, class)
     type_list_columns <-column_types[column_types=="list"]
     if (length(type_list_columns)>0) {
-      print(paste("The following columns are of type list:",
-                  paste(names(type_list_columns), collapse = ", ")))
-      stop("TypeError: No column can contain entries of type list or vector. All columns should be in vector format.")
+      stop(paste("TypeError: No column can contain entries of type list or vector. All columns should be in vector format. The following columns are of type list:",
+                 paste(names(type_list_columns), collapse = ", ")))
     }
   }
   
