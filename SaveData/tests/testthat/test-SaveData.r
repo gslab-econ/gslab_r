@@ -14,12 +14,12 @@ test_that("correctly saves data", {
 
 test_that("correctly saves data when working with data.table", {
   test_data <- fread("./data/data.csv", header = TRUE)
-  
+
   if (file.exists("./output/logfile.log")) file.remove("./output/logfile.log")
   output <- SaveData(test_data,"id","./output/data", "./output/logfile.log")
-  
+
   intended_output <- "File './output/data.RDS' saved successfully."
-  
+
   expect_identical(output, intended_output)
 })
 
@@ -65,7 +65,7 @@ test_that("correctly saves data without logfile", {
 test_that("appends to logfile", {
 
   test_data <- read.csv("./data/data.csv", header = TRUE)
-  
+
   output <- SaveData(test_data,"id","./output/data", appendlog = TRUE)
 
   intended_output <- "File './output/data.RDS' saved successfully."
@@ -76,7 +76,7 @@ test_that("appends to logfile", {
 test_that("does not append to logfile", {
 
   test_data <- read.csv("./data/data.csv", header = TRUE)
-  
+
   output <- SaveData(test_data,"id","./output/data", appendlog = FALSE)
 
   intended_output <- "File './output/data.RDS' saved successfully."
@@ -110,6 +110,13 @@ test_that("correctly gives error for nonexistent key", {
 
     expect_error(SaveData(test_data,"wrongkey","./output/data", "./output/logfile.log"),
                  "KeyError: One or more key variables are not in df.")
+})
+
+test_that("correctly gives error for column of type list", {
+  test_data <- read.csv("./data/data.csv", header = TRUE)
+  test_data$list <- lapply(1:nrow(test_data), function (x) c(1, 2))
+  expect_error(SaveData(test_data,c("partid1","partid2"),"./output/data", "./output/logfile.log"),
+               "TypeError: No column can contain entries of type list or vector. All columns should be in vector format.")
 })
 
 
