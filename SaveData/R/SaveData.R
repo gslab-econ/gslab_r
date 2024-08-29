@@ -85,11 +85,21 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     return(list("outfile" = outfile, "logfile" = logfile, "filetype" = filetype))
   }
 
+  CheckColumnsNotList <- function(df) {
+    column_types <- sapply(df, class)
+    type_list_columns <-column_types[column_types=="list"]
+    if (length(type_list_columns)>0) {
+      stop(paste("TypeError: No column can contain entries of type list or vector. All columns should be in vector format. The following columns are of type list:",
+                 paste(names(type_list_columns), collapse = ", ")))
+    }
+  }
+
   CheckKey <- function(df, key, colname_order = reordered_colnames) {
 
-    if (!all(key %in% colnames(df))) {
-
-      stop("KeyError: One or more key variables are not in df.")
+    missing_keys <- key[!key %in% colnames(df)]
+    if (length(missing_keys) > 0) {
+      stop(paste("KeyError: One or more key variables are not in df:",
+                 paste(missing_keys, collapse = ", ")))
     }
 
     missings <- df[, lapply(.SD, function(x) sum(is.na(x))), .SDcols = key]
@@ -179,8 +189,8 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
 
   h <- DataDictionary()
   files <- CheckExtension(outfile, h, logfile)
-  reordered_colnames <- c(key, base::setdiff(colnames(df), key))
-
+  CheckColumnsNotList(df)
+  reordered_colnames <- c(key, setdiff(colnames(df), key))
   CheckKey(df, key, colname_order = reordered_colnames)
   WriteLog(df, key, files$outfile, files$logfile, appendlog)
   WriteData(df, files$outfile, files$filetype, h)
