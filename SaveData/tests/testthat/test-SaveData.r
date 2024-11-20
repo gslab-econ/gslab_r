@@ -12,6 +12,17 @@ test_that("correctly saves data", {
     expect_identical(output, intended_output)
 })
 
+test_that("correctly saves data to .RData", {
+  test_data <- read.csv("./data/data.csv", header = TRUE)
+  
+  if (file.exists("./output/logfile.log")) file.remove("./output/logfile.log")
+  output <- SaveData(test_data,"id","./output/data.RData", "./output/logfile.log")
+  
+  intended_output <- "File './output/data.RData' saved successfully."
+  
+  expect_identical(output, intended_output)
+})
+
 test_that("correctly saves data when working with data.table", {
   test_data <- fread("./data/data.csv", header = TRUE)
 
