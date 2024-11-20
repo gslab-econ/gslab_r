@@ -64,7 +64,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     file <- basename(outfile)
     dir  <- dirname(outfile)
     extensions <- unlist(strsplit(file, "[.]"))
-
+    
     if (length(extensions)  > 2) {
       stop("FileNameError: Cannot have '.' in filename.")
     } else if (length(extensions) == 2) {
@@ -180,9 +180,11 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
   }
 
   WriteData <- function(df, outfile, filetype, h) {
-
-    do.call(h[[filetype]][1], list(df, eval(parse(text=h[[filetype]][2]))))
-
+    if (filetype == "RData") {
+      do.call(h[[filetype]][1], list("df", file = eval(parse(text=h[[filetype]][2]))))
+    } else {
+      do.call(h[[filetype]][1], list(df, eval(parse(text=h[[filetype]][2]))))
+    }
     print(paste0("File '", outfile, "' saved successfully."))
 
   }
