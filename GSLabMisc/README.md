@@ -9,3 +9,8 @@ Use `AutoFill()` to save TeX macros as described [here](https://github.com/gslab
 
 ## LoadGlobals
 Use `LoadGlobals()` to load values from a .txt file into the global environment.
+
+## MakeTableTxt
+
+Use `MakeTableTxt()` to write a dataframe to a `.txt` file as a tab-separated table, preceded by a tag line.
+
