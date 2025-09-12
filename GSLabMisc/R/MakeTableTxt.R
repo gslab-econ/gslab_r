@@ -1,13 +1,12 @@
 #' Load scalars from a text file into global environment.
 #'
 #' @param df the object to be written, preferably a matrix or data frame. If not, it is attempted to coerce df to a data frame.
-#' @param table_name 
-#' @param outdir
+#' @param table_name the name used both as the table tag and as the exported file’s name
+#' @param outdir the directory path where the table will be saved
 #' 
-#' @details Each line of the input file is assumed to have the name of the global variable followed by 
-#' a space followed by the value of the global variable. Lines beginning with # are treated as comments. 
-#' Lines in the file that do not have at least two words (defined as blocks of text separated by a 
-#' space) are ignored. Strings enclosed in double quotes count as one word.
+#' @details The function first writes a tag line in the form `<tab:table_name>` to the output file, overwriting if necessary.  
+#' The table contents are then written on a new line after this tag. The file is tab-delimited and excludes
+#' row and column names. All values are unquoted. 
 #' 
 #' @export
 #' 
