@@ -1,4 +1,4 @@
-#' Load scalars from a text file into global environment.
+#' Save table values in txt format for use in Tablefill. 
 #'
 #' @param df the object to be written, preferably a matrix or data frame. If not, it is attempted to coerce df to a data frame.
 #' @param table_name the name used both as the table tag and as the exported file’s name
