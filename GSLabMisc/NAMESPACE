@@ -2,6 +2,7 @@
 
 export(AutoFill)
 export(LoadGlobals)
+export(MakeTableTxt)
 importFrom(stringr,str_split)
 importFrom(utils,capture.output)
 importFrom(utils,type.convert)
