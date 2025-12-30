@@ -24,28 +24,15 @@
 #' SaveData(data, "id", "path/output.csv", "path/custom_logfile.log")
 #' }
 #'
-#' @importFrom data.table setDT
-#' @importFrom data.table setorderv
-#' @importFrom data.table setcolorder
-#' @importFrom data.table is.data.table
-#' @importFrom data.table merge.data.table
-#' @importFrom data.table :=
-#' @importFrom data.table .SD
-#' @importFrom data.table .SDcols
-#' @importFrom data.table uniqueN
 #' @importFrom data.table fwrite
 #' @importFrom digest     digest
-#' @importFrom dplyr      arrange
+#' @importFrom dplyr      arrange across all_of select
 #' @importFrom hash       keys hash
 #' @importFrom haven      write_dta
 #' @importFrom stargazer  stargazer
 #' @export
 
 SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortbykey = TRUE) {
-
-  if (!is.data.table(df)) {
-    setDT(df)
-  }
 
   # map file extension to export function
   DataDictionary <- function() {
@@ -102,26 +89,20 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
                  paste(missing_keys, collapse = ", ")))
     }
 
-    missings <- df[, lapply(.SD, function(x) sum(is.na(x))), .SDcols = key]
+    missings <- sapply(key, function(k) sum(is.na(df[[k]])))
 
     if (sum(missings) > 0) {
       stop(paste("KeyError: There are rows with missing keys. Check the following keys:",
                  paste(key[which(missings > 0)], collapse = ", ")))
     }
 
-    nunique <- data.table::uniqueN(df, key)
+    key_df <- data.frame(lapply(key, function(k) df[[k]]), stringsAsFactors = FALSE)
+    nunique <- nrow(unique(key_df))
 
     if (nrow(df) != nunique) {
 
       stop("KeyError: Key variables do not uniquely identify observations.")
 
-    } else {
-
-      if (sortbykey) {
-        data.table::setorderv(df, key)  # sort by key values
-      }
-
-      data.table::setcolorder(df, colname_order)
     }
   }
 
@@ -135,30 +116,31 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     numeric_cols <- reordered_colnames[sapply(df, FUN = is.numeric)]
     non_numeric_cols <- base::setdiff(reordered_colnames, numeric_cols)
 
-    numeric_sum <- df[, .(
+    numeric_sum <- data.frame(
       variable_name = numeric_cols,
-      mean = sapply(.SD, function(x) round(mean(x, na.rm = TRUE), 3)),
-      sd = sapply(.SD, function(x) round(sd(x, na.rm = TRUE), 3)),
-      min = sapply(.SD, function(x) round(min(x, na.rm = TRUE), 3)),
-      max = sapply(.SD, function(x) round(max(x, na.rm = TRUE), 3))
-    ), .SDcols = numeric_cols]
+      mean = sapply(numeric_cols, function(col) round(mean(df[[col]], na.rm = TRUE), 3)),
+      sd = sapply(numeric_cols, function(col) round(sd(df[[col]], na.rm = TRUE), 3)),
+      min = sapply(numeric_cols, function(col) round(min(df[[col]], na.rm = TRUE), 3)),
+      max = sapply(numeric_cols, function(col) round(max(df[[col]], na.rm = TRUE), 3)),
+      stringsAsFactors = FALSE
+    )
 
-
-    non_numeric_sum <- df[, .(
+    non_numeric_sum <- data.frame(
       variable_name = non_numeric_cols,
-      uniqueN = sapply(.SD, function(x) uniqueN(x))
-    ), .SDcols = non_numeric_cols]
+      uniqueN = sapply(non_numeric_cols, function(col) length(unique(df[[col]]))),
+      stringsAsFactors = FALSE
+    )
 
-    all_sum <- df[, .(
+    all_sum <- data.frame(
       variable_name = reordered_colnames,
-      type = sapply(.SD, class),
-      N = sapply(.SD, function(x) sum(!is.na(x)))
-    )]
+      type = sapply(df, function(x) class(x)[1]),
+      N = sapply(df, function(x) sum(!is.na(x))),
+      stringsAsFactors = FALSE
+    )
 
-    sum <- all_sum |>
-      merge.data.table(non_numeric_sum, by = "variable_name", all.x = TRUE) |>
-      merge.data.table(numeric_sum, by = "variable_name", all.x = TRUE) |>
-      arrange(match(variable_name, reordered_colnames))
+    sum <- merge(all_sum, non_numeric_sum, by = "variable_name", all.x = TRUE)
+    sum <- merge(sum, numeric_sum, by = "variable_name", all.x = TRUE)
+    sum <- sum[match(reordered_colnames, sum$variable_name), ]
 
     hash <- digest::digest(df, algo="md5")
 
@@ -194,6 +176,13 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
   CheckColumnsNotList(df)
   reordered_colnames <- c(key, setdiff(colnames(df), key))
   CheckKey(df, key, colname_order = reordered_colnames)
+
+  if (sortbykey) {
+    df <- dplyr::arrange(df, dplyr::across(dplyr::all_of(key)))
+  }
+
+  df <- dplyr::select(df, dplyr::all_of(reordered_colnames))
+
   WriteLog(df, key, files$outfile, files$logfile, appendlog)
   WriteData(df, files$outfile, files$filetype, h)
 
