@@ -26,7 +26,7 @@
 #'
 #' @importFrom data.table fwrite
 #' @importFrom digest     digest
-#' @importFrom dplyr      arrange across all_of select
+#' @importFrom dplyr      arrange across all_of select distinct
 #' @importFrom hash       keys hash
 #' @importFrom haven      write_dta
 #' @importFrom stargazer  stargazer
@@ -96,8 +96,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
                  paste(key[which(missings > 0)], collapse = ", ")))
     }
 
-    key_df <- data.frame(lapply(key, function(k) df[[k]]), stringsAsFactors = FALSE)
-    nunique <- nrow(unique(key_df))
+    nunique <- df %>% dplyr::distinct(across(all_of(key))) %>% nrow()
 
     if (nrow(df) != nunique) {
 
