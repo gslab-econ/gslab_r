@@ -115,7 +115,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     numeric_cols <- reordered_colnames[sapply(df, FUN = is.numeric)]
     non_numeric_cols <- base::setdiff(reordered_colnames, numeric_cols)
 
-    numeric_sum <- data.frame(
+    numeric_summ <- data.frame(
       variable_name = numeric_cols,
       mean = sapply(numeric_cols, function(col) round(mean(df[[col]], na.rm = TRUE), 3)),
       sd = sapply(numeric_cols, function(col) round(sd(df[[col]], na.rm = TRUE), 3)),
@@ -124,22 +124,22 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
       stringsAsFactors = FALSE
     )
 
-    non_numeric_sum <- data.frame(
+    non_numeric_summ <- data.frame(
       variable_name = non_numeric_cols,
       uniqueN = sapply(non_numeric_cols, function(col) length(unique(df[[col]]))),
       stringsAsFactors = FALSE
     )
 
-    all_sum <- data.frame(
+    all_summ <- data.frame(
       variable_name = reordered_colnames,
       type = sapply(df, function(x) class(x)[1]),
       N = sapply(df, function(x) sum(!is.na(x))),
       stringsAsFactors = FALSE
     )
 
-    sum <- merge(all_sum, non_numeric_sum, by = "variable_name", all.x = TRUE)
-    sum <- merge(sum, numeric_sum, by = "variable_name", all.x = TRUE)
-    sum <- sum[match(reordered_colnames, sum$variable_name), ]
+    summ <- merge(all_summ, non_numeric_summ, by = "variable_name", all.x = TRUE)
+    summ <- merge(summ, numeric_summ, by = "variable_name", all.x = TRUE)
+    summ <- summ[match(reordered_colnames, summ$variable_name), ]
 
     hash <- digest::digest(df, algo="md5")
 
@@ -150,7 +150,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     cat("Key:  ", key, '\n',     file = logfile, append=T)
 
     s = capture.output(
-      stargazer::stargazer(sum,
+      stargazer::stargazer(summ,
                            summary = F,
                            type = 'text',
                            digit.separate = 3,
