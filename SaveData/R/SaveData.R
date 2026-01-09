@@ -2,12 +2,12 @@
 #'
 #' @param df Data to be saved
 #' @param key Defines key to dataset. Must be non-missing and jointly unique.
-#' @param outfile Path to saved data file. Possible file extensions are .csv, .dta, RData, and .RDS. If no file extension is provided, the data is saved as .RDS.
+#' @param outfile Path to saved data file. Possible file extensions are .csv, .dta, .parquet, .RData, and .RDS. If no file extension is provided, the data is saved as .RDS.
 #' @param logfile Path to logfile. File contains standard summary statistics for numerical variables and displays variable types for all variables. If no path is specified, the log file is saved to the same directory as the output file. Type logfile = FALSE to not output a logfile.
 #' @param appendlog If TRUE, an existing log file of the same name will not be overwritten but the information appended. Default is FALSE.
 #' @param sortbykey If TRUE, the data will be sorted based on the keys provided. Default is TRUE.
 #'
-#' @seealso \link[data.table]{fwrite}, \link[base]{save}, \link[base]{saveRDS}, and \link[haven]{write_dta},
+#' @seealso \link[data.table]{fwrite}, \link[base]{save}, \link[base]{saveRDS}, \link[haven]{write_dta}, and \link[arrow]{write_parquet}
 #'
 #' @examples
 #' \dontrun{
@@ -24,6 +24,7 @@
 #' SaveData(data, "id", "path/output.csv", "path/custom_logfile.log")
 #' }
 #'
+#' @importFrom arrow       write_parquet
 #' @importFrom data.table fwrite
 #' @importFrom digest     digest
 #' @importFrom dplyr      arrange across all_of select distinct
@@ -37,11 +38,12 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
   # map file extension to export function
   DataDictionary <- function() {
     h <- hash::hash()
-    h[["csv"]]   <-   c("fwrite", "file = outfile")
-    h[["dta"]]   <-   c("write_dta", "outfile")
-    h[["RData"]] <-   c("save", "file = outfile")
-    h[["RDS"]]   <-   c("saveRDS", "file = outfile")
-    h[["Rds"]]   <-   c("saveRDS", "file = outfile")
+    h[["csv"]]     <-   c("fwrite", "file = outfile")
+    h[["dta"]]     <-   c("write_dta", "outfile")
+    h[["parquet"]] <-   c("write_parquet", "outfile")
+    h[["RData"]]   <-   c("save", "file = outfile")
+    h[["RDS"]]     <-   c("saveRDS", "file = outfile")
+    h[["Rds"]]     <-   c("saveRDS", "file = outfile")
 
     return(h)
   }
@@ -62,7 +64,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     }
 
     if (!any(filetype %in% hash::keys(h))) {
-      stop("FileType Error: Incorrect format. Only .csv, .dta, .RData, and .RDS are allowed.")
+      stop("FileType Error: Incorrect format. Only .csv, .dta, .parquet, .RData, and .RDS are allowed.")
     }
 
     if (is.null(logfile)) {
