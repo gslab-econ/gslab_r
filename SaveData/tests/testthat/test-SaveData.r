@@ -1,5 +1,6 @@
 context("SaveData")
 library(data.table)
+library(tibble)
 
 test_that("correctly saves data", {
     test_data <- read.csv("./data/data.csv", header = TRUE)
@@ -158,5 +159,21 @@ test_that("correctly gives error for wrong filename", {
 
     expect_error(SaveData(test_data,"id","./output/data.1.RDS", "./output/logfile.log"),
                  NULL)
+})
+
+test_that("preserves classes", {
+    tibble_data <- tibble::as_tibble(read.csv("./data/data.csv", header = TRUE))
+    expect_true(inherits(tibble_data, "tbl_df"))
+
+    SaveData(tibble_data, "id", "./output/data.RDS", logfile = FALSE)
+    reloaded_tibble <- readRDS("./output/data.RDS")
+    expect_true(inherits(reloaded_tibble, "tbl_df"))
+
+    dt_data <- data.table::as.data.table(read.csv("./data/data.csv", header = TRUE))
+    expect_true(inherits(dt_data, "data.table"))
+
+    SaveData(dt_data, "id", "./output/data.RDS", logfile = FALSE)
+    reloaded_dt <- readRDS("./output/data.RDS")
+    expect_true(inherits(reloaded_dt, "data.table"))
 })
 
