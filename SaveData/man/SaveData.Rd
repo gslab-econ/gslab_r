@@ -11,7 +11,7 @@ SaveData(df, key, outfile, logfile = NULL, appendlog = FALSE, sortbykey = TRUE)
 
 \item{key}{Defines key to dataset. Must be non-missing and jointly unique.}
 
-\item{outfile}{Path to saved data file. Possible file extensions are .csv, .dta, RData, and .RDS. If no file extension is provided, the data is saved as .RDS.}
+\item{outfile}{Path to saved data file. Possible file extensions are .csv, .dta, .parquet, .RData, and .RDS. If no file extension is provided, the data is saved as .RDS.}
 
 \item{logfile}{Path to logfile. File contains standard summary statistics for numerical variables and displays variable types for all variables. If no path is specified, the log file is saved to the same directory as the output file. Type logfile = FALSE to not output a logfile.}
 
@@ -39,5 +39,5 @@ SaveData(data, "id", "path/output.csv", "path/custom_logfile.log")
 
 }
 \seealso{
-\link[data.table]{fwrite}, \link[base]{save}, \link[base]{saveRDS}, and \link[haven]{write_dta},
+\link[data.table]{fwrite}, \link[base]{save}, \link[base]{saveRDS}, \link[haven]{write_dta}, and \link[arrow]{write_parquet}
 }

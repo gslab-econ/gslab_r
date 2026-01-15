@@ -9,6 +9,7 @@ Description: Contains one function to save and summarize data. Use SaveData to s
 Depends: 
   R (>= 3.2.1)
 Imports:
+  arrow,
   data.table,
   digest,
   dplyr,

@@ -1,4 +1,5 @@
 context("SaveData")
+library(arrow)
 library(data.table)
 library(tibble)
 
@@ -46,6 +47,30 @@ test_that("correctly saves data to different format", {
 
     expect_identical(output, intended_output)
 
+})
+
+test_that("correctly saves data to parquet format", {
+    test_data <- read.csv("./data/data.csv", header = TRUE)
+
+    if (file.exists("./output/logfile.log")) file.remove("./output/logfile.log")
+
+    output <- SaveData(test_data,"id","./output/data.parquet", "./output/logfile.log")
+
+    intended_output <- "File './output/data.parquet' saved successfully."
+
+    expect_identical(output, intended_output)
+})
+
+test_that("correctly saves data.table to parquet format", {
+    test_data <- fread("./data/data.csv", header = TRUE)
+
+    if (file.exists("./output/logfile.log")) file.remove("./output/logfile.log")
+
+    output <- SaveData(test_data,"id","./output/data.parquet", "./output/logfile.log")
+
+    intended_output <- "File './output/data.parquet' saved successfully."
+
+    expect_identical(output, intended_output)
 })
 
 
