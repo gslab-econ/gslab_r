@@ -27,14 +27,25 @@
 #' @importFrom arrow       write_parquet
 #' @importFrom data.table fwrite
 #' @importFrom digest     digest
-#' @importFrom dplyr      arrange across all_of select distinct
+#' @importFrom dplyr      arrange across all_of select distinct 
 #' @importFrom hash       keys hash
 #' @importFrom haven      write_dta
 #' @importFrom stargazer  stargazer
+#' @importFrom stats      sd
+#' @importFrom utils      capture.output
 #' @export
 
 SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortbykey = TRUE) {
 
+  ClassAwareCopy <- function(df) {
+    if (inherits(df, "data.table")) {
+      df_copy <- data.table::copy(df)
+    } else {
+      df_copy <- df[, , drop = FALSE]
+    }
+    return(df_copy)
+  }
+  
   # map file extension to export function
   DataDictionary <- function() {
     h <- hash::hash()
@@ -97,9 +108,8 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
       stop(paste("KeyError: There are rows with missing keys. Check the following keys:",
                  paste(key[which(missings > 0)], collapse = ", ")))
     }
-
-    nunique <- df %>% dplyr::distinct(across(all_of(key))) %>% nrow()
-
+    nunique <- nrow(dplyr::distinct(df, dplyr::across(dplyr::all_of(key))))
+    
     if (nrow(df) != nunique) {
 
       stop("KeyError: Key variables do not uniquely identify observations.")
@@ -120,7 +130,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     numeric_summ <- data.frame(
       variable_name = numeric_cols,
       mean = sapply(numeric_cols, function(col) round(mean(df[[col]], na.rm = TRUE), 3)),
-      sd = sapply(numeric_cols, function(col) round(sd(df[[col]], na.rm = TRUE), 3)),
+      sd = sapply(numeric_cols, function(col) round(stats::sd(df[[col]], na.rm = TRUE), 3)),
       min = sapply(numeric_cols, function(col) round(min(df[[col]], na.rm = TRUE), 3)),
       max = sapply(numeric_cols, function(col) round(max(df[[col]], na.rm = TRUE), 3)),
       stringsAsFactors = FALSE
@@ -151,7 +161,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
     cat("MD5:  ", hash, '\n',    file = logfile, append=T)
     cat("Key:  ", key, '\n',     file = logfile, append=T)
 
-    s = capture.output(
+    s = utils::capture.output(
       stargazer::stargazer(summ,
                            summary = F,
                            type = 'text',
@@ -172,6 +182,7 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
 
   }
 
+  df <- ClassAwareCopy(df)
   h <- DataDictionary()
   files <- CheckExtension(outfile, h, logfile)
   CheckColumnsNotList(df)
