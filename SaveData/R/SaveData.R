@@ -36,16 +36,6 @@
 #' @export
 
 SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortbykey = TRUE) {
-
-  ClassAwareCopy <- function(df) {
-    if (inherits(df, "data.table")) {
-      df_copy <- data.table::copy(df)
-    } else {
-      df_copy <- df[, , drop = FALSE]
-    }
-    return(df_copy)
-  }
-  
   # map file extension to export function
   DataDictionary <- function() {
     h <- hash::hash()
@@ -182,7 +172,6 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
 
   }
 
-  df <- ClassAwareCopy(df)
   h <- DataDictionary()
   files <- CheckExtension(outfile, h, logfile)
   CheckColumnsNotList(df)
