@@ -7,7 +7,7 @@
 #' @param appendlog If TRUE, an existing log file of the same name will not be overwritten but the information appended. Default is FALSE.
 #' @param sortbykey If TRUE, the data will be sorted based on the keys provided. Default is TRUE.
 #'
-#' @seealso \link[data.table]{fwrite}, \link[base]{save}, \link[base]{saveRDS}, \link[haven]{write_dta}, and \link[arrow]{write_parquet}
+#' @seealso \link[data.table]{fwrite}, \link[base]{save}, \link[base]{saveRDS}, and \link[haven]{write_dta}. For parquet format, the arrow package is required (optional dependency).
 #'
 #' @examples
 #' \dontrun{
@@ -166,7 +166,8 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
       if (!requireNamespace("arrow", quietly = TRUE)) {
         stop("ParquetError: The 'arrow' package is required to save files in parquet format, but it is not installed.")
       }
-      arrow::write_parquet(df, outfile)
+      write_parquet_fn <- get("write_parquet", envir = asNamespace("arrow"))
+      write_parquet_fn(df, outfile)
     } else if (filetype == "RData") {
       do.call(h[[filetype]][1], list("df", file = eval(parse(text=h[[filetype]][2]))))
     } else {
