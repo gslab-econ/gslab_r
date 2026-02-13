@@ -203,36 +203,27 @@ test_that("preserves classes", {
     expect_true(inherits(reloaded_dt, "data.table"))
 })
 
-test_that("saving does not mutate shared columns among datasets", {
-  dt_test <- data.frame(
-    year       = c(3, 2, 1),
-    rmse       = c(3, 2, 1),
-    model_vars = "model vars",
-    stringsAsFactors = FALSE
+test_that("saving a dataframe's subset does not modify the parent dataframe", {
+  df_parent <- data.frame(
+    key = c(3, 2, 1),
+    value1 = c(3, 2, 1),
+    value2 = "foobar"
+  )
+  df_parent_original <- data.frame(
+    key = c(3, 2, 1),
+    value1 = c(3, 2, 1),
+    value2 = "foobar"
   )
   
-  out1 <- dt_test %>% dplyr::select(-rmse)
-  out2 <- dt_test %>% dplyr::select(year, rmse)
+  outpath <- "./output/shared_out1.csv"
+  df_parent |>
+    dplyr::select(-value2) |>
+    SaveData(key = "key",
+             outfile = outpath,
+             logfile = FALSE)
   
-  expected_out2_in_memory <- as.data.frame(out2)
-  
-  out1_path <- "./output/shared_out1.csv"
-  out2_path <- "./output/shared_out2.csv"
-  if (file.exists(out1_path)) file.remove(out1_path)
-  if (file.exists(out2_path)) file.remove(out2_path)
-  
-  SaveData(out1,
-           key = "year",
-           outfile = out1_path,
-           logfile = FALSE,
-           appendlog = TRUE)
-  
-  expect_identical(out2, expected_out2_in_memory)
-  
-  SaveData(out2,
-           key = "year",
-           outfile = out2_path,
-           logfile = FALSE,
-           appendlog = TRUE)
+  if (file.exists(outpath)) file.remove(outpath)
+  expect_identical(df_parent, df_parent_original)
+
 })
 
