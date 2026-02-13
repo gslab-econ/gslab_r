@@ -209,11 +209,7 @@ test_that("saving a dataframe's subset does not modify the parent dataframe", {
     value1 = c(3, 2, 1),
     value2 = "foobar"
   )
-  df_parent_original <- data.frame(
-    key = c(3, 2, 1),
-    value1 = c(3, 2, 1),
-    value2 = "foobar"
-  )
+  df_parent_original <- data.table::copy(df_parent) # deep copy
   
   outpath <- "./output/shared_out1.csv"
   df_parent |>
@@ -226,4 +222,3 @@ test_that("saving a dataframe's subset does not modify the parent dataframe", {
   expect_identical(df_parent, df_parent_original)
 
 })
-
