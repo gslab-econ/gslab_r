@@ -24,7 +24,6 @@
 #' SaveData(data, "id", "path/output.csv", "path/custom_logfile.log")
 #' }
 #'
-#' @importFrom arrow       write_parquet
 #' @importFrom data.table fwrite
 #' @importFrom digest     digest
 #' @importFrom dplyr      arrange across all_of select distinct
@@ -163,7 +162,12 @@ SaveData <- function(df, key, outfile, logfile = NULL, appendlog = FALSE, sortby
   }
 
   WriteData <- function(df, outfile, filetype, h) {
-    if (filetype == "RData") {
+    if (filetype == "parquet") {
+      if (!requireNamespace("arrow", quietly = TRUE)) {
+        stop("ParquetError: The 'arrow' package is required to save files in parquet format, but it is not installed.")
+      }
+      arrow::write_parquet(df, outfile)
+    } else if (filetype == "RData") {
       do.call(h[[filetype]][1], list("df", file = eval(parse(text=h[[filetype]][2]))))
     } else {
       do.call(h[[filetype]][1], list(df, eval(parse(text=h[[filetype]][2]))))
