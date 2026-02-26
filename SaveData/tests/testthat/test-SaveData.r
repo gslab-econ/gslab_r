@@ -2,6 +2,7 @@ context("SaveData")
 library(arrow)
 library(data.table)
 library(tibble)
+library(dplyr)
 
 test_that("correctly saves data", {
     test_data <- read.csv("./data/data.csv", header = TRUE)
@@ -202,3 +203,22 @@ test_that("preserves classes", {
     expect_true(inherits(reloaded_dt, "data.table"))
 })
 
+test_that("saving a dataframe's subset does not modify the parent dataframe", {
+  df_parent <- data.frame(
+    key = c(3, 2, 1),
+    value1 = c(3, 2, 1),
+    value2 = "foobar"
+  )
+  df_parent_original <- data.table::copy(df_parent) # deep copy
+  
+  outpath <- "./output/shared_out1.csv"
+  df_parent |>
+    dplyr::select(-value2) |>
+    SaveData(key = "key",
+             outfile = outpath,
+             logfile = FALSE)
+  
+  if (file.exists(outpath)) file.remove(outpath)
+  expect_identical(df_parent, df_parent_original)
+
+})
