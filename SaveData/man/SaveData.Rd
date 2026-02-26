@@ -39,5 +39,5 @@ SaveData(data, "id", "path/output.csv", "path/custom_logfile.log")
 
 }
 \seealso{
-\link[data.table]{fwrite}, \link[base]{save}, \link[base]{saveRDS}, \link[haven]{write_dta}, and \link[arrow]{write_parquet}
+\link[data.table]{fwrite}, \link[base]{save}, \link[base]{saveRDS}, and \link[haven]{write_dta}. For parquet format, the arrow package is required (optional dependency).
 }
